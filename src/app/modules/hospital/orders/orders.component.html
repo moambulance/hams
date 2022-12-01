@@ -1,0 +1,382 @@
+<div id="wrapper">
+  <app-navbar></app-navbar>
+  <app-sidebar></app-sidebar>
+  <app-spinner></app-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-breadcrumb [breadCrumbData]="breadCrumbData"></app-breadcrumb>
+      <div class="card">
+        <div class="header float-right">
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              type="search"
+              class="form-control float-right w-100"
+              placeholder="Search Here"
+              [(ngModel)]="searchText"
+              aria-controls="addrowExample"
+            />
+          </div>
+
+          <button
+            class="btn btn-warning float-right m-2 text-white"
+            (click)="exportExcel()"
+          >
+            <i class="fa-solid fa-file-excel"></i>
+            Export to Excel
+          </button>
+        </div>
+        <div class="body">
+          <div
+            id="example3_wrapper"
+            class="dataTables_wrapper no-footer table-scroll"
+          >
+            <table
+              class="table table-bordered table-hover table-striped text-center"
+              cellspacing="0"
+              id="addrowExample"
+              #excelTable
+            >
+              <thead>
+                <tr role="row">
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    #
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    Order No
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Ambulance Number
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Department: activate to sort column ascending"
+                  >
+                    Price
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Customer Name
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Customer Number
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                  >
+                    Driver Name
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                  >
+                    Driver Number
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                  >
+                    Order By
+                  </th>
+                  <!-- <th class="sorting_desc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Tax: activate to sort column ascending" style="width: 43.5312px;" aria-sort="descending">Tax</th> -->
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                    (click)="onOrderDisplayType()"
+                  >
+                    Date<i
+                      [class]="
+                        orderType === 'DESC'
+                          ? 'fa-solid fa-angle-down m-1 text-info'
+                          : 'fa-solid fa-angle-up m-1 text-info'
+                      "
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      [title]="
+                        orderType === 'DESC'
+                          ? 'Descending Order'
+                          : 'Ascending Order'
+                      "
+                    ></i>
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Education: activate to sort column ascending"
+                  >
+                    Confirm Status
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Gender: activate to sort column ascending"
+                  >
+                    Status
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Action: activate to sort column ascending"
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  role="row"
+                  class="odd"
+                  *ngFor="
+                    let order of orders | searchFilter: searchText;
+                    let i = index
+                  "
+                >
+                  <td>
+                    <strong>{{ order?.sl_no }}</strong>
+                  </td>
+                  <td>
+                    <strong>{{ order?.id }}</strong>
+                  </td>
+                  <td class="sorting_1">
+                    {{ order?.ambulance_id?.registration_number }}
+                  </td>
+                  <td>{{ order?.price }}</td>
+                  <td>
+                    {{
+                      order.customer_id
+                        ? order.customer_id.first_name + ' '
+                        : ''
+                    }}
+                    {{ order.customer_id ? order.customer_id.last_name : '' }}
+                  </td>
+                  <td>
+                    {{ order?.customer_id?.phone }}
+                  </td>
+                  <td>{{ order?.driver_id?.name }}</td>
+                  <td>{{ order?.driver_id?.phone }}</td>
+                  <td>{{ order?.order_by }}</td>
+                  <td>{{ order?.cretaed_on.slice(0, 10) }}</td>
+                  <td>
+                    <span
+                      [class]="
+                        order?.is_confirm == 1
+                          ? 'badge badge-success'
+                          : 'badge badge-danger'
+                      "
+                      >{{
+                        order?.is_confirm == 1 ? 'Confirmed' : 'Not Confirmed'
+                      }}</span
+                    >
+                    <!-- (click)="onConfirmed($event, order?.id,  order?.is_confirm)" -->
+                  </td>
+                  <td>
+                    <span
+                      [class]="
+                        order?.status == 1
+                          ? 'badge badge-success'
+                          : order?.status == 2
+                          ? 'badge badge-secondary text-secondary'
+                          : order?.status == 0 && order?.is_confirm === 1
+                          ? 'badge badge-warning'
+                          : 'badge badge-danger text'
+                      "
+                      >{{
+                        order?.status == 1
+                          ? 'Completed'
+                          : order?.status == 0 && order?.is_confirm === 1
+                          ? 'On Trip'
+                          : order?.status == 0
+                          ? 'New'
+                          : order?.status == 2
+                          ? 'Canceled'
+                          : ''
+                      }}
+                    </span>
+                  </td>
+
+                  <td>
+                    <button
+                      *ngIf="order.status === 0"
+                      type="button"
+                      class="btn btn-primary"
+                      (click)="onTripData(order)"
+                    >
+                      End Trip
+                    </button>
+
+                    <button
+                      *ngIf="order.status == 1"
+                      type="button"
+                      class="btn btn-success"
+                      (click)="onInvoiceGenerate(order)"
+                    >
+                      Invoice
+                    </button>
+                    <!-- <div class="d-flex"> -->
+
+                    <!--   <a
+                        [routerLink]="['edit-order/', order?.id]"
+                        routerLinkActive="router-link-active"
+                        class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                        ><i class="icon-pencil" aria-hidden="true"></i
+                      ></a>
+                    </div>-->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <ngb-pagination
+          class="dataTables_paginate paging_simple_numbers"
+          [(page)]="page"
+          [pageSize]="pageSize"
+          [maxSize]="15"
+          [collectionSize]="ordersLength"
+          (pageChange)="getAllOrders()"
+        >
+        </ngb-pagination>
+        <div class="dataTables_length float-right" id="example3_length">
+          <label
+            >Show
+            <select
+              class="p-2"
+              name="form-control"
+              aria-controls="example3"
+              [(ngModel)]="pageSize"
+              (ngModelChange)="getAllOrders()"
+            >
+              <option [ngValue]="5">5</option>
+              <option [ngValue]="10">10</option>
+              <option [ngValue]="15">15</option>
+              <option [ngValue]="ordersLength">All</option>
+            </select>
+            entries</label
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary d-none"
+  data-bs-toggle="modal"
+  data-bs-target="#endTripModal"
+  #endTripId
+>
+  Launch demo modal
+</button>
+<!-- End Trip Modal -->
+<div
+  class="modal fade"
+  id="endTripModal"
+  tabindex="-1"
+  aria-labelledby="endTripModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="endTripModalLabel">
+          Do you Want to End The Trip?
+        </h3>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <!-- <div class="modal-body">
+        ...
+      </div> -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="onEndTrip()"
+          data-bs-dismiss="modal"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

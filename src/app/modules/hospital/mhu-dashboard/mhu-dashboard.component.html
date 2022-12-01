@@ -1,0 +1,234 @@
+<div id="wrapper">
+    <app-spinner></app-spinner>
+    <div id="main-content" class="mhu-container">
+        <div class="container-fluid">
+            <div class="topwrapper">
+                <div class="top-innerbox">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <img class="logo" src="assets/images/vital-icon/logo.png" alt="M-vitals logo" srcset="">
+                        </div>
+                        <div class="col-md-7">
+                            <button class="btn add-patient-btn" (click)="bookPatient()">
+                                <i></i> Book Patient
+                            </button>
+                            <button type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                #patientAddModal></button>
+                            <button type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop1"
+                                #iotCompanyModal></button>
+                            <button class="btn refresh-btn" (click)="onRefreshPatients()">
+                                <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                            </button>
+                            <button class="btn log-out-btn" (click)="onLogout()">
+                                <i></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card m-t-10">
+                <h3 class="card-header">Patients</h3>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Mobile</th>
+                                <th>Age</th>
+                                <th>IOT Device</th>
+                                <th>Reports</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let patient of patients; let i = index;">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{patient.name}}</td>
+                                <td>{{patient.phone}}</td>
+                                <td>{{patient.age}}</td>
+                                <td>{{patient?.iot_company?.name}} {{patient?.ezeRxId != null ? '('+patient?.ezeRxId+')' : ""}}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-info" href="javascript:void(0)"
+                                        (click)="showPatientVitalsOverlay(i)">View Report</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="overlay overlay-mvital" #patientVitalsOverlay>
+                <div class="vitals-overlay-content">
+                    <app-patient-vitals (closeClick)="onClosePatientVitalsOverlay($event)"></app-patient-vitals>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal to show available iot companies -->
+<div class="modal modal fade" id="staticBackdrop1" 
+    data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+           <div class="modal-body text-center">
+               <button type="button" class="btn-close float-right" 
+                        #closeIotCompanyModal data-bs-dismiss="modal" aria-label="Close"></button>
+               <h5 class="modal-title" id="staticBackdropLabel">Select Iot Device</h5>
+                <ng-container *ngFor="let company of assignedIotCompanies; let i = index;">
+                    <button class="btn btn-sm m-r-10" [ngClass]="{
+                        'btn-success': company.isSelected,
+                        'btn-primary': !company.isSelected}" (click)="onIotCompanySelect(i)">{{company.name}}</button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Emd of available iot companies popup-->
+<!-- Popup for patient add -->
+<div class="modal modal-xl fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Enter Patient details</h5>
+                <button type="button" class="btn-close" #closeModal data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row" [formGroup]="patientForm" (ngSubmit)="onAddPatientCustomer()" *ngIf="patientField">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Patient Mobile Number</label>
+                        <input type="text" formControlName="phone" placeholder="Enter Patient Mobile Number"
+                            class="form-control p-1" maxlength="10" (change)="mobileNumberPatch($event)">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Patient Name</label>
+                        <input type="text" formControlName="name" placeholder="Enter Patient Name"
+                            class="form-control p-1">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="text" formControlName="email" placeholder="Enter Patient Email"
+                            class="form-control p-1">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Address</label>
+                        <input type="text" formControlName="p_address" placeholder="Enter Patient Address"
+                            class="form-control p-1">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Date Of Birth:</label>
+                        <input type="date" formControlName="age" placeholder="Enter Date Of Birth"
+                            class="form-control p-1">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <span class="p-1">Gender:</span>
+                            </div>
+                            <label class="fancy-radio col-md-4">
+                                <input type="radio" formControlName="gender" [value]="1" required="" />
+                                <span><i></i>Male</span>
+                            </label>
+
+                            <label class="fancy-radio col-md-4">
+                                <input class="bg-secondary" type="radio" formControlName="gender" [value]="0"
+                                    required="" />
+                                <span><i></i>Female</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">height(in CM)</label>
+                        <input type="number" formControlName="height" placeholder="Enter height"
+                            class="form-control p-1">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">wight(in KG)</label>
+                        <input type="number" formControlName="weight" placeholder="Enter weight"
+                            class="form-control p-1">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <button type="submit" class="btn btn-primary float-right"
+                            [disabled]="mobileNumber.length != 10">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                                *ngIf="showNextBtnLoader"></span>
+                            {{showNextBtnLoader ? 'Saving Patient...' : 'Next'}}
+                        </button>
+                    </div>
+                </form>
+                <fieldset *ngIf="isIotServices">
+                    <h2 class="fs-title">Choose Test Vitals</h2>
+                    <div class="form-group col-md-12 flex-wrap">
+                        <div class="card card-color">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4" *ngFor="let test of allTest">
+                                        <div class="card p-0 text-light test-card cursor-pointer" [ngClass]="{
+                                                background_theme: !test.isSelected,
+                                                'bg-success': test.isSelected
+                                            }" (click)="onSelectedTest(test)">
+                                            <div class="card-body p-0">
+                                                <div class="text-center p-0">
+                                                    <h5 class="card-title">{{ test?.name }}</h5>
+                                                    <span class="h2">{{ test?.price }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-success float-right" (click)="getTestFareDetails()" type="submit">
+                            Proceed To Book
+                        </button>
+                    </div>
+                </fieldset>
+                <fieldset *ngIf="isPaymentScreen">
+                    <h2 class="fs-title">Payment Details</h2>
+                    <div class="form-group col-md-12 flex-wrap">
+                        <div class="card card-color">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-bordered table-hover table-striped text-center">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Basic</th>
+                                                <th>Pro</th>
+                                            </tr>
+                                            <tr *ngFor="
+                                                let test of fareData.allTest;
+                                                let i = index
+                                            ">
+                                                <td>{{ i + 1 }}</td>
+                                                <td>{{ test?.name }}</td>
+                                                <td>{{ test?.price }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td>Tax</td>
+                                                <td>0<!-- {{ fareData?.fareDetails?.taxes }} --></td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td>Total</td>
+                                                <td>
+                                                    {{ fareData?.fareDetails?.total_price }}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-success float-right" (click)="onPaymentSubmit()" type="submit">
+                                Pay
+                            </button>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of patient add popup -->

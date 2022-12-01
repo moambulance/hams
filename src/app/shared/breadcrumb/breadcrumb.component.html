@@ -1,0 +1,38 @@
+<div class="block-header">
+  <div class="row">
+    <div class="col-lg-6 col-md-8 col-sm-12">
+      <h2 class="cursor-pointer">
+        <a (click)="onToggleClick()"
+          ><i
+            class="{{
+              sidebarToggle
+                ? 'icon-arrow-right text_theme'
+                : 'icon-arrow-left text_theme'
+            }}"
+          ></i>
+        </a>
+        {{ breadCrumbData.heading }}
+      </h2>
+    </div>
+    <div class="col-lg-6 col-md-4 col-sm-12 text-right">
+      <ul class="breadcrumb">
+        <li [routerLink]="['/hospital/dashboard']" class="breadcrumb-item">
+          <a routerLinkActive="router-link-active" class="t-d-none"
+            ><i class="icon-home"></i
+          ></a>
+        </li>
+        <li
+          class="breadcrumb-item active"
+          *ngFor="let item of breadCrumbData.routing"
+        >
+          <a
+            class="text-decoration-none text-secondary"
+            [routerLink]="[item.routerLink]"
+            routerLinkActive="active"
+            >{{ item.routerHeading }}</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

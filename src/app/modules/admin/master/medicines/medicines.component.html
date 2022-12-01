@@ -1,0 +1,356 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="row clearfix">
+        <div class="card">
+          <div class="header float-right">
+            <div
+              id="addrowExample_filter "
+              class="dataTables_filter float-right"
+            >
+              <input
+                type="search"
+                class="form-control m-1"
+                placeholder="Search Here"
+                [(ngModel)]="searchText"
+                aria-controls="addrowExample"
+              />
+            </div>
+            <button
+              class="btn btn-warning text-white m-1"
+              (click)="exportExcel()"
+              data-bs-toggle="#allList"
+              data-bs-target="#allList"
+            >
+              <i class="fa-solid fa-file-excel"></i>
+              Export to Excel
+            </button>
+            <button
+              class="btn btn-primary m-1"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasScrolling"
+              aria-controls="offcanvasScrolling"
+            >
+              Add Medicines
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="header float-right"></div>
+
+            <div class="body">
+              <!-- For ADD Medicine -->
+
+              <div
+                class="offcanvas offcanvas-end m-2"
+                data-bs-scroll="true"
+                data-bs-backdrop="false"
+                tabindex="-1"
+                id="offcanvasScrolling"
+                aria-labelledby="offcanvasScrollingLabel"
+              >
+                <div class="offcanvas-header">
+                  <h5 class="offcanvas-title" id="offcanvasScrollingLabel">
+                    Medicine Form
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close text-reset"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="offcanvas-body body">
+                  <form
+                    [formGroup]="medicineAddForm"
+                    (ngSubmit)="onAddMedicine()"
+                  >
+                    <div class="row">
+                      <div class="row mb-3">
+                        <label
+                          for="exampleFormControlInput1"
+                          class="form-label pt-1 w-40"
+                          ><strong>Medicine Name :</strong>
+                        </label>
+                        <input
+                          type="text"
+                          class="form-control w-50"
+                          formControlName="medicine_name"
+                          placeholder="Medicine Name"
+                        />
+                      </div>
+                      <div
+                        *ngIf="
+                          medicine_name &&
+                          medicine_name.invalid &&
+                          (medicine_name.dirty || medicine_name.touched)
+                        "
+                        class="invalid animated bounceIn text-danger"
+                      >
+                        Please Enter Valid Name
+                      </div>
+                    </div>
+                    <div class="row mb-3 mt-3">
+                      <div class="w-50">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexCheckChecked"
+                            checked
+                            (change)="onActiveChange($event)"
+                          />
+                          <label
+                            class="form-check-label"
+                            for="flexCheckChecked"
+                            formControlName="is_active"
+                          >
+                            Status
+                          </label>
+                        </div>
+                      </div>
+                      <div class="w-50">
+                        <div class="form-check">
+                          <input
+                            formControlName="is_prescription"
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="flexCheckDefault"
+                            (change)="onAddPrescribed($event)"
+                          />
+                          <label
+                            class="form-check-label"
+                            for="flexCheckDefault"
+                          >
+                            Prescribed
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row m-3">
+                      <button
+                        type="submit"
+                        class="btn btn-sm btn-rounded btn-success m-2 w-40"
+                        [disabled]="
+                          isBtnLoading ||
+                          (medicine_name && medicine_name.invalid)
+                        "
+                      >
+                        <span
+                          *ngIf="isBtnLoading"
+                          isBtnLoading
+                          class="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+
+                        {{ !isBtnLoading ? buttonSave : '  Loading...' }}
+                      </button>
+
+                      <button
+                        #cancel
+                        type="reset"
+                        class="btn w-40 btn-rounded btn-danger m-2"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasScrolling"
+                        aria-controls="offcanvasScrolling"
+                        (click)="onCancel()"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+
+                    <div class="col-md-12 text-success">
+                      {{ message }}
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!--end of For ADD Medicine -->
+
+              <div
+                id="example3_wrapper"
+                class="dataTables_wrapper no-footer table-scroll"
+              >
+                <!-- <button (click)="exportExcel()">Export to Excel</button> -->
+                <table
+                  class="table table-bordered table-hover table-striped text-center"
+                  cellspacing="0"
+                  id="addrowExample"
+                  #excelTable
+                >
+                  <thead>
+                    <tr role="row">
+                      <th
+                        class=""
+                        tabindex="0"
+                        aria-controls="example3"
+                        rowspan="1"
+                        colspan="1"
+                        aria-sort="ascending"
+                        aria-label=": activate to sort column descending"
+                      >
+                        #
+                      </th>
+
+                      <th
+                        class=""
+                        tabindex="0"
+                        aria-controls="example3"
+                        rowspan="1"
+                        colspan="1"
+                        aria-label="Department: activate to sort column ascending"
+                      >
+                        Name
+                      </th>
+
+                      <!-- <th>Location</th> -->
+                      <th>Status</th>
+                      <th>Prescribed</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let medicine of medicineLists
+                          | searchFilter: searchText;
+                        let i = index
+                      "
+                    >
+                      <td>
+                        {{ medicine?.sl_no }}
+                      </td>
+
+                      <td>{{ medicine?.name }}</td>
+
+                      <td>
+                        <label
+                          *ngIf="!isVisible"
+                          class="switch"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="right"
+                          title="{{
+                            medicine?.is_active == 1 ? 'Active' : 'Inactive'
+                          }}"
+                        >
+                          <input
+                            type="checkbox"
+                            [checked]="medicine?.is_active == 1"
+                            (click)="
+                              onStatusChange(
+                                $event,
+                                medicine?.id,
+                                medicine?.is_active
+                              )
+                            "
+                          />
+                          <span class="slider round"></span>
+                        </label>
+                        <span *ngIf="isVisible" class="">
+                          {{
+                            medicine?.is_active == 1 ? 'Active' : 'Inactive'
+                          }}</span
+                        >
+                      </td>
+                      <td>
+                        <label
+                          class="switch"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="right"
+                          title="{{
+                            medicine?.is_prescription == 1
+                              ? 'Prescribed'
+                              : 'Not Prescribed'
+                          }}"
+                        >
+                          <input
+                            type="checkbox"
+                            [checked]="medicine?.is_prescription == 1"
+                            (click)="
+                              onPrescribedChange(
+                                $event,
+                                medicine?.id,
+                                medicine?.is_prescription
+                              )
+                            "
+                          />
+                          <span class="slider round"></span>
+                        </label>
+                        <span *ngIf="isVisible" class="">
+                          {{
+                            medicine?.is_prescriptiond == 1
+                              ? 'Prescribedd'
+                              : 'Not Prescribedd'
+                          }}</span
+                        >
+                      </td>
+                      <td>
+                        <div class="d-flex justify-content-center">
+                          <!-- <a
+                          [routerLink]="['medicine', medicine.id]"
+                          [routerLinkActive]="'router-Link-Active'"
+                          class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                          ><i class="icon-eye" aria-hidden="true"></i
+                        ></a> -->
+
+                          <a
+                            (click)="onEdit(medicine)"
+                            class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasScrolling"
+                            aria-controls="offcanvasScrolling"
+                            ><i class="icon-pencil" aria-hidden="true"></i
+                          ></a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <ngb-pagination
+                class="dataTables_paginate paging_simple_numbers"
+                [(page)]="page"
+                [pageSize]="pageSize"
+                [collectionSize]="medicineLength"
+                (pageChange)="getAllMedicines()"
+              >
+              </ngb-pagination>
+              <div class="dataTables_length float-right" id="example3_length">
+                <label
+                  >Show
+                  <select
+                    name="form-control"
+                    aria-controls="example3"
+                    class="p-2"
+                    [(ngModel)]="pageSize"
+                    (ngModelChange)="getAllMedicines()"
+                  >
+                    <option [ngValue]="5">5</option>
+                    <option [ngValue]="10">10</option>
+                    <option [ngValue]="15">15</option>
+                    <option #allList [ngValue]="medicineLength">All</option>
+                  </select>
+                  entries</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

@@ -1,0 +1,211 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content" style="min-height: 801px">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="card" *ngIf="writePermission">
+        <div class="header">
+          <h2>Add Hospital Type</h2>
+        </div>
+        <div class="card-body">
+          <div class="basic-form">
+            <form
+              [formGroup]="hospitalFormType"
+              (ngSubmit)="CreateHospitalType()"
+            >
+              <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label"
+                  >Hospital Type : <span class="text-danger">*</span></label
+                >
+                <div class="col-sm-6">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm m-1"
+                    formControlName="hospital_type"
+                    placeholder="Enter Hospital Type"
+                  />
+                  <div
+                    *ngIf="
+                      hospital_type &&
+                      hospital_type.invalid &&
+                      (hospital_type.dirty || hospital_type.touched)
+                    "
+                    class="invalid animated bounceIn text-danger"
+                  >
+                    Please enter Hospital name.
+                  </div>
+                </div>
+                <div class="text-right col-sm-4">
+                  <button
+                    type="submit"
+                    class="btn btn-primary m-1"
+                    [disabled]="hospital_type.invalid"
+                  >
+                    {{ buttonType }}
+                  </button>
+                  <button
+                    *ngIf="cancelButton !== ''"
+                    type="reset"
+                    (click)="onCancel()"
+                    class="btn btn-danger m-1"
+                  >
+                    {{ cancelButton }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div id="addrowExample_filter" class="dataTables_filter float-right m-2">
+        <input
+          type="search"
+          class="form-control float-right"
+          placeholder="Search Here"
+          [(ngModel)]="searchText"
+          aria-controls="addrowExample"
+        />
+      </div>
+      <button
+        class="btn btn-warning float-right m-2 text-white"
+        (click)="exportExcel()"
+        *ngIf="writePermission"
+      >
+        <i class="fa-solid fa-file-excel"></i>
+        Export to Excel
+      </button>
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive table-scroll">
+            <table
+              class="table table-bordered table-hover table-striped"
+              cellspacing="0"
+              id="addrowExample"
+              #excelTable
+            >
+              <thead>
+                <tr>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    #
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Name
+                  </th>
+                  <th>Status</th>
+                  <th *ngIf="writePermission">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let hospitalType of hospitalTypes
+                      | searchFilter: searchText;
+                    let i = index
+                  "
+                >
+                  <td>
+                    {{ hospitalType.sl_no }}
+                  </td>
+                  <td>{{ hospitalType.name }}</td>
+                  <td>
+                    <ng-container *ngIf="writePermission">
+                      <label
+                        *ngIf="!isVisible"
+                        class="switch"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="right"
+                        title="{{
+                          hospitalType.is_active == 1 ? 'Active' : 'Inactive'
+                        }}"
+                      >
+                        <input
+                          type="checkbox"
+                          [checked]="hospitalType.is_active == 1"
+                          (click)="
+                            onStatusChange(
+                              $event,
+                              hospitalType.id,
+                              hospitalType.is_active
+                            )
+                          "
+                        />
+                        <span class="slider round"></span> </label
+                      ><span *ngIf="isVisible">
+                        {{
+                          hospitalType.is_active == 1 ? 'Active' : 'Inactive'
+                        }}</span
+                      >
+                    </ng-container>
+                    <ng-container *ngIf="!writePermission">
+                        {{
+                          hospitalType.is_active == 1 ? 'Active' : 'Inactive'
+                        }}
+                    </ng-container>
+                  </td>
+                  <td *ngIf="writePermission">
+                    <a
+                      (click)="editHospitalType(hospitalType.id)"
+                      [routerLinkActive]="'router-Link-Active'"
+                      class="btn btn-warning shadow btn-xs sharp me-1"
+                      title="edit"><i class="icon-pencil"></i
+                    ></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <ngb-pagination
+              class="dataTables_paginate paging_simple_numbers"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [collectionSize]="departmentLength"
+              (pageChange)="getHospitalType()"
+            ></ngb-pagination>
+            <div class="dataTables_length float-right" id="example3_length">
+              <label
+                >Show
+                <select
+                  class="p-2"
+                  name="example3_length"
+                  aria-controls="example3"
+                  [(ngModel)]="pageSize"
+                  (ngModelChange)="getHospitalType()"
+                >
+                  <option [ngValue]="5">5</option>
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="15">15</option>
+                  <option [ngValue]="departmentLength">All</option>
+                </select>
+                Entries</label
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-admin-footer></app-admin-footer>
+  </div>
+</div>

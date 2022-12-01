@@ -1,0 +1,365 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="card">
+        <div class="header">
+          <!-- <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right mx-2"
+          >
+            <input
+              type="search"
+              class="form-control float-left w-100 m-2"
+              placeholder="Search Here"
+              [(ngModel)]="searchText"
+              aria-controls="addrowExample"
+            />
+          </div> -->
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right mx-2"
+          >
+            <input
+              [disabled]="nameFilter"
+              type="search"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              class="form-control float-left w-100 m-2"
+              placeholder="Search By Phone"
+              (input)="findDriverByMobile($event)"
+              aria-controls="addrowExample"
+            />
+          </div>
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right mx-2"
+          >
+            <input
+              [disabled]="phoneFilter"
+              type="search"
+              class="form-control float-left w-100 m-2"
+              placeholder="Search By Name"
+              (input)="findDriverByName($event)"
+              aria-controls="addrowExample"
+            />
+          </div>
+          <button
+            [routerLink]="['/admin/driver/add-driver']"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="Add Driver"
+            id="addToTable"
+            class="btn btn-primary float-right m-2"
+            type="button"
+            *ngIf="CURRENT_URL === '/admin/driver'"
+          >
+            <i class="icon-plus" aria-hidden="true"></i> Add Driver
+          </button>
+          <button
+            class="btn btn-warning float-right m-2 text-white"
+            (click)="exportExcel()"
+            *ngIf="CURRENT_URL === '/admin/driver'"
+          >
+            <i class="fa-solid fa-file-excel"></i>
+            Export to Excel
+          </button>
+        </div>
+        <div class="body">
+          <div
+            id="example3_wrapper"
+            class="dataTables_wrapper no-footer table-scroll"
+          >
+            <div class="table-responsive">
+              <table
+                class="table table-bordered table-hover table-striped text-center"
+                cellspacing="0"
+                id="addrowExample"
+                #excelTable
+              >
+                <thead>
+                  <tr role="row">
+                    <th
+                      class=""
+                      tabindex="0"
+                      aria-controls="example3"
+                      rowspan="1"
+                      colspan="1"
+                      aria-sort="ascending"
+                      aria-label=": activate to sort column descending"
+                    >
+                      #
+                    </th>
+
+                    <th
+                      class=""
+                      tabindex="0"
+                      aria-controls="example3"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="Email: activate to sort column ascending"
+                    >
+                      Profile Image
+                    </th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <!-- <th>Country</th> -->
+                    <!-- <th>Location</th> -->
+                    <th *ngIf="CURRENT_URL === '/admin/driver'">Status</th>
+                    <th *ngIf="CURRENT_URL === '/admin/driver'">Approve</th>
+                    <th *ngIf="CURRENT_URL === '/admin/driver'">Ambulance</th>
+                    <th *ngIf="CURRENT_URL === '/admin/driver'">On Boarded</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let driver of driverLists | searchFilter: searchText;
+                      let i = index
+                    "
+                  >
+                    <td>
+                      {{ driver?.sl_no }}
+                    </td>
+                    <td class="sorting_1">
+                      <img
+                        class=""
+                        width="35"
+                        src="{{ baseUrl }}{{ driver?.profile_image }}"
+                        alt=""
+                      />
+                    </td>
+                    <td>{{ driver?.name }}</td>
+                    <td>{{ driver?.email }}</td>
+                    <td>{{ driver?.phone }}</td>
+                    <!-- <td>{{ driver?.country_code }}</td> -->
+                    <td *ngIf="CURRENT_URL === '/admin/driver'">
+                      <label
+                        *ngIf="!isVisible"
+                        class="switch"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="right"
+                        title="{{
+                          driver?.is_active == 1 ? 'Active' : 'Inactive'
+                        }}"
+                      >
+                        <input
+                          type="checkbox"
+                          [checked]="driver?.is_active == 1"
+                          (click)="
+                            onStatusChange(
+                              $event,
+                              driver?.id,
+                              driver?.is_active
+                            )
+                          "
+                        />
+                        <span class="slider round"></span>
+                      </label>
+                      <span *ngIf="isVisible" class="">
+                        {{
+                          driver?.is_active == 1 ? 'Active' : 'Inactive'
+                        }}</span
+                      >
+                    </td>
+                    <td *ngIf="CURRENT_URL === '/admin/driver'">
+                      <label
+                        class="switch"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="right"
+                        title="{{
+                          driver?.is_approved == 1 ? 'Approved' : 'Not Approved'
+                        }}"
+                      >
+                        <input
+                          type="checkbox"
+                          [checked]="driver?.is_approved == 1"
+                          (click)="
+                            onApprovedChange(
+                              $event,
+                              driver?.id,
+                              driver?.is_approved
+                            )
+                          "
+                        />
+                        <span class="slider round"></span>
+                      </label>
+                      <span *ngIf="isVisible" class="">
+                        {{
+                          driver?.is_approved == 1 ? 'Approved' : 'Not Approved'
+                        }}</span
+                      >
+                    </td>
+                    <td *ngIf="CURRENT_URL === '/admin/driver'">
+                      <b> {{ driver?.ambulance_id?.ambulance_type?.name }}</b> -
+                      {{ driver?.ambulance_id?.registration_number }}
+                    </td>
+                    <td *ngIf="CURRENT_URL === '/admin/driver'">
+                      {{ driver?.cretaed_on | date }}
+                    </td>
+                    <td>
+                      <a
+                        *ngIf="CURRENT_URL === '/admin/driver'"
+                        [routerLink]="[
+                          '/admin/driver/edit-driver/',
+                          driver?.id
+                        ]"
+                        routerLinkActive="router-link-active"
+                        class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                        data-toggle="tooltip"
+                        data-original-title="Edit"
+                        ><i class="icon-pencil" aria-hidden="true"></i
+                      ></a>
+                      <a
+                        *ngIf="CURRENT_URL === '/admin/driver-rides'"
+                        class="btn btn-danger shadow btn-xs sharp me-1"
+                        (click)="onReportView(driver)"
+                      >
+                        <i class="fa-solid fa-square-poll-vertical"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ngb-pagination
+              class="dataTables_paginate paging_simple_numbers"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [collectionSize]="driverLength"
+              (pageChange)="getAllDriver()"
+            >
+            </ngb-pagination>
+            <div class="dataTables_length float-right" id="example3_length">
+              <label
+                >Show
+                <select
+                  name="form-control"
+                  aria-controls="example3"
+                  class="p-2"
+                  [(ngModel)]="pageSize"
+                  (ngModelChange)="getAllDriver()"
+                  id="selectMenu"
+                  #selectMenu
+                >
+                  <option [ngValue]="5">5</option>
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="15">15</option>
+                  <option #allList id="allList" [ngValue]="driverLength">
+                    All
+                  </option>
+                </select>
+
+                entries</label
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-admin-footer></app-admin-footer>
+</div>
+
+<!--driver Ride Report Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary d-none"
+  data-bs-toggle="modal"
+  data-bs-target="#staticBackdrop"
+  #reportModal
+></button>
+<!--driver Ride Report Modal -->
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg oy-none">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="reportForm" (ngSubmit)="onFilter()">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="row">
+                <label class="col-sm-4 col-form-label"
+                  >Start Date:
+                  <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-8">
+                  <input
+                    type="date"
+                    class="form-control"
+                    placeholder="Enter a Start date"
+                    formControlName="start_date"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="row">
+                <label class="col-sm-4 col-form-label"
+                  >End Date:
+                  <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-8">
+                  <input
+                    type="date"
+                    class="form-control"
+                    placeholder="Enter a End date"
+                    formControlName="end_date"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-1">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                (click)="onFilter()"
+              >
+                Filter
+              </button>
+            </div>
+          </div>
+        </form>
+        <div class="body">
+          <canvas
+            *ngIf="message"
+            baseChart
+            [datasets]="totalRides"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [plugins]="barChartPlugins"
+            [legend]="barChartLegend"
+            [chartType]="barChartType"
+          >
+          </canvas>
+          <p *ngIf="!message" class="text-danger">Data Not Found</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

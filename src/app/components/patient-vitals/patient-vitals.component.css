@@ -1,0 +1,290 @@
+.box-left {
+    float: left;
+    width: 100%;
+    border-right: 1px solid #283464;
+}
+
+.wave-box {
+    float: left;
+    width: 100%;
+    border-bottom: 1px dashed #37426b;
+    padding: 20px 50px;
+    text-align: center;
+}
+
+.wave-box img {
+    width: 86%;
+}
+
+.download-ecg {
+    float: left;
+    width: 100%;
+    border-bottom: 1px dashed #37426b;
+    padding: 5px;
+    text-align: center;
+}
+
+.download-ecg a,
+.ecg-btn {
+    display: inline-block;
+    padding: 5px 30px 5px 50px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #f2cd00;
+    border-radius: 50px;
+    border: none;
+    background: #293975 url(src/assets/images/vital-icon/download.png) no-repeat 25px 8px;
+    background-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.history-bar {
+    float: left;
+    width: 100%;
+    border-bottom: 1px dashed #37426b;
+    padding: 5px;
+}
+
+.history-bar h3 {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    color: #f2cd00;
+    font-weight: 700;
+}
+
+.history-bar h3.ba-ico {
+    padding-left: 15px;
+    background: url(src/assets/images/vital-icon/body-analizer.png) no-repeat 0px 4px;
+    background-size: 10px;
+}
+
+.bottom-box-wrap {
+    width: 100%;
+    float: left;
+}
+
+.table-box {
+    float: left;
+    width: 100%;
+}
+
+.table-box .table tr th,
+.table-box .table tr td {
+    border-bottom: 1px solid #283464;
+    border-right: 1px solid #283464;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+}
+
+.table-box .table tr:hover,
+.table-box .table tr.selected,
+.table-box .table tr.selected td {
+    color: #f2cd00;
+    background: #293975;
+    cursor: pointer;
+}
+
+.left-border {
+    border-left: 1px solid #283464;
+}
+
+.body-analizer-ul {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.body-analizer-ul li {
+    display: inline-block;
+    margin-right: 10px;
+    margin-top: 5px;
+    border: 1px dashed #fff;
+    border-radius: 50px;
+    padding: 4px 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #fff;
+}
+
+.body-analizer-ul li span {
+    color: #f2cd00;
+}
+
+.v-right-box {
+    float: left;
+    border-bottom: 1px dashed #37426b;
+    width: 100%;
+    padding-top: 7px;
+    padding-left: 8px;
+}
+
+.pr-icobox {
+    float: left;
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    color: #00A900;
+    padding-left: 23px;
+    background: url(src/assets/images/vital-icon/pulse-green.png) no-repeat 0px 0px;
+    background-size: 18px;
+}
+
+.pr-text {
+    float: left;
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 40px;
+    color: #00A900;
+    font-weight: 700;
+    padding: 23px 0;
+    padding-bottom: 10px;
+}
+
+.pi-ico {
+    background: url(src/assets/images/vital-icon/pi.png) no-repeat 0px 0px;
+    background-size: 18px;
+    color: #00c6ff;
+}
+
+.pi-text {
+    color: #00c6ff;
+}
+
+.spo-ico {
+    background: url(src/assets/images/vital-icon/spo2.png) no-repeat 0px 0px;
+    background-size: 18px;
+    color: #7ee9e9;
+}
+
+.spo-text {
+    color: #7ee9e9;
+    font-size: 80px;
+}
+
+.date-time {
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.date-time li {
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #f2cd00;
+    padding-left: 17px;
+    margin-right: 10px;
+}
+
+.date-ico {
+    background: url(src/assets/images/vital-icon/date.png) no-repeat 0px 3px;
+    background-size: 11px;
+}
+
+.time-ico {
+    background: url(src/assets/images/vital-icon/time.png) no-repeat 0px 3px;
+    background-size: 11px;
+}
+
+.vital-bp-ico {
+    background: url(src/assets/images/vital-icon/bp.png) no-repeat 0px 0px;
+    background-size: 18px;
+    color: #e5007c;
+}
+
+.vital-bp-text {
+    color: #e5007c;
+    font-size: 38px;
+}
+
+.pulse-rate-light {
+    background: url(src/assets/images/vital-icon/pulse-lightgreen.png) no-repeat 0px 0px;
+    background-size: 18px;
+    color: #97d775;
+    width: auto;
+}
+
+.pulse-rate-lighttext {
+    color: #97d775;
+    font-size: 92px;
+    float: right;
+    width: auto;
+    padding-right: 108px;
+    background: url(src/assets/images/vital-icon/wave-ico.png) no-repeat 85% 0px;
+    background-size: 88px;
+    padding-bottom: 17px;
+}
+
+.pulse-box-right {
+    padding: 11px 0;
+    padding-left: 8px;
+}
+
+.respiration-ico-box {
+    background: url(src/assets/images/vital-icon/rr.png) no-repeat 0px 0px;
+    background-size: 18px;
+    color: #f2cd00;
+}
+
+.respiration-box-text {
+    color: #f2cd00;
+    background: url(src/assets/images/vital-icon/rr-big.png) no-repeat 85% 0px;
+    font-size: 60px;
+    padding-right: 141px;
+    padding-top: 42px;
+    padding-bottom: 28px;
+}
+
+.thermometer-ico-box {
+    background: url(src/assets/images/vital-icon/temprature.png) no-repeat 0px 0px;
+    background-size: 11px;
+    color: #ff0000;
+}
+
+.thermometer-text-box {
+    color: #ff0000;
+    background: url(src/assets/images/vital-icon/thermometer.png) no-repeat 140px 13px;
+    font-size: 46px;
+    padding-left: 221px;
+    padding-top: 57px;
+    padding-bottom: 43px;
+    background-size: 67px;
+}
+
+.thermometer-text-box span {
+    display: block;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.no-border {
+    border-bottom: 0;
+}
+
+.border-left {
+    border-left: 1px dashed #37426b;
+}
+
+.closebtn-vital {
+    background: #f2cd00;
+    border-radius: 50px;
+    color: #fff;
+    font-size: 14px;
+    padding: 7px 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    display: inline-block;
+    margin-left: 45px;
+}
+
+.closebtn-vital i {
+    margin-right: 7px;
+}

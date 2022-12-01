@@ -1,0 +1,30 @@
+.hospital-image {
+  width: 88px;
+  /* height: 40px; */
+  vertical-align: top;
+  margin-right: 15px;
+  border: 1px solid #efefef;
+}
+
+.ontrip-alert {
+  width: 40px;
+  margin-right: 10px;
+  float: left;
+}
+
+.user-account {
+  margin: 10px;
+}
+
+.dropdown-menu {
+  min-width: 190px;
+}
+.t-d-none {
+  text-decoration: none;
+}
+.z-1000 {
+  z-index: 1000 !important;
+}
+.z-10000 {
+  z-index: 1000 !important;
+}

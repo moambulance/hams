@@ -1,0 +1,292 @@
+<div id="wrapper">
+  <app-navbar></app-navbar>
+  <app-sidebar></app-sidebar>
+  <app-spinner></app-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-breadcrumb [breadCrumbData]="breadCrumbData"></app-breadcrumb>
+
+      <div class="row clearfix">
+        <div class="card">
+          <div class="card-body">
+            <div class="form-validation">
+              <form
+                class="needs-validation"
+                novalidate=""
+                [formGroup]="hospitalForm"
+                (ngSubmit)="onCreateHospital()"
+              >
+                <div class="row">
+                  <div class="col-xl-6">
+                    <div class="mb-3 row">
+                      <label class="col-lg-5 col-form-label" for="bls_base_fare"
+                        >BLS base fare:
+                        <!-- <span class="text-danger">*</span> -->
+                      </label>
+                      <div class="col-lg-5">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="bls_base_fare"
+                          placeholder="Enter BLS base fare "
+                          required=""
+                          formControlName="bls_base_fare"
+                        />
+                        <!-- <div *ngIf="
+                            bls_base_fare && bls_base_fare.invalid && (bls_base_fare.dirty || bls_base_fare.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-5 col-form-label"
+                        for="bls_per_km_fare_slab1"
+                        >BLS per KM fare slab1:
+                        <!-- <span class="text-danger">*</span> -->
+                      </label>
+                      <div class="col-lg-5">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="bls_per_km_fare_slab1"
+                          placeholder="Enter BLS per KM  fare slab1"
+                          required=""
+                          formControlName="bls_per_km_fare_slab1"
+                        />
+                        <!-- <div *ngIf="
+                            bls_per_km_fare_slab1 && bls_per_km_fare_slab1.invalid && (bls_per_km_fare_slab1.dirty || bls_per_km_fare_slab1.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-5 col-form-label"
+                        for="bls_per_km_fare_slab2"
+                        >BLS per KM fare slab2:
+                        <!-- <span class="text-danger">*</span> -->
+                      </label>
+                      <div class="col-lg-5">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="bls_per_km_fare_slab2"
+                          placeholder="Enter BLS per KM  fare slab2"
+                          required=""
+                          formControlName="bls_per_km_fare_slab2"
+                        />
+                        <!-- <div *ngIf="
+                            bls_per_km_fare_slab2 && bls_per_km_fare_slab2.invalid && (bls_per_km_fare_slab2.dirty || bls_per_km_fare_slab2.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-5 col-form-label"
+                        for="bls_oxygen_per_km"
+                        >BLS oxygen per KM:
+                        <!-- <span class="text-danger">*</span> -->
+                      </label>
+                      <div class="col-lg-5">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="bls_oxygen_per_km"
+                          placeholder="Enter BLS oxygen per KM"
+                          required=""
+                          formControlName="bls_oxygen_per_km"
+                        />
+                        <!-- <div *ngIf="
+                            bls_oxygen_per_km && bls_oxygen_per_km.invalid && (bls_oxygen_per_km.dirty || bls_oxygen_per_km.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-6">
+                    <div class="mb-3 row">
+                      <label class="col-lg-5 col-form-label" for="als_base_fare"
+                        >ALS base fare:
+                        <!-- <span class="text-danger">*</span> -->
+                      </label>
+                      <div class="col-lg-5">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="als_base_fare"
+                          placeholder="Enter als_base_fare"
+                          required=""
+                          formControlName="als_base_fare"
+                        />
+                        <!-- <div *ngIf="
+                            als_base_fare && als_base_fare.invalid && (als_base_fare.dirty || als_base_fare.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter als_base_fare
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-5 col-form-label"
+                        for="als_per_km_fare_slab1"
+                        >ALS per KM fare slab1:
+                        <!-- <span class="text-danger">*</span> -->
+                      </label>
+                      <div class="col-lg-5">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="als_per_km_fare_slab1"
+                          placeholder="Enter ALS per KM  fare slab1"
+                          required=""
+                          formControlName="als_per_km_fare_slab1"
+                        />
+                        <!-- <div *ngIf="
+                            als_per_km_fare_slab1 && als_per_km_fare_slab1.invalid && (als_per_km_fare_slab1.dirty || bls_per_km_fare_slab1.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-5 col-form-label"
+                        for="als_per_km_fare_slab2"
+                        >ALS per KM fare slab2:
+                        <!-- <span class="text-danger">*</span> -->
+                      </label>
+                      <div class="col-lg-5">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="als_per_km_fare_slab2"
+                          placeholder="Enter BLS per KM  fare slab2"
+                          required=""
+                          formControlName="als_per_km_fare_slab2"
+                        />
+                        <!-- <div *ngIf="
+                            als_per_km_fare_slab2 && als_per_km_fare_slab2.invalid && (als_per_km_fare_slab2.dirty || BLS per KM  fare slab1.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-5 col-form-label"
+                        for="als_oxygen_per_km"
+                        >ALS oxygen per KM:
+                        <!-- <span class="text-danger">*</span> -->
+                      </label>
+                      <div class="col-lg-5">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="als_oxygen_per_km"
+                          placeholder="Enter ALS oxygen per KM"
+                          required=""
+                          formControlName="als_oxygen_per_km"
+                        />
+                        <!-- <div *ngIf="
+                            als_oxygen_per_km && als_oxygen_per_km.invalid && (als_oxygen_per_km.dirty || als_oxygen_per_km.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-6">
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-5 col-form-label"
+                        for="covid_ppe_cost"
+                        >Covid PPE kit Cost:
+                        <!-- <span class="text-danger">*</span> -->
+                      </label>
+                      <div class="col-lg-5">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="covid_ppe_cost"
+                          placeholder="Enter Covid PPE kit Cost"
+                          required=""
+                          formControlName="covid_ppe_cost"
+                        />
+                        <!-- <div *ngIf="
+                            als_oxygen_per_km && als_oxygen_per_km.invalid && (als_oxygen_per_km.dirty || als_oxygen_per_km.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-6">
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-5 col-form-label"
+                        for="covid_ppe_cost"
+                        >Platform Service Charge(%):
+                        <!-- <span class="text-danger">*</span> 
+ -->
+                      </label>
+                      <div class="col-lg-5">
+                        <input
+                          type="number"
+                          [min]="0"
+                          [max]="100"
+                          class="form-control"
+                          id="covid_ppe_cost"
+                          placeholder="Enter Platform Service Percentage"
+                          required=""
+                          formControlName="platformServicePercentage"
+                          (input)="onPlatformPercentage($event)"
+                        />
+                        <!-- <div *ngIf="
+                            als_oxygen_per_km && als_oxygen_per_km.invalid && (als_oxygen_per_km.dirty || als_oxygen_per_km.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <div class="col-lg-12">
+                    <button
+                      type="submit"
+                      class="btn btn-save p-2 rounded w-10 m-1 float-right"
+                    >
+                      Save
+                    </button>
+                    <a
+                      class="btn btn-cancel p-2 w-10 m-1 float-right"
+                      routerLink="/hospital/dashboard"
+                    >
+                      Cancel
+                    </a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

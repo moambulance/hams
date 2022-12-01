@@ -1,0 +1,802 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content" style="min-height: 801px">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+
+      <div class="card">
+        <!-- hospital bed canvas start -->
+        <div
+          class="offcanvas offcanvas-end w-35"
+          data-bs-scroll="true"
+          data-bs-backdrop="false"
+          tabindex="-1"
+          id="offcanvasScrolling"
+          aria-labelledby="offcanvasScrollingLabel"
+        >
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">
+              Hospital Bed Details
+            </h5>
+            <button
+              type="reset"
+              class="btn-close text-reset"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
+          </div>
+
+          <div class="offcanvas-body">
+            <div class="form-validation">
+              <form
+                class="needs-validation"
+                novalidate=""
+                [formGroup]="hospitalBedForm"
+                (ngSubmit)="onSubmitBed()"
+              >
+                <div class="row">
+                  <div class="col-xl-12">
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="emergency_bed"
+                        >Emergency Bed
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          accept="number"
+                          type="number"
+                          min="0"
+                          class="form-control"
+                          id="emergency_bed"
+                          placeholder="Emergency beds.."
+                          formControlName="emergency_bed"
+                        />
+                        <div
+                          *ngIf="
+                            emergency_bed &&
+                            emergency_bed.invalid &&
+                            (emergency_bed.dirty || emergency_bed.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter emergency bed quantity.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="icu_bed"
+                        >ICU Bed
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          accept="number"
+                          type="number"
+                          min="0"
+                          class="form-control"
+                          id="icu_bed"
+                          placeholder="ICU beds.."
+                          formControlName="icu_bed"
+                        />
+                        <div
+                          *ngIf="
+                            icu_bed &&
+                            icu_bed.invalid &&
+                            (icu_bed.dirty || icu_bed.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter ICU bed quantity.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="nicu_bed"
+                        >NICU Bed
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          accept="number"
+                          type="number"
+                          min="0"
+                          id="nicu_bed"
+                          class="form-control"
+                          placeholder="NICU beds.."
+                          formControlName="nicu_bed"
+                        />
+                        <div
+                          *ngIf="
+                            nicu_bed &&
+                            nicu_bed.invalid &&
+                            (nicu_bed.dirty || nicu_bed.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter NICU bed quantity.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="dialysis_bed"
+                        >dialysis Bed
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          accept="number"
+                          type="number"
+                          min="0"
+                          id="dialysis_bed"
+                          class="form-control"
+                          placeholder="dialysis beds.."
+                          formControlName="dialysis_bed"
+                        />
+                        <div
+                          *ngIf="
+                            dialysis_bed &&
+                            dialysis_bed.invalid &&
+                            (dialysis_bed.dirty || dialysis_bed.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter dialysis bed quantity.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-3 col-form-label"
+                        for="emergency_doctor"
+                        >Emergency Doctor
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="emergency_doctor"
+                          placeholder="Emergency Doctor"
+                          formControlName="emergency_doctor"
+                        />
+                        <div
+                          *ngIf="
+                            emergency_doctor &&
+                            emergency_doctor.invalid &&
+                            (emergency_doctor.dirty || emergency_doctor.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter Emergency doctor name.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="phone"
+                        >Phone
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Enter mobile number.."
+                          id="phone"
+                          formControlName="phone"
+                          maxlength="10"
+                        />
+                        <div
+                          *ngIf="
+                            phone &&
+                            phone.invalid &&
+                            (phone.dirty || phone.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter valid phone number.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-md-2" for="active"
+                        >Active
+                        <span class="text-danger">*</span>
+                        <div class="form-check"></div>
+                      </label>
+                      <div class="col-md-2">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          [value]="is_checked"
+                          id="active"
+                          [checked]="is_checked === 1"
+                          formArrayName="is_active"
+                          (change)="onBedActive($event)"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-success float-right w-25" type="submit">
+                  Submit
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!--hospital bed canvas end -->
+        <div class="header float-right">
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              type="search"
+              class="form-control float-right w-100"
+              placeholder="Search Here"
+              [(ngModel)]="searchText"
+              aria-controls="addrowExample"
+            />
+          </div>
+          <button
+            *ngIf="CURRENT_URL === '/admin/hospitals'"
+            [routerLink]="['add-hospital/']"
+            class="btn btn-primary m-2 float-right"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            type="button"
+          >
+            <i class="icon-plus" aria-hidden="true"></i>
+            Add Hospital
+          </button>
+          <button
+            *ngIf="CURRENT_URL === '/admin/hospitals'"
+            class="btn btn-warning float-right m-2 text-white"
+            (click)="exportExcel()"
+          >
+            <i class="fa-solid fa-file-excel"></i>
+            Export to Excel
+          </button>
+        </div>
+        <div class="body">
+          <div
+            class="offcanvas offcanvas-end w-50 m-2"
+            data-bs-scroll="true"
+            data-bs-backdrop="false"
+            tabindex="-1"
+            id="offcanvasScrolling"
+            aria-labelledby="offcanvasScrollingLabel"
+          >
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasScrollingLabel">
+                <!-- Heading -->
+              </h5>
+              <button
+                type="button"
+                class="btn-close text-reset"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"
+              ></button>
+            </div>
+          </div>
+          <div
+            id="example3_wrapper"
+            class="dataTables_wrapper no-footer table-scroll"
+          >
+            <table
+              class="table table-bordered table-hover table-striped text-center"
+              cellspacing="0"
+              id="addrowExample"
+              #excelTable
+            >
+              <thead>
+                <tr role="row">
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    #
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Logo
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Department: activate to sort column ascending"
+                  >
+                    Name
+                  </th>
+
+                  <th
+                    *ngIf="CURRENT_URL === '/admin/hospitals'"
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Address
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                  >
+                    City
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                  >
+                    State
+                  </th>
+                  <th
+                    *ngIf="CURRENT_URL === '/admin/hospitals'"
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Education: activate to sort column ascending"
+                  >
+                    Status
+                  </th>
+                  <th
+                    *ngIf="CURRENT_URL === '/admin/hospitals'"
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Gender: activate to sort column ascending"
+                  >
+                    Approve
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Action: activate to sort column ascending"
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  role="row"
+                  class="odd"
+                  *ngFor="
+                    let hospital of hospitals | searchFilter: searchText;
+                    let i = index
+                  "
+                >
+                  <td>
+                    <strong>{{ hospital.sl_no }}</strong>
+                  </td>
+                  <td class="sorting_1">
+                    <img
+                      class=""
+                      width="35"
+                      src="{{ baseUrl }}{{ hospital.logo }}"
+                      alt=""
+                    />
+                  </td>
+                  <td>{{ hospital.name }}</td>
+                  <td *ngIf="CURRENT_URL === '/admin/hospitals'">
+                    {{
+                      hospital.address1 &&
+                      hospital.address1.address &&
+                      hospital.address1.address != 'undefined'
+                        ? hospital.address1.address
+                        : ''
+                    }}
+                  </td>
+                  <td>{{ hospital?.city_name }}</td>
+                  <td>{{ hospital?.state_name }}</td>
+                  <td *ngIf="CURRENT_URL === '/admin/hospitals'">
+                    <span *ngIf="isVisible">
+                      {{
+                        hospital?.is_active == 1 ? 'Active' : 'Inactive'
+                      }}</span
+                    >
+                    <label
+                      *ngIf="!isVisible"
+                      class="switch"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="right"
+                      title="{{
+                        hospital.is_active == 1 ? 'Active' : 'Inactive'
+                      }}"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="hospital.is_active == 1"
+                        (click)="
+                          onStatusChange(
+                            $event,
+                            hospital.id,
+                            hospital.is_active
+                          )
+                        "
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+                  <td *ngIf="CURRENT_URL === '/admin/hospitals'">
+                    <span *ngIf="isVisible">
+                      {{
+                        hospital?.is_approved == 1 ? 'Approved' : 'Not Approved'
+                      }}</span
+                    >
+                    <label
+                      *ngIf="!isVisible"
+                      class="switch"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="right"
+                      title="{{
+                        hospital?.is_approved == 1 ? 'Approved' : 'Not Approved'
+                      }}"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="hospital?.is_approved == 1"
+                        (click)="
+                          onApprovedChange(
+                            $event,
+                            hospital?.id,
+                            hospital?.is_approved
+                          )
+                        "
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+
+                  <td>
+                    <div class="d-flex justify-content-center">
+                      <!-- <a
+                        [routerLink]="['hospital-details', hospital.id]"
+                        [routerLinkActive]="'router-Link-Active'"
+                        class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                        ><i class="icon-eye" aria-hidden="true"></i
+                      ></a> -->
+
+                      <a
+                        *ngIf="CURRENT_URL === '/admin/hospitals'"
+                        [routerLink]="['edit-hospital/', hospital.id]"
+                        routerLinkActive="router-link-active"
+                        class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                        ><i class="icon-pencil" aria-hidden="true"></i
+                      ></a>
+                      <a
+                        *ngIf="CURRENT_URL === '/admin/hospitals'"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasScrolling"
+                        aria-controls="offcanvasScrolling"
+                        class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                        (click)="getBedDetails(hospital.id)"
+                        ><i class="fa-solid fa-bed"></i
+                      ></a>
+                      <a
+                        *ngIf="CURRENT_URL === '/admin/hospitals'"
+                        class="btn btn-sm on-default m-r-5 btn-icon btn-pure btn-default on-default m-r-5"
+                        (click)="getAmbuLanceByHospitalId(hospital?.id)"
+                      >
+                        <i class="fa-solid fa-truck-medical"></i>
+                      </a>
+                      <a
+                        *ngIf="CURRENT_URL === '/admin/hospital-rides'"
+                        class="btn btn-danger shadow btn-xs sharp me-1"
+                        (click)="onReportClick(hospital)"
+                      >
+                        <i class="fa-solid fa-square-poll-vertical"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <ngb-pagination
+          class="dataTables_paginate paging_simple_numbers"
+          [(page)]="page"
+          [pageSize]="pageSize"
+          [collectionSize]="hospitalsLength"
+          (pageChange)="getAllHospitals()"
+        >
+        </ngb-pagination>
+        <div class="dataTables_length float-right" id="example3_length">
+          <label
+            >Show
+            <select
+              class="p-2"
+              name="form-control"
+              aria-controls="example3"
+              [(ngModel)]="pageSize"
+              (ngModelChange)="getAllHospitals()"
+            >
+              <option [ngValue]="5">5</option>
+              <option [ngValue]="10">10</option>
+              <option [ngValue]="15">15</option>
+              <option [ngValue]="hospitalsLength">All</option>
+            </select>
+            entries</label
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>
+
+<!--Assign Ambulance to hospital Modal -->
+<button
+  class="d-none"
+  data-bs-toggle="modal"
+  data-bs-target="#exampleModal"
+  #openModal
+></button>
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Assign Ambulance to hospital
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div
+          *ngFor="let ambulance of allAvailableAmbulance"
+          (click)="selecedAmbulance(ambulance)"
+        >
+          <div
+            [class]="
+              ambulance?.selected
+                ? 'row mb-3 rounded border border-3 border-success cursor-pointer'
+                : 'row mb-3 rounded border border-3 border-secondary cursor-pointer'
+            "
+          >
+            <div class="column">
+              <div class="card1">
+                <h3>Registration Number</h3>
+                <p>
+                  {{
+                    ambulance.registration_number
+                      ? ambulance.registration_number
+                      : 'NA'
+                  }}
+                </p>
+                <!-- <p>Some text</p> -->
+              </div>
+            </div>
+
+            <div class="column">
+              <div class="card1">
+                <h3>Ambulance Type Name</h3>
+                <p>
+                  {{
+                    ambulance.ambulance_type_id.name
+                      ? ambulance.ambulance_type_id.name
+                      : 'NA'
+                  }}
+                </p>
+                <!-- <p>Some text</p> -->
+              </div>
+            </div>
+
+            <div class="column">
+              <div class="card1">
+                <h3>Hospital</h3>
+                <p>
+                  {{
+                    ambulance?.hospital_id
+                      ? ambulance?.hospital_id?.name
+                      : 'Not Assigned'
+                  }}
+                </p>
+                <!-- <p>Some text</p> -->
+              </div>
+            </div>
+
+            <div class="column">
+              <div class="card1">
+                <h3>Ambulance Type Image</h3>
+                <img
+                  *ngIf="ambulance?.ambulance_type_id?.image"
+                  src="{{ baseUrl + ambulance?.ambulance_type_id?.image }}"
+                  alt=""
+                />
+                <p *ngIf="!ambulance?.ambulance_type_id?.image">NA</p>
+                <!-- <p>Some text</p> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          (click)="updateAssignedHospital()"
+        >
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Hospital Ride Report Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary d-none"
+  data-bs-toggle="modal"
+  data-bs-target="#staticBackdrop"
+  #reportModal
+></button>
+<!--Hospital Ride Report Modal -->
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-xl oy-none">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="reportForm" (ngSubmit)="getFilteredData()">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="row">
+                <label class="col-sm-3 col-form-label"
+                  >Start Date:
+                  <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-9">
+                  <input
+                    type="date"
+                    class="form-control"
+                    placeholder="Enter a Start date"
+                    formControlName="start_date"
+                  />
+                  <div
+                    *ngIf="
+                      start_date &&
+                      start_date.invalid &&
+                      (start_date.dirty || start_date.touched)
+                    "
+                    class="invalid animated bounceIn text-danger"
+                  >
+                    Please enter start date
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="row">
+                <label class="col-sm-3 col-form-label"
+                  >End Date:
+                  <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-9">
+                  <input
+                    type="date"
+                    class="form-control"
+                    placeholder="Enter a End date"
+                    formControlName="end_date"
+                  />
+                  <div
+                    *ngIf="
+                      end_date &&
+                      end_date.invalid &&
+                      (end_date.dirty || end_date.touched)
+                    "
+                    class="invalid animated bounceIn text-danger"
+                  >
+                    Please enter end date
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <select
+                class="form-select form-control"
+                aria-label="Default select example"
+                formControlName="ambulance_type_id"
+                (input)="onAmbulanceTypeChange($event)"
+              >
+                <option [value]="-1">Select Ambulance Type</option>
+                <option [value]="0">All Rides</option>
+                <option *ngFor="let type of ambulanceTypes" [value]="type.id">
+                  {{ type.name }}
+                </option>
+                <!-- <option value="2">BLS</option> -->
+              </select>
+            </div>
+            <div class="col-md-1">
+              <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="body">
+        <canvas
+          *ngIf="message"
+          baseChart
+          [datasets]="hospitalRides"
+          [labels]="barChartLabels"
+          [options]="barChartOptions"
+          [plugins]="barChartPlugins"
+          [legend]="barChartLegend"
+          [chartType]="barChartType"
+        >
+        </canvas>
+        <p *ngIf="!message" class="text-danger">Data Not Found</p>
+      </div>
+    </div>
+  </div>
+</div>

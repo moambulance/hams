@@ -1,0 +1,324 @@
+<div id="wrapper">
+  <app-navbar></app-navbar>
+  <app-sidebar></app-sidebar>
+  <app-spinner></app-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-breadcrumb [breadCrumbData]="breadCrumbData"></app-breadcrumb>
+      <div class="row">
+        <div class="card">
+          <div class="body">
+            <div class="form-validation">
+              <form
+                id="basic-form"
+                [formGroup]="ambulanceForm"
+                (ngSubmit)="onSubmit()"
+              >
+                <div class="mb-3 row">
+                  <label class="col-sm-3 col-form-label"
+                    >Registration Date :
+                    <span class="text-danger">*</span></label
+                  >
+                  <div class="col-sm-9">
+                    <input
+                      type="date"
+                      class="form-control"
+                      placeholder="dd/mm/yy"
+                      required=""
+                      formControlName="registration_date"
+                    />
+                    <div
+                      *ngIf="
+                        registration_date &&
+                        registration_date.invalid &&
+                        (registration_date.dirty || registration_date.touched)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please Provide Ambulance's Registration Date.
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-sm-3 col-form-label"
+                    >Registration Number :
+                    <span class="text-danger">*</span></label
+                  >
+
+                  <div class="col-sm-9">
+                    <input
+                      type="text"
+                      class="form-control"
+                      style="text-transform: uppercase"
+                      placeholder="Registration Number"
+                      required=""
+                      formControlName="registration_number"
+                    />
+                    <div
+                      *ngIf="
+                        registration_number &&
+                        registration_number.invalid &&
+                        (registration_number.dirty ||
+                          registration_number.touched)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please Provide Ambulance's Registration Number.
+                    </div>
+                  </div>
+                </div>
+                <!-- <fieldset class="mb-3">
+                  <div class="row">
+                    <label class="col-form-label col-sm-3 pt-0"
+                      >Type : <span class="text-danger">*</span></label
+                    >
+                    <div class="col-sm-9">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="owner_type"
+                          formControlName="owner_type"
+                          id="inlineRadio2"
+                          [value]="0"
+                          (click)="onTypeChange($event)"
+                        />
+                        <label class="form-check-label"> Self/Admin</label>
+                      </div>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="owner_type"
+                          formControlName="owner_type"
+                          id="inlineRadio2"
+                          [value]="1"
+                          (click)="onTypeChange($event)"
+                        />
+                        <label class="form-check-label"> Hospital</label>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="
+                        owner_type &&
+                        owner_type.invalid &&
+                        (owner_type.dirty || owner_type.touched)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please Provide Owner Type.
+                    </div>
+                  </div>
+                </fieldset> -->
+                <div class="mb-3 row">
+                  <label class="col-sm-3 col-form-label"
+                    >Hospital Name :<span class="text-danger">*</span></label
+                  >
+
+                  <div class="col-sm-9 p-2">
+                    {{ hospitalDetails?.name }}
+
+                    <div
+                      *ngIf="
+                        hospital_id &&
+                        hospital_id.invalid &&
+                        (hospital_id.dirty || hospital_id.touched)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please Provide Hospital Name.
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-sm-3 col-form-label"
+                    >Ambulance Type :<span class="text-danger">*</span></label
+                  >
+
+                  <div class="col-sm-9">
+                    <select
+                      class="default-select form-control wide mb-3"
+                      formControlName="ambulance_type_id"
+                    >
+                      <option value="">Select Ambulance Type</option>
+                      <option
+                        *ngFor="let ambulance of ambulanceType"
+                        [value]="ambulance?.id"
+                      >
+                        {{ ambulance?.name }}
+                      </option>
+                    </select>
+                    <div
+                      *ngIf="
+                        ambulance_type_id &&
+                        ambulance_type_id.touched &&
+                        (ambulance_type_id.invalid ||
+                          ambulance_type_id.value == 0)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please Provide Ambulance Type.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3 row">
+                  <label class="col-lg-3" for="City"
+                    >Front Image
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-lg-5 col-xl-5">
+                    <button
+                      type="button"
+                      class="btn btn-secondary btn-sm"
+                      (click)="frontImageFile.click()"
+                    >
+                      Browse front Image
+                    </button>
+                    <input
+                      accept=".jpg, .png, .jpeg"
+                      type="file"
+                      style="display: none"
+                      (change)="onambulanceFrontUpload($event)"
+                      #frontImageFile
+                      formControlName="front_Image"
+                    />
+                    <img
+                      [src]="ambulanceFrontUrl"
+                      alt="Ambulance type image"
+                      class="img-fluid avatar-lg ml-5"
+                      style="width: 25%; margin-left: 10px"
+                      [hidden]="ambulanceFrontUrl == undefined"
+                      *ngIf="ambulanceFrontUrl != ''"
+                    />
+                  </div>
+                </div>
+
+                <div class="mb-3 row">
+                  <label class="col-lg-3" for="City"
+                    >Back Image
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-lg-5 col-xl-5">
+                    <button
+                      type="button"
+                      class="btn btn-secondary btn-sm"
+                      (click)="backImageFile.click()"
+                    >
+                      Browse back Image
+                    </button>
+                    <input
+                      accept=".jpg, .png, .jpeg"
+                      type="file"
+                      style="display: none"
+                      (change)="onambulanceBackUpload($event)"
+                      #backImageFile
+                      formControlName="back_Image"
+                    />
+                    <img
+                      [src]="ambulanceBackUrl"
+                      alt="Ambulance type image"
+                      class="img-fluid avatar-lg ml-5"
+                      style="width: 25%; margin-left: 10px"
+                      [hidden]="ambulanceBackUrl == undefined"
+                      *ngIf="ambulanceBackUrl != ''"
+                    />
+                  </div>
+                </div>
+
+                <div class="mb-3 row">
+                  <label class="col-lg-3" for="City"
+                    >Right Image
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-lg-5 col-xl-5">
+                    <button
+                      type="button"
+                      class="btn btn-secondary btn-sm"
+                      (click)="rightImageFile.click()"
+                    >
+                      Browse right Image
+                    </button>
+                    <input
+                      accept=".jpg, .png, .jpeg"
+                      type="file"
+                      style="display: none"
+                      (change)="onambulanceRightUpload($event)"
+                      #rightImageFile
+                      formControlName="right_Side_Image"
+                    />
+                    <img
+                      [src]="ambulanceRightUrl"
+                      alt="Ambulance type image"
+                      class="img-fluid avatar-lg ml-5"
+                      style="width: 25%; margin-left: 10px"
+                      [hidden]="ambulanceRightUrl == undefined"
+                      *ngIf="ambulanceRightUrl != ''"
+                    />
+                  </div>
+                </div>
+
+                <div class="mb-3 row">
+                  <label class="col-lg-3" for="City"
+                    >Left Image
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-lg-5 col-xl-5">
+                    <button
+                      type="button"
+                      class="btn btn-secondary btn-sm"
+                      (click)="leftImageFile.click()"
+                    >
+                      Browse left Image
+                    </button>
+                    <input
+                      accept=".jpg, .png, .jpeg"
+                      type="file"
+                      style="display: none"
+                      (change)="onambulanceLeftUpload($event)"
+                      #leftImageFile
+                      formControlName="left_Side_Image"
+                    />
+                    <img
+                      [src]="ambulanceLeftUrl"
+                      alt="Ambulance type image"
+                      class="img-fluid avatar-lg ml-5"
+                      style="width: 25%; margin-left: 10px"
+                      [hidden]="ambulanceLeftUrl == undefined"
+                      *ngIf="ambulanceLeftUrl != ''"
+                    />
+                  </div>
+                </div>
+
+                <div class="mb-3 justify-content-center row">
+                  <div class="col-lg-12">
+                    <div>
+                      <a
+                        class="btn btn-lg btn-danger float-right m-1"
+                        routerLink="/hospital/ambulance"
+                      >
+                        Cancel
+                      </a>
+                      <button
+                        type="submit"
+                        class="btn btn-lg btn-primary float-right m-1"
+                      >
+                        {{
+                          ambulanceId == 0
+                            ? 'Add Ambulance'
+                            : 'Update Ambulance'
+                        }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

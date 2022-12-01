@@ -1,0 +1,775 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+
+      <div class="row clearfix">
+        <div class="card">
+          <div class="card-body">
+            <div class="form-validation">
+              <form
+                class="needs-validation"
+                novalidate=""
+                [formGroup]="hospitalForm"
+                (ngSubmit)="onCreateHospital()"
+              >
+                <div class="row">
+                  <div class="col-xl-12">
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="hospital_name"
+                        >Hospital Name
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="hospital_name"
+                          placeholder="Enter a username.."
+                          formControlName="name"
+                        />
+                        <div
+                          *ngIf="
+                            (name &&
+                              name.invalid &&
+                              (name.dirty || name.touched)) ||
+                            responseFalure
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter Hospital name.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="email"
+                        >Email <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="email"
+                          placeholder="Your valid email.."
+                          formControlName="email"
+                        />
+                        <div
+                          class="invalid animated bounceIn text-danger"
+                          *ngIf="
+                            (email &&
+                              email.invalid &&
+                              (email.dirty || email.touched)) ||
+                            responseFalure
+                          "
+                        >
+                          Please enter a valid Email.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="phone"
+                        >Mobile No
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="phone"
+                          placeholder="Enter your mobile no."
+                          formControlName="mobile"
+                        />
+                        <div
+                          class="invalid animated bounceIn text-danger"
+                          *ngIf="
+                            (mobile &&
+                              mobile.invalid &&
+                              (mobile.dirty || mobile.touched)) ||
+                            responseFalure
+                          "
+                        >
+                          Please your valid mobile number.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="location"
+                        >Location lat,lon:
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="location"
+                          placeholder="Enter latitude and longitude"
+                          formControlName="location"
+                        />
+                        <div
+                          class="invalid animated bounceIn text-danger"
+                          *ngIf="
+                            (location &&
+                              location.invalid &&
+                              (location.dirty || location.touched)) ||
+                            responseFalure
+                          "
+                        >
+                          Please your valid Location.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="ce_no"
+                        >CE_number:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="ce_no"
+                          placeholder="Enter your CE no."
+                          required=""
+                          formControlName="CE_number"
+                        />
+                        <!-- <div
+                          *ngIf="
+                            CE_number &&
+                            CE_number.invalid &&
+                            (CE_number.dirty || CE_number.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please your valid CE_number number.
+                        </div> -->
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="Municipality"
+                        >Municipality Number:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="Municipality"
+                          placeholder="Enter Municipality Number"
+                          required=""
+                          formControlName="municipality_number"
+                        />
+                        <!-- <div
+                          *ngIf="
+                            municipality_number &&
+                            municipality_number.invalid &&
+                            (municipality_number.dirty ||
+                              municipality_number.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter your Municipality number.
+                        </div> -->
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="doctor"
+                        >Doctor In Emergency:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="doctor"
+                          placeholder="Enter Doctor name"
+                          required=""
+                          formControlName="doctor_emergency"
+                        />
+                        <!-- <div
+                          *ngIf="
+                            doctor_emergency &&
+                            doctor_emergency.invalid &&
+                            (doctor_emergency.dirty || doctor_emergency.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter Doctor Name.
+                        </div> -->
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="emergency"
+                        >Emergency Contact No.:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="emergency"
+                          placeholder="Enter Emergency Contact No."
+                          required=""
+                          formControlName="emergency_no"
+                        />
+                        <!-- <div
+                          *ngIf="
+                            emergency_no &&
+                            emergency_no.invalid &&
+                            (emergency_no.dirty || emergency_no.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter Emergency Contact No.
+                        </div> -->
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="address_1"
+                        >Address 1:
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="address_1"
+                          placeholder="Enter Address 1"
+                          required=""
+                          formControlName="address_1"
+                        />
+                        <div
+                          *ngIf="
+                            (address_1 &&
+                              address_1.invalid &&
+                              (address_1.dirty || address_1.touched)) ||
+                            responseFalure
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter Address 1
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="address_2"
+                        >Address 2:
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="address_2"
+                          placeholder="Enter Address 2"
+                          required=""
+                          formControlName="address_2"
+                        />
+                        <div
+                          *ngIf="
+                            address_2 &&
+                            address_2.invalid &&
+                            (address_2.dirty || address_2.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter Address 2
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label"
+                        >Country :<span class="text-danger"></span
+                      ></label>
+
+                      <div class="col-sm-6">
+                        <select
+                          formControlName="country"
+                          (change)="onCountrySelect()"
+                          class="default-select form-control wide mb-3"
+                        >
+                          <option value="0">Select Country</option>
+                          <option [value]="101">India</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label"
+                        >State :<span class="text-danger"></span
+                      ></label>
+
+                      <div class="col-sm-6">
+                        <select
+                          formControlName="state"
+                          (change)="onStateSelect()"
+                          class="default-select form-control wide mb-3"
+                        >
+                          <option value="0">Select State</option>
+                          <option
+                            *ngFor="let state of stateLists"
+                            [value]="state.id"
+                          >
+                            {{ state.name }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="City"
+                        >City :
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-sm-6">
+                        <select
+                          formControlName="city"
+                          class="default-select form-control wide mb-3"
+                        >
+                          <option value="0">Select City</option>
+                          <option *ngFor="let city of cities" [value]="city.id">
+                            {{ city.name }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="Pincode"
+                        >Pincode :
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="Pincode"
+                          placeholder="Enter Pincode name"
+                          required=""
+                          formControlName="pincode"
+                        />
+                        <div
+                          *ngIf="
+                            (pincode &&
+                              pincode.invalid &&
+                              (pincode.dirty || pincode.touched)) ||
+                            responseFalure
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter City name
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="bls_base_fare"
+                        >BLS base fare:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="bls_base_fare"
+                          placeholder="Enter BLS base fare "
+                          required=""
+                          formControlName="bls_base_fare"
+                        />
+                        <!-- <div *ngIf="
+                            bls_base_fare && bls_base_fare.invalid && (bls_base_fare.dirty || bls_base_fare.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-3 col-form-label"
+                        for="bls_per_km_fare_slab1"
+                        >BLS per KM fare slab1:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="bls_per_km_fare_slab1"
+                          placeholder="Enter BLS per KM  fare slab1"
+                          required=""
+                          formControlName="bls_per_km_fare_slab1"
+                        />
+                        <!-- <div *ngIf="
+                            bls_per_km_fare_slab1 && bls_per_km_fare_slab1.invalid && (bls_per_km_fare_slab1.dirty || bls_per_km_fare_slab1.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-3 col-form-label"
+                        for="bls_per_km_fare_slab2"
+                        >BLS per KM fare slab2:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="bls_per_km_fare_slab2"
+                          placeholder="Enter BLS per KM  fare slab2"
+                          required=""
+                          formControlName="bls_per_km_fare_slab2"
+                        />
+                        <!-- <div *ngIf="
+                            bls_per_km_fare_slab2 && bls_per_km_fare_slab2.invalid && (bls_per_km_fare_slab2.dirty || bls_per_km_fare_slab2.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-3 col-form-label"
+                        for="bls_oxygen_per_km"
+                        >BLS oxygen per KM:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="bls_oxygen_per_km"
+                          placeholder="Enter BLS oxygen per KM"
+                          required=""
+                          formControlName="bls_oxygen_per_km"
+                        />
+                        <!-- <div *ngIf="
+                            bls_oxygen_per_km && bls_oxygen_per_km.invalid && (bls_oxygen_per_km.dirty || bls_oxygen_per_km.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="als_base_fare"
+                        >ALS base fare:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="als_base_fare"
+                          placeholder="Enter als_base_fare"
+                          required=""
+                          formControlName="als_base_fare"
+                        />
+                        <!-- <div *ngIf="
+                            als_base_fare && als_base_fare.invalid && (als_base_fare.dirty || als_base_fare.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter als_base_fare
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-3 col-form-label"
+                        for="als_per_km_fare_slab1"
+                        >ALS per KM fare slab1:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="als_per_km_fare_slab1"
+                          placeholder="Enter ALS per KM  fare slab1"
+                          required=""
+                          formControlName="als_per_km_fare_slab1"
+                        />
+                        <!-- <div *ngIf="
+                            als_per_km_fare_slab1 && als_per_km_fare_slab1.invalid && (als_per_km_fare_slab1.dirty || bls_per_km_fare_slab1.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-3 col-form-label"
+                        for="als_per_km_fare_slab2"
+                        >ALS per KM fare slab2:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="als_per_km_fare_slab2"
+                          placeholder="Enter BLS per KM  fare slab2"
+                          required=""
+                          formControlName="als_per_km_fare_slab2"
+                        />
+                        <!-- <div *ngIf="
+                            als_per_km_fare_slab2 && als_per_km_fare_slab2.invalid && (als_per_km_fare_slab2.dirty || BLS per KM  fare slab1.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-3 col-form-label"
+                        for="als_oxygen_per_km"
+                        >ALS oxygen per KM:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="als_oxygen_per_km"
+                          placeholder="Enter ALS oxygen per KM"
+                          required=""
+                          formControlName="als_oxygen_per_km"
+                        />
+                        <!-- <div *ngIf="
+                            als_oxygen_per_km && als_oxygen_per_km.invalid && (als_oxygen_per_km.dirty || als_oxygen_per_km.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-3 col-form-label"
+                        for="covid_ppe_cost"
+                        >Covid PPE kit Cost:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="covid_ppe_cost"
+                          placeholder="Enter Covid PPE kit Cost"
+                          required=""
+                          formControlName="covid_ppe_cost"
+                        />
+                        <!-- <div *ngIf="
+                            als_oxygen_per_km && als_oxygen_per_km.invalid && (als_oxygen_per_km.dirty || als_oxygen_per_km.touched)
+                          " class="invalid animated bounceIn text-danger">
+                          Please enter Address 2
+                        </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-3 col-form-label"
+                        for="validationCustom01"
+                        >Hospital Type:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <!-- <div class="row">
+                          <div class="col-lg-4" *ngFor="let hospitalType of hospitalTypes; let i = index;">
+                            <div class="form-check custom-checkbox mb-3">
+                              <input  class="form-check-input" formControlName="hospitalType" (change)="onHospitalTypeChange(hospitalType.id, $event)"name="{{ hospitalType.name }}" type="checkbox" id="{{hospitalType.name}}" />
+                              <label class="form-check-label" for="{{hospitalType.name}}">{{hospitalType.name}}</label>
+                            </div>
+                          </div>
+                        </div> -->
+                        <ng-multiselect-dropdown
+                          [placeholder]="'Select Hospital Type'"
+                          formControlName="hospitalType"
+                          [data]="hospitalTypes"
+                          [settings]="hospitalTypeDropdownSettings"
+                          class="ward-list"
+                          (onSelect)="onSelectHospitalType($event)"
+                          (onDeSelect)="onDeSelect($event)"
+                        >
+                        </ng-multiselect-dropdown>
+                        <div
+                          class="invalid animated bounceIn text-danger"
+                          *ngIf="
+                            (hospitalType &&
+                              hospitalType.invalid &&
+                              (hospitalType.dirty || hospitalType.touched)) ||
+                            responseFalure
+                          "
+                        >
+                          Please your valid Location.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-3 col-form-label"
+                        for="validationCustom01"
+                        >Available Service:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <!-- <div class="row">
+                          <div class="col-lg-4"  *ngFor="let hospitalService of hospitalAvailableServices; let i = index;">
+                            <div class="form-check custom-checkbox mb-3">
+                              <input  class="form-check-input" formControlName="hospitalService" (change)="onHospitalServiceChange(hospitalService.id, $event)" name="{{ hospitalService.name }}" type="checkbox" id="{{hospitalService.name}}" />
+                              <label class="form-check-label" for="{{hospitalService.name}}">{{hospitalService.name}}</label>
+                            </div>
+                          </div>
+                        </div> -->
+                        <ng-multiselect-dropdown
+                          [placeholder]="'Select Available Service'"
+                          formControlName="hospitalService"
+                          [data]="hospitalAvailableServices"
+                          [settings]="hospitalserviceDropdownSettings"
+                          class="ward-list"
+                          (onSelect)="onSelectHospitalService($event)"
+                          (onDeSelect)="onDeSelectHospitalService($event)"
+                        >
+                        </ng-multiselect-dropdown>
+                        <div
+                          class="invalid animated bounceIn text-danger"
+                          *ngIf="responseFalure"
+                        >
+                          Please your valid Location.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-3 col-form-label"
+                        for="validationCustom01"
+                        >Department :
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <!-- <div class="row">
+                          <div class="col-lg-4" *ngFor="let department of hospitalDepartment; let i = index;">
+                            <div class="form-check custom-checkbox mb-3">
+                              <input  class="form-check-input" formControlName="hospitalDepartment" (change)="onHospitalDepartmentChange(department.id, $event)" name="{{ department.name }}" type="checkbox" id="{{department.name}}" />
+                              <label class="form-check-label" for="{{department.name}}">{{department.name}}</label>
+                            </div>
+                          </div>
+                        </div> -->
+                        <ng-multiselect-dropdown
+                          [placeholder]="'Select Department'"
+                          formControlName="hospitalDepartment"
+                          [data]="hospitalDepartment"
+                          [settings]="hospitalDepartmentDropdownSettings"
+                          class="ward-list"
+                          (onSelect)="onSelectHospitalDepartment($event)"
+                          (onDeSelect)="onDeSelectHospitalDepartmen($event)"
+                        >
+                        </ng-multiselect-dropdown>
+                        <div
+                          class="invalid animated bounceIn text-danger"
+                          *ngIf="responseFalure"
+                        >
+                          Please your valid Location.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-form-label col-sm-3 pt-0"
+                        >Ambulance Availability</label
+                      >
+                      <div class="col-sm-9">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            formControlName="ambulance_availability"
+                            [value]="1"
+                          />
+                          <label class="form-check-label"> Yes </label>
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            formControlName="ambulance_availability"
+                            [value]="0"
+                          />
+                          <label class="form-check-label"> No </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-3 col-form-label"
+                        for="validationCustom01"
+                        >Upload Profile Image:
+                        <span class="text-danger"></span>
+                      </label>
+                      <div class="col-lg-6">
+                        <button
+                          type="button"
+                          class="btn btn-secondary btn-sm"
+                          (click)="profileImageFile.click()"
+                        >
+                          Browse Image
+                        </button>
+                        <input
+                          accept=".jpg, .png, .jpeg"
+                          type="file"
+                          style="display: none"
+                          (change)="onProfileImageChange($event)"
+                          #profileImageFile
+                          formControlName="logo"
+                        />
+                        <img
+                          [src]="profileImageBrowse"
+                          alt="Ambulance type image"
+                          class="img-fluid avatar-lg ml-5"
+                          style="width: 25%; margin-left: 10px"
+                          [hidden]="profileImageBrowse == undefined"
+                          *ngIf="profileImageBrowse != ''"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <div class="col-lg-8">
+                      <a
+                        class="btn btn-danger w-30 float-right m-1"
+                        routerLink="/admin/hospitals"
+                      >
+                        Cancel
+                      </a>
+                      <button
+                        type="submit"
+                        class="btn btn-primary w-30 float-right m-1"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

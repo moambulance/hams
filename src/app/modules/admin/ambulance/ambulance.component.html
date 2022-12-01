@@ -1,0 +1,542 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+  <app-admin-spinner></app-admin-spinner>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <div id="main-content" style="min-height: 801px">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="card">
+        <div class="header float-right">
+          <!-- <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              type="search"
+              class="form-control float-right w-100"
+              placeholder="Search Here"
+              [(ngModel)]="searchText"
+              aria-controls="addrowExample"
+            />
+          </div> -->
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              type="search"
+              class="form-control float-right w-100"
+              placeholder="Search Registration Number"
+              (input)="getAmbulanceByRegdNo($event)"
+              aria-controls="addrowExample"
+            />
+          </div>
+          <button
+            [routerLink]="['add-ambulance']"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            id="addToTable"
+            class="btn btn-primary m-2 float-right"
+            type="button"
+            *ngIf="CURRENT_URL === '/admin/ambulance'"
+          >
+            <i class="icon-plus" aria-hidden="true"></i> Add Ambulance
+          </button>
+          <button
+            *ngIf="CURRENT_URL === '/admin/ambulance'"
+            class="btn btn-warning float-right m-2 text-white"
+            (click)="exportExcel()"
+          >
+            <i class="fa-solid fa-file-excel"></i>
+            Export to Excel
+          </button>
+        </div>
+        <div class="body">
+          <div
+            id="example3_wrapper"
+            class="dataTables_wrapper no-footer table-scroll"
+          >
+            <table
+              class="table table-bordered table-hover table-striped overflow-x-auto text-center"
+              cellspacing="0"
+              id="addrowExample"
+              #excelTable
+            >
+              <thead>
+                <tr role="row">
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    #
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Registration No
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                  >
+                    Registration Date
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                  >
+                    On Boarded
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Education: activate to sort column ascending"
+                  >
+                    Type
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Gender: activate to sort column ascending"
+                  >
+                    BaseFare
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Joining Date: activate to sort column ascending"
+                  >
+                    Owner
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Action: activate to sort column ascending"
+                  >
+                    Hospital
+                  </th>
+                  <th
+                    *ngIf="CURRENT_URL === '/admin/ambulance'"
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Name: activate to sort column ascending"
+                  >
+                    Status
+                  </th>
+                  <th
+                    *ngIf="CURRENT_URL === '/admin/ambulance'"
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Department: activate to sort column ascending"
+                  >
+                    Approve
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Action: activate to sort column ascending"
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  role="row"
+                  class="odd"
+                  *ngFor="
+                    let ambulance of ambulances | searchFilter: searchText;
+                    let i = index
+                  "
+                >
+                  <td>{{ ambulance?.sl_no }}</td>
+
+                  <td>{{ ambulance?.registration_number }}</td>
+                  <td>
+                    {{ ambulance?.registration_date }}
+                    <!-- {{
+                      ambulance.registration_date ||
+                      ambulance.registration_date.includes('.')
+                        ? (ambulance.registration_date.replace('.', '-') | date)
+                        : (ambulance.registration_date | date)
+                    }} -->
+                  </td>
+                  <td>{{ ambulance?.cretaed_on | date }}</td>
+                  <td>{{ ambulance?.ambulance_type_id?.name }}</td>
+                  <td>{{ ambulance?.ambulance_type_id?.basefare }}</td>
+
+                  <td>
+                    {{ ambulance?.owner_type == 0 ? 'Self/Admin' : 'Hospital' }}
+                  </td>
+                  <td>{{ ambulance?.hospital_id?.name }}</td>
+                  <td *ngIf="CURRENT_URL === '/admin/ambulance'">
+                    <label
+                      *ngIf="!isVisible"
+                      class="switch"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="{{
+                        ambulance?.is_active == 1 ? 'Active' : 'Inactive'
+                      }}"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="ambulance?.is_active == 1"
+                        (click)="onStatusChange(ambulance?.id)"
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                    <span *ngIf="isVisible">
+                      {{
+                        ambulance?.is_active == 1 ? 'Active' : 'Inactive'
+                      }}</span
+                    >
+                  </td>
+
+                  <td *ngIf="CURRENT_URL === '/admin/ambulance'">
+                    <label
+                      *ngIf="!isVisible"
+                      class="switch"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="right"
+                      title="{{
+                        ambulance?.is_approved == 1
+                          ? 'Approved'
+                          : 'Not Approved'
+                      }}"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="ambulance?.is_approved == 1"
+                        (click)="
+                          onApprovedChange(
+                            $event,
+                            ambulance?.id,
+                            ambulance?.is_approved
+                          )
+                        "
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                    <span *ngIf="isVisible" class="">
+                      {{
+                        ambulance?.is_approved == 1
+                          ? 'Approved'
+                          : 'Not Approved'
+                      }}</span
+                    >
+                  </td>
+
+                  <td>
+                    <div class="d-flex justify-content-center">
+                      <a
+                        *ngIf="CURRENT_URL === '/admin/ambulance'"
+                        [routerLink]="['ambulance-details', ambulance?.id]"
+                        class="btn btn-secondary shadow btn-xs sharp me-1"
+                        ><i class="icon-eye"></i
+                      ></a>
+                      <a
+                        *ngIf="CURRENT_URL === '/admin/ambulance'"
+                        [routerLink]="['edit-ambulance/', ambulance?.id]"
+                        class="btn btn-warning shadow btn-xs sharp me-1"
+                        ><i class="icon-pencil"></i
+                      ></a>
+                      <a
+                        *ngIf="CURRENT_URL === '/admin/ambulance'"
+                        class="btn btn-primary shadow btn-xs sharp me-1"
+                        (click)="getDrivers(ambulance?.id)"
+                        ><i class="fa-solid fa-car"></i
+                      ></a>
+                      <a
+                        *ngIf="CURRENT_URL === '/admin/ambulance-rides'"
+                        class="btn btn-danger shadow btn-xs sharp me-1"
+                        (click)="onReportView(ambulance)"
+                      >
+                        <i class="fa-solid fa-square-poll-vertical"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <ngb-pagination
+              class="dataTables_paginate paging_simple_numbers"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [collectionSize]="ambulanceLength"
+              (pageChange)="getAllAmbulance()"
+            ></ngb-pagination>
+
+            <div class="dataTables_length float-right" id="example3_length">
+              <label
+                >Show
+                <select
+                  name="example3_length "
+                  aria-controls="example3 "
+                  class="p-2"
+                  [(ngModel)]="pageSize"
+                  (ngModelChange)="getAllAmbulance()"
+                >
+                  <option [ngValue]="5">5</option>
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="15">15</option>
+                  <option [ngValue]="ambulanceLength">All</option>
+                </select>
+                Entries</label
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>
+<!--  Modal -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#staticBackdrop"
+>
+  Launch static backdrop modal
+</button>
+<!--Assign Driver to Ambulance Modal -->
+<button
+  class="d-none"
+  data-bs-toggle="modal"
+  data-bs-target="#exampleModal"
+  #openModal
+></button>
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Assign Driver To Ambulance
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div
+          *ngFor="let driver of allAvailableDrivers"
+          (click)="selecedDriver(driver)"
+        >
+          <div
+            [class]="
+              driver?.selected
+                ? 'row mb-3 rounded border border-3 border-success cursor-pointer'
+                : 'row mb-3 rounded border border-3 border-secondary cursor-pointer'
+            "
+          >
+            <div class="column">
+              <div class="card1">
+                <h3>DL NO</h3>
+                <p>{{ driver.dl_no ? driver.dl_no : 'NA' }}</p>
+                <!-- <p>Some text</p> -->
+              </div>
+            </div>
+
+            <div class="column">
+              <div class="card1">
+                <h3>Driver Name</h3>
+                <p>{{ driver.name ? driver.name : 'NA' }}</p>
+                <!-- <p>Some text</p> -->
+              </div>
+            </div>
+
+            <div class="column">
+              <div class="card1">
+                <h3>Aadhaar No</h3>
+                <p>
+                  {{ driver.adhar_no ? driver.adhar_no : 'NA' }}
+                </p>
+                <!-- <p>Some text</p> -->
+              </div>
+            </div>
+
+            <div class="column">
+              <div class="card1">
+                <h3>DL Image</h3>
+                <img
+                  *ngIf="driver?.dl_image"
+                  src="{{ baseUrl + driver?.dl_image }}"
+                  alt=""
+                />
+                <!-- <p>Some text</p> -->
+
+                <p *ngIf="!driver?.dl_image">NA</p>
+                <!-- <p>Some text</p> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          (click)="updateAssignedAmbulance()"
+        >
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Ambulance Ride Report Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary d-none"
+  data-bs-toggle="modal"
+  data-bs-target="#staticBackdrop"
+  #reportModal
+></button>
+<!--Ambulance Ride Report Modal -->
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg oy-none">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="reportForm" (ngSubmit)="onFilter()">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="row">
+                <label class="col-sm-4 col-form-label"
+                  >Start Date:
+                  <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-8">
+                  <input
+                    type="date"
+                    class="form-control"
+                    placeholder="Enter a Start date"
+                    formControlName="start_date"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="row">
+                <label class="col-sm-4 col-form-label"
+                  >End Date:
+                  <span class="text-danger">*</span>
+                </label>
+                <div class="col-sm-8">
+                  <input
+                    type="date"
+                    class="form-control"
+                    placeholder="Enter a End date"
+                    formControlName="end_date"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-1">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                (click)="onFilter()"
+              >
+                Filter
+              </button>
+            </div>
+          </div>
+        </form>
+        <div class="body">
+          <canvas
+            *ngIf="message"
+            baseChart
+            [datasets]="totalRides"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [plugins]="barChartPlugins"
+            [legend]="barChartLegend"
+            [chartType]="barChartType"
+          >
+          </canvas>
+          <p *ngIf="!message" class="text-danger">Data Not Found</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

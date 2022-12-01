@@ -1,0 +1,383 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="card">
+        <div class="body">
+          <div class="row m-3">
+            <div class="col-md-12 select-menu mb-3">
+              <ng-select
+                class="custom"
+                [items]="hospitalList"
+                bindLabel="name"
+                [placeholder]="!selectedHospital ? 'Select Hospital' : ''"
+                [(ngModel)]="selectedHospital"
+                (change)="onHospitalSelect($event)"
+              >
+              </ng-select>
+            </div>
+            <!-- <fieldset
+              class="col-md-3"
+              [disabled]="ambulanceId === 0"
+            ></fieldset> -->
+            <!-- <div>
+              <ng-select
+                class="custom"
+                [items]="ambulanceList"
+                bindLabel="name"
+                [placeholder]="!selectedAmbulance ? 'Select Ambulance' : ''"
+                [(ngModel)]="selectedAmbulance"
+                (change)="onAmbulanceSelect($event)"
+              >
+              </ng-select>
+            </div> -->
+
+            <!-- <fieldset class="col-md-3" [disabled]="ambulanceId === 0">
+              <div>
+                <ng-select
+                  class="custom"
+                  [items]="driverList"
+                  bindLabel="name"
+                  [placeholder]="!selectedDriver ? 'Select Driver' : ''"
+                  [(ngModel)]="selectedDriver"
+                  (change)="onDriverSelect($event)"
+                >
+                </ng-select>
+              </div>
+            </fieldset> -->
+            <!-- <div class="col-md-3"></div>
+            <ng-multiselect-dropdown
+              [placeholder]="'Select Ambulance'"
+              [data]="allAmbulance"
+              [settings]="ambulanceDropdownSettings"
+              class="custom"
+              (onSelect)="onSelectAmbulanceForQueue($event)"
+              (onDeSelect)="onDeSelect($event)"
+            >
+            </ng-multiselect-dropdown>
+          </div> -->
+            <div class="row">
+              <div [class]="addedtoQueue ? 'col-md-6' : 'col-md-12'">
+                <h3 class="text-dark text-center">
+                  <u>Available Ambulances</u>
+                </h3>
+                <div id="example3_wrapper" class="dataTables_wrapper no-footer">
+                  <!-- <button (click)="exportExcel()">Export to Excel</button> -->
+                  <p
+                    *ngIf="allAmbulance?.length == 0"
+                    class="text-danger h3 text-center"
+                  >
+                    No Data Found
+                  </p>
+                  <table
+                    *ngIf="allAmbulance?.length != 0"
+                    class="table table-bordered table-hover table-striped text-center"
+                    cellspacing="0"
+                    id="addrowExample"
+                  >
+                    <thead>
+                      <tr role="row">
+                        <th
+                          class=""
+                          tabindex="0"
+                          aria-controls="example3"
+                          rowspan="1"
+                          colspan="1"
+                          aria-sort="ascending"
+                          aria-label=": activate to sort column descending"
+                        >
+                          #
+                        </th>
+
+                        <th
+                          class=""
+                          tabindex="0"
+                          aria-controls="example3"
+                          rowspan="1"
+                          colspan="1"
+                          aria-label="Department: activate to sort column ascending"
+                        >
+                          Regd.No
+                        </th>
+
+                        <th
+                          class=""
+                          tabindex="0"
+                          aria-controls="example3"
+                          rowspan="1"
+                          colspan="1"
+                          aria-label="Mobile: activate to sort column ascending"
+                        >
+                          Driver Name
+                        </th>
+
+                        <th
+                          class=""
+                          tabindex="0"
+                          aria-controls="example3"
+                          rowspan="1"
+                          colspan="1"
+                          aria-label="Action: activate to sort column ascending"
+                        >
+                          Type
+                        </th>
+                        <th
+                          class=""
+                          tabindex="0"
+                          aria-controls="example3"
+                          rowspan="1"
+                          colspan="1"
+                          aria-label="Action: activate to sort column ascending"
+                        >
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        role="row"
+                        class="odd"
+                        *ngFor="
+                          let ambulance of allAmbulance
+                            | searchFilter: searchText;
+                          let i = index
+                        "
+                      >
+                        <td>
+                          <strong>{{ ambulance.sl_no }}</strong>
+                        </td>
+
+                        <td>{{ ambulance.registration_number }}</td>
+
+                        <td>{{ ambulance.dName }}</td>
+
+                        <td>
+                          {{ ambulance.typeName }}
+                        </td>
+                        <td>
+                          <!-- <button><i class="fa-solid fa-plus"></i></button> -->
+                          <a
+                            class="has-arrow m-r-5 t-d-none text-danger"
+                            style="font-size: 20px"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="right"
+                            title="Add To Queue"
+                            (click)="
+                              addAmbulanceToQueue(
+                                ambulance.hospital_id,
+                                ambulance.id,
+                                ambulance.driverId
+                              )
+                            "
+                            ><i class="fa-solid fa-plus text-success"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <ngb-pagination
+                    *ngIf="allAmbulance?.length != 0"
+                    class="dataTables_paginate paging_simple_numbers"
+                    [(page)]="page"
+                    [pageSize]="pageSize"
+                    [collectionSize]="ambulanceLength"
+                    (pageChange)="getAmbulanceByHospitalID()"
+                  >
+                  </ngb-pagination>
+
+                  <div
+                    *ngIf="allAmbulance?.length != 0"
+                    class="dataTables_length float-right"
+                    id="example3_length"
+                  >
+                    <label
+                      >Show
+                      <select
+                        class="p-2"
+                        name="form-control"
+                        aria-controls="example3"
+                        [(ngModel)]="pageSize"
+                        (ngModelChange)="getAmbulanceByHospitalID()"
+                      >
+                        <option [ngValue]="15">15</option>
+                        <option [ngValue]="25">25</option>
+                        <option [ngValue]="50">50</option>
+                        <option
+                          #allList
+                          id="allList"
+                          [ngValue]="ambulanceLength"
+                        >
+                          All
+                        </option>
+                      </select>
+                      entries</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div [class]="addedtoQueue ? 'col-md-6' : 'd-none'">
+                <h3 class="text-dark text-center">
+                  <u>Ambulances in Queue</u>
+                </h3>
+                <div id="example3_wrapper" class="dataTables_wrapper no-footer">
+                  <!-- <button (click)="exportExcel()">Export to Excel</button> -->
+                  <p
+                    *ngIf="ambulanceQueue?.length == 0"
+                    class="text-danger h3 text-center"
+                  >
+                    No Data Found
+                  </p>
+                  <table
+                    *ngIf="ambulanceQueue?.length != 0"
+                    class="table table-bordered table-hover table-striped text-center"
+                    cellspacing="0"
+                    id="addrowExample"
+                  >
+                    <thead>
+                      <tr role="row">
+                        <th
+                          class=""
+                          tabindex="0"
+                          aria-controls="example3"
+                          rowspan="1"
+                          colspan="1"
+                          aria-sort="ascending"
+                          aria-label=": activate to sort column descending"
+                        >
+                          #
+                        </th>
+
+                        <th
+                          class=""
+                          tabindex="0"
+                          aria-controls="example3"
+                          rowspan="1"
+                          colspan="1"
+                          aria-label="Department: activate to sort column ascending"
+                        >
+                          Regd.No
+                        </th>
+
+                        <th
+                          class=""
+                          tabindex="0"
+                          aria-controls="example3"
+                          rowspan="1"
+                          colspan="1"
+                          aria-label="Mobile: activate to sort column ascending"
+                        >
+                          Driver Name
+                        </th>
+
+                        <th
+                          class=""
+                          tabindex="0"
+                          aria-controls="example3"
+                          rowspan="1"
+                          colspan="1"
+                          aria-label="Action: activate to sort column ascending"
+                        >
+                          Type
+                        </th>
+                        <th
+                          class=""
+                          tabindex="0"
+                          aria-controls="example3"
+                          rowspan="1"
+                          colspan="1"
+                          aria-label="Action: activate to sort column ascending"
+                        >
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        role="row"
+                        class="odd"
+                        *ngFor="
+                          let ambQueue of ambulanceQueue
+                            | searchFilter: searchText;
+                          let i = index
+                        "
+                      >
+                        <td>
+                          <strong>{{ ambQueue.queue_number }}</strong>
+                        </td>
+
+                        <td>{{ ambQueue.ambulance?.registration_number }}</td>
+
+                        <td>{{ ambQueue.drivers?.name }}</td>
+
+                        <td>
+                          {{ ambQueue.ambulance.ambulance_type.name }}
+                        </td>
+                        <td>
+                          <a
+                            class="has-arrow m-r-5 t-d-none text-danger"
+                            style="font-size: 20px"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="right"
+                            title="Add To Queue"
+                            (click)="removeAmbulanceToQueue(ambQueue)"
+                            ><i class="fa-solid fa-trash"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <ngb-pagination
+                    *ngIf="ambulanceQueue?.length != 0"
+                    class="dataTables_paginate paging_simple_numbers"
+                    [(page)]="page1"
+                    [pageSize]="pageSize1"
+                    [collectionSize]="ambulanceQueueLength"
+                    (pageChange)="getAmbulanceByHospitalID()"
+                  >
+                  </ngb-pagination>
+
+                  <div
+                    *ngIf="ambulanceQueue?.length != 0"
+                    class="dataTables_length float-right"
+                    id="example3_length"
+                  >
+                    <label
+                      >Show
+                      <select
+                        class="p-2"
+                        name="form-control"
+                        aria-controls="example3"
+                        [(ngModel)]="pageSize1"
+                        (ngModelChange)="getAmbulanceQueue()"
+                      >
+                        <option [ngValue]="15">15</option>
+                        <option [ngValue]="25">25</option>
+                        <option [ngValue]="50">50</option>
+                        <option
+                          #allList
+                          id="allList"
+                          [ngValue]="ambulanceQueueLength"
+                        >
+                          All
+                        </option>
+                      </select>
+                      entries</label
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-admin-footer></app-admin-footer>
+  </div>
+</div>

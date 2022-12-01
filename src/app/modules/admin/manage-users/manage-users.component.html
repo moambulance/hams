@@ -1,0 +1,203 @@
+<div id="wrapper">
+    <app-admin-navbar></app-admin-navbar>
+     <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+    <div id="main-content">
+        <div class="container-fluid">
+            <app-admin-breadcrumb [breadCrumbData]="breadCrumbData"></app-admin-breadcrumb>
+            <app-admin-spinner></app-admin-spinner>
+
+            <div class="row" id="user-form">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <button class="btn btn-primary float-right mb-3" (click)="openAddUserForm()">Add User</button>
+                </div>
+            </div>
+
+            <div class="card collapse" [@collapse]="collapse">
+                <div class="card-body">
+                    <div class="basic-form">
+                        <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+                            <div class="row mb-3">
+                                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                    <label class="col-form-label">Name: <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm m-1" formControlName="name"
+                                        placeholder="Enter Name"
+                                        [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                        Please enter name.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                    <label class="col-form-label">User Role: <span class="text-danger">*</span></label>
+                                    <select type="text" class="form-control" formControlName="role">
+                                        <option [ngValue]="1">Super Admin</option>
+                                        <option [ngValue]="2">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                    <label class="col-form-label">Username: <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm m-1"
+                                        formControlName="username" placeholder="Enter Username"
+                                        [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                                    <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                                        Please enter username.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                    <label class="col-form-label">Email: <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm m-1" formControlName="email"
+                                        placeholder="Enter Email"
+                                        [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                                        Please enter a valid email address (Ex: useremail@email.com).
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                    <label class="col-form-label">Mobile: <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm m-1" formControlName="mobile"
+                                        placeholder="Enter mobile"
+                                        [ngClass]="{ 'is-invalid': submitted && f.mobile.errors }" />
+                                    <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
+                                        Please enter mobile number.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                    <label class="col-form-label me-3">{{f.is_active.value ? 'Active' :
+                                        'InActive'}}:</label>
+                                    <label class="switch">
+                                        <input type="checkbox" formControlName="is_active" [checked]="f.is_active" />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+                                    <button type="submit" class="btn btn-primary m-1">
+                                        {{ buttonType }}
+                                    </button>
+                                    <button type="reset" (click)="onCancel()" class="btn btn-warning m-1">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-12 col-lg-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <td>#</td>
+                                            <td>Name</td>
+                                            <td>Username</td>
+                                            <td>email</td>
+                                            <td>mobile</td>
+                                            <td>status</td>
+                                            <td>actions</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let user of users; let i = index;">
+                                            <td>{{ i + 1}}</td>
+                                            <td>{{user.name}}</td>
+                                            <td>{{user.username}}</td>
+                                            <td>{{user.email}}</td>
+                                            <td>{{user.mobile}}</td>
+                                            <td>
+                                                <label class="col-form-label ms-3 me-3">{{user.is_active == "1" ?
+                                                    'Active' : 'InActive'}}:</label>
+                                                <label class="switch">
+                                                    <input type="checkbox" [(ngModel)]="user.isActive"
+                                                        [checked]="user.isActive"
+                                                        (change)="onUserStatusChange($event, i)" />
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <i class="icon-pencil btn btn-warning me-3" ngbTooltip="Edit Menu"
+                                                    (click)="onEditClick(i)"></i>
+                                                <i class="fa-regular fa-circle-user btn btn-danger"
+                                                    ngbTooltip="Manage App Access" 
+                                                    (click)="onManageRoleClick(i)"></i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="btn d-none" data-bs-toggle="modal"
+    data-bs-target="#manageAccessModal" 
+    #openManageAccessModal></button>
+
+<div class="modal fade" id="manageAccessModal" tabindex="-1" 
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Manage Role And Access For <b class="ms-2">{{ activeUser?.name }}</b>
+                    <span class="ms-3">{{activeUser?.email}}</span>
+                    <span class="ms-3">{{activeUser?.mobile}}</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" 
+                    aria-label="Close" #closeManageAccessModal></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <th>#</th>
+                            <th>Menu</th>
+                            <th>Read</th>
+                            <th>Write</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let menu of menuList; let i = index;">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{menu.display_name}} <i [class]="menu.icon + ' ms-3'"></i></td>
+                                <td>
+                                    <label class="col-form-label ms-3 me-3">{{menu.readAccess ?
+                                        'Active' : 'InActive'}}:</label>
+                                    <label class="switch">
+                                        <input type="checkbox" [(ngModel)]="menu.readAccess"
+                                            [checked]="menu.readAccess" />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="col-form-label ms-3 me-3">{{menu.writeAccess ?
+                                        'Active' : 'InActive'}}:</label>
+                                    <label class="switch">
+                                        <input type="checkbox" [(ngModel)]="menu.writeAccess"
+                                            [checked]="menu.writeAccess" />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" (click)="onSaveRoleAccessChange()">Save</button>
+                <button class="btn btn-warning" (click)="onCancelRoleAccessChange()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,275 @@
+<div id="wrapper">
+  <app-navbar></app-navbar>
+  <app-sidebar></app-sidebar>
+  <app-spinner></app-spinner>
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-breadcrumb [breadCrumbData]="breadCrumbData"></app-breadcrumb>
+      <div class="card">
+        <div class="header">
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              type="search"
+              class="form-control float-right w-100"
+              placeholder="Search Here"
+              [(ngModel)]="searchText"
+              aria-controls="addrowExample"
+            />
+          </div>
+          <!-- <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              type="search"
+              class="form-control float-right w-100"
+              placeholder="Search Registration Number"
+              (input)="getAmbulanceByRegdNo($event)"
+              aria-controls="addrowExample"
+            />
+          </div> -->
+          <button
+            class="btn btn-warning text-white float-right m-2"
+            (click)="exportExcel()"
+          >
+            <i class="fa-solid fa-file-excel"></i>
+            Export to Excel
+          </button>
+          <button
+            [routerLink]="['add-ambulance']"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="Add Driver"
+            id="addToTable"
+            class="btn btn-primary m-2 float-right"
+            type="button"
+          >
+            <i class="icon-plus" aria-hidden="true"></i> Add Ambulance
+          </button>
+        </div>
+        <div class="body">
+          <div id="example3_wrapper" class="dataTables_wrapper no-footer">
+            <table
+              class="table table-bordered table-hover table-striped"
+              cellspacing="0"
+              id="addrowExample"
+              #excelTable
+            >
+              <thead>
+                <tr role="row">
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    #
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Registration No
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                  >
+                    Registration Date
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Education: activate to sort column ascending"
+                  >
+                    Type
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Gender: activate to sort column ascending"
+                  >
+                    BaseFare
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Joining Date: activate to sort column ascending"
+                  >
+                    Owner
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Action: activate to sort column ascending"
+                  >
+                    Hospital
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Name: activate to sort column ascending"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Department: activate to sort column ascending"
+                  >
+                    Approve
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Action: activate to sort column ascending"
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  role="row"
+                  class="odd"
+                  *ngFor="
+                    let ambulance of ambulances | searchFilter: searchText
+                  "
+                >
+                  <td>{{ ambulance.sl_no }}</td>
+
+                  <td>{{ ambulance.registration_number }}</td>
+                  <td>{{ ambulance.registration_date }}</td>
+                  <td>{{ ambulance.ambulance_type_id.name }}</td>
+                  <td>{{ ambulance.ambulance_type_id.basefare }}</td>
+
+                  <td>Hospital</td>
+                  <td>{{ ambulance?.hospital_id?.name }}</td>
+                  <td>
+                    <label
+                      *ngIf="!isVisible"
+                      class="switch"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="{{
+                        ambulance?.is_active == 1 ? 'Active' : 'Inactive'
+                      }}"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="ambulance?.is_active == 1"
+                        (click)="onStatusChange(ambulance?.id)"
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                    <span *ngIf="isVisible">
+                      {{ ambulance?.is_active == 1 ? 'Active' : 'Inactive' }}"
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      class="{{
+                        ambulance?.is_approved == 1
+                          ? 'badge badge-success'
+                          : 'badge badge-danger'
+                      }}"
+                      >{{
+                        ambulance?.is_approved == 1 ? 'Approved' : 'Blocked'
+                      }}</span
+                    >
+                  </td>
+
+                  <td>
+                    <div class="d-flex">
+                      <a
+                        [routerLink]="['ambulance-details', ambulance?.id]"
+                        routerLinkActive="router-link-active"
+                        class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                        data-toggle="tooltip"
+                        data-original-title="View"
+                        ><i class="icon-eye" aria-hidden="true"></i
+                      ></a>
+
+                      <a
+                        [routerLink]="['edit-ambulance', ambulance?.id]"
+                        routerLinkActive="router-link-active"
+                        class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                        data-toggle="tooltip"
+                        data-original-title="Edit"
+                        ><i class="icon-pencil" aria-hidden="true"></i
+                      ></a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <ngb-pagination
+              class="dataTables_paginate paging_simple_numbers"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [collectionSize]="ambulanceLength"
+              (pageChange)="getAllAmbulance()"
+            ></ngb-pagination>
+            <div class="dataTables_length float-right" id="example3_length">
+              <label
+                >Show
+                <select
+                  class="p-2"
+                  name="example3_length"
+                  aria-controls="example3"
+                  [(ngModel)]="pageSize"
+                  (ngModelChange)="getAllAmbulance()"
+                >
+                  <option [ngValue]="5">5</option>
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="15">15</option>
+                  <option [ngValue]="ambulanceLength">All</option>
+                </select>
+                Entries</label
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

@@ -1,0 +1,16 @@
+.user-account {
+  margin: 10px;
+}
+
+.dropdown-menu {
+  min-width: 190px;
+}
+.logo_pic {
+  margin-right: 10px;
+}
+
+.user-account .user-photo {
+  width: 30px !important;
+  vertical-align: top;
+  border: 2px solid #dfdede;
+}

@@ -1,0 +1,234 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+  <app-admin-spinner></app-admin-spinner>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <div id="main-content">
+    <!-- row -->
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="row">
+        <div class="card">
+          <div class="body">
+            <div class="form-validation">
+              <form
+                id="basic-form"
+                [formGroup]="addAmbulanceTypeForm"
+                (ngSubmit)="onAddAmbulanceType()"
+              >
+                <div class="mb-3 row">
+                  <label class="col-sm-3 col-form-label"
+                    >Name <span class="text-danger">*</span></label
+                  >
+                  <div class="col-lg-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="hospital_name"
+                      placeholder="Enter a Ambulance Type"
+                      formControlName="name"
+                    />
+                    <div
+                      *ngIf="
+                        name && name.invalid && (name.dirty || name.touched)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please enter Hospital name.
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-form-label col-sm-3 pt-0"
+                    >Base fare <span class="text-danger">*</span></label
+                  >
+                  <div class="col-lg-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Enter Base fare"
+                      formControlName="base_fare"
+                    />
+                    <div
+                      *ngIf="
+                        base_fare &&
+                        base_fare.invalid &&
+                        (base_fare.dirty || base_fare.touched)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please enter Base Fare.
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-lg-3" for="slab1"
+                    >Per KM Charge Slab1
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-lg-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="slab1"
+                      placeholder="Enter Per KM Charge Slab1"
+                      formControlName="slab1"
+                    />
+                    <div
+                      *ngIf="
+                        slab1 && slab1.invalid && (slab1.dirty || slab1.touched)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please enter Per KM Charge for Slab 1.
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-lg-3" for="slab2"
+                    >Per KM Charge Slab2
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-lg-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="slab2"
+                      placeholder="Enter Per KM Charge Slab2"
+                      formControlName="slab2"
+                    />
+                    <div
+                      *ngIf="
+                        slab2 && slab2.invalid && (slab2.dirty || slab2.touched)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please enter Per KM Charge for Slab 2
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-lg-3" for="oxygen"
+                    >Oxygen Per KM
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-lg-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="oxygen"
+                      placeholder="Enter Oxygen per km charge"
+                      required=""
+                      formControlName="oxygen"
+                    />
+                    <div
+                      *ngIf="
+                        oxygen &&
+                        oxygen.invalid &&
+                        (oxygen.dirty || oxygen.touched)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please enter Oxygen Per KM.
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-lg-3" for="Municipality"
+                    >Covid PPE Kit
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-lg-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="Municipality"
+                      placeholder="Enter PPE KIT charges"
+                      required=""
+                      formControlName="ppe_kit"
+                    />
+                    <div
+                      *ngIf="
+                        ppe_kit &&
+                        ppe_kit.invalid &&
+                        (ppe_kit.dirty || ppe_kit.touched)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please enter Covid PPE Kit.
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-lg-3" for="City"
+                    >Image
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-lg-6">
+                    <button
+                      type="button"
+                      class="btn btn-secondary btn-sm"
+                      (click)="profileImageFile.click()"
+                    >
+                      Browse Image
+                    </button>
+                    <input
+                      accept=".jpg, .png, .jpeg"
+                      type="file"
+                      style="display: none"
+                      (change)="onProfileImageChange($event)"
+                      #profileImageFile
+                      formControlName="image"
+                    />
+                    <img
+                      [src]="profileImageBrowse"
+                      alt="Ambulance type image"
+                      class="img-fluid avatar-lg ml-5"
+                      style="width: 25%; margin-left: 10px"
+                      [hidden]="profileImageBrowse == undefined"
+                      *ngIf="profileImageBrowse != ''"
+                    />
+                  </div>
+                  <div
+                    *ngIf="
+                      image &&
+                      profileImageBrowse == undefined &&
+                      image.invalid &&
+                      (image.dirty || image.touched)
+                    "
+                    class="invalid animated bounceIn text-danger"
+                  >
+                    Please enter Covid PPE Kit.
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <div class="col-lg-8">
+                    <a
+                      class="float-right btn btn-lg btn-danger m-1"
+                      routerLink="/admin/ambulance-type"
+                    >
+                      Cancel
+                    </a>
+                    <button
+                      type="submit"
+                      class="float-right btn btn-lg btn-primary m-1"
+                      [disabled]="addAmbulanceTypeForm.invalid"
+                    >
+                      Save
+                    </button>
+                  </div>
+                  <div class="col-lg-4">
+                    <span class="text-success">{{ message }}</span>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-admin-footer></app-admin-footer>
+  </div>
+</div>

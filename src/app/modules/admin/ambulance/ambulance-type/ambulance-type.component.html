@@ -1,0 +1,191 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="card">
+        <div class="header">
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              type="search"
+              class="form-control float-right"
+              placeholder="Search Here"
+              [(ngModel)]="searchText"
+              aria-controls="addrowExample"
+            />
+          </div>
+          <button
+            class="btn btn-warning float-right m-2 text-white"
+            (click)="exportExcel()"
+          >
+            <i class="fa-solid fa-file-excel"></i>
+            Export to Excel
+          </button>
+          <button
+            [routerLink]="['add-ambulance-type/']"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            id="addToTable"
+            class="btn btn-primary float-right m-2"
+            type="button"
+          >
+            <i class="icon-plus m-1" aria-hidden="true"></i>Add Ambulance Type
+          </button>
+        </div>
+        <div class="body">
+          <div
+            id="example3_wrapper"
+            class="dataTables_wrapper no-footer table-scroll"
+          >
+            <table
+              class="table table-bordered table-hover table-striped texy-center"
+              cellspacing="0"
+              id="addrowExample"
+              #excelTable
+            >
+              <thead>
+                <tr role="row">
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    #
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Name
+                  </th>
+                  <th>Base Fare</th>
+                  <th>Price/KM Slab1</th>
+                  <th>Price/KM Slab2</th>
+                  <th>Oxygen/KM</th>
+                  <th>PPE KIT</th>
+                  <th>Image</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let ambulancetype of ambulanceTypes
+                      | searchFilter: searchText
+                  "
+                >
+                  <td>
+                    {{ ambulancetype.sl_no }}
+                  </td>
+                  <td>{{ ambulancetype.name }}</td>
+                  <td>{{ ambulancetype.basefare }}</td>
+                  <td>{{ ambulancetype.per_km_charge_slab1 }}</td>
+                  <td>{{ ambulancetype.per_km_charge_slab2 }}</td>
+                  <td>{{ ambulancetype.oxygen_per_km }}</td>
+                  <td>{{ ambulancetype.covid_ppe_cost }}</td>
+                  <td>
+                    <img
+                      class=""
+                      width="35"
+                      src="{{ baseUrl }}{{ ambulancetype.image }}"
+                      alt=""
+                    />
+                  </td>
+                  <td>
+                    <span *ngIf="isVisible">
+                      {{
+                        ambulancetype?.is_active == 1 ? 'Active' : 'Inactive'
+                      }}</span
+                    >
+                    <label
+                      *ngIf="!isVisible"
+                      class="switch"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="right"
+                      title="{{
+                        ambulancetype.is_active == 1 ? 'Active' : 'Inactive'
+                      }}"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="ambulancetype.is_active == 1"
+                        (click)="
+                          onStatusChange(
+                            $event,
+                            ambulancetype.id,
+                            ambulancetype.is_active
+                          )
+                        "
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <div class="d-flex">
+                      <a
+                        [routerLink]="[
+                          'edit-ambulance-type/',
+                          ambulancetype.id
+                        ]"
+                        [routerLinkActive]="'router-Link-Active'"
+                        class="btn btn-warning shadow btn-xs sharp me-1"
+                        ><i class="icon-pencil"></i
+                      ></a>
+                      <!-- <a (click)="deleteHospitalType(hospitaltype.id)" routerLinkActive="router-link-active"
+                                                        class="btn btn-primary shadow btn-xs sharp"><i class="fas fa-trash-alt"></i></a> -->
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <ngb-pagination
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [collectionSize]="ambulanceLength"
+              (pageChange)="getAllAmbulanceType()"
+            ></ngb-pagination>
+            <div class="dataTables_length float-right" id="example3_length">
+              <label
+                >Show
+                <select
+                  name="example3_length"
+                  aria-controls="example3"
+                  class="p-2"
+                  [(ngModel)]="pageSize"
+                  (ngModelChange)="getAllAmbulanceType()"
+                >
+                  <option [ngValue]="5">5</option>
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="15">15</option>
+                  <option [ngValue]="ambulanceLength">All</option>
+                </select>
+                Entries</label
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-admin-footer></app-admin-footer>
+</div>

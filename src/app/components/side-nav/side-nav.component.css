@@ -1,0 +1,18 @@
+.liststylenone {
+    list-style: none !important;
+}
+
+.sidebar-nav .metismenu a:hover {
+    background-color: #dbdee0;
+}
+
+.fs-s {
+    font-size: 10px !important;
+}
+
+.fs-m {
+    font-size: 13px !important;
+}
+.sidebar-nav .metismenu{
+    padding-bottom: 90px!important;
+}

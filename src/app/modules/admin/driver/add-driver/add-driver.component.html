@@ -1,0 +1,339 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="row">
+        <div class="card">
+          <div class="body">
+            <div class="form-validation">
+              <form
+                id="basic-form"
+                method="post"
+                novalidate=""
+                novalidate=""
+                [formGroup]="driverForm"
+                (ngSubmit)="onUpdate()"
+              >
+                <div class="mb-3 row">
+                  <label class="col-sm-3 col-form-label"
+                    >Full Name:
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-sm-9">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="validationCustom01"
+                      placeholder="Enter a username.."
+                      formControlName="name"
+                    />
+                    <div
+                      *ngIf="
+                        name && name.invalid && (name.dirty || name.touched)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please your full name.
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-sm-3 col-form-label"
+                    >Email <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-sm-9">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="validationCustom02"
+                      placeholder="Your valid email.."
+                      formControlName="email"
+                    />
+                    <div
+                      class="invalid animated bounceIn text-danger"
+                      *ngIf="
+                        email && email.invalid && (email.dirty || email.touched)
+                      "
+                    >
+                      Please enter a valid Email.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3 row">
+                  <label
+                    class="col-lg-3 col-form-label"
+                    for="validationCustom01"
+                    >Mobile No
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-sm-9">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="validationCustom01"
+                      placeholder="Enter your mobile no."
+                      formControlName="phone"
+                    />
+                    <div
+                      class="invalid animated bounceIn text-danger"
+                      *ngIf="
+                        phone && phone.invalid && (phone.dirty || phone.touched)
+                      "
+                    >
+                      Please your valid mobile number.
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label
+                    class="col-lg-3 col-form-label"
+                    for="validationCustom01"
+                    >Aadhaar No:
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-sm-9">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="validationCustom01"
+                      placeholder="Enter your Aadhaar no."
+                      formControlName="adhar_no"
+                    />
+                    <div
+                      class="invalid animated bounceIn text-danger"
+                      *ngIf="
+                        adhar_no &&
+                        adhar_no.invalid &&
+                        (adhar_no.dirty || adhar_no.touched)
+                      "
+                    >
+                      Please your valid aadhaar number.
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label
+                    class="col-lg-3 col-form-label"
+                    for="validationCustom01"
+                    >Assign Ambulance:
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-sm-9">
+                    <ng-multiselect-dropdown
+                      [placeholder]="'Select Ambulance'"
+                      formControlName="ambulance_id"
+                      [data]="ambulanceAvailableServices"
+                      [settings]="ambulanceServiceDropdownSettings"
+                      class="ward-list"
+                      (onSelect)="onSelectAmbulanceService($event)"
+                      (onDeSelect)="onDeSelectAmbulanceService($event)"
+                    >
+                    </ng-multiselect-dropdown>
+                    <!-- <select
+                      class="form-select"
+                      aria-label=".form-select-lg example"
+                      formControlName="ambulance_id"
+                    >
+                      <option value="0">Select Ambulance</option>
+                      <option
+                        *ngFor="let ambulance of ambulanceAvailableServices"
+                        [value]="ambulance?.id"
+                      >
+                        {{
+                          ambulance?.ambulance_type_id?.name +
+                            ' - ' +
+                            ambulance?.registration_number
+                        }}
+                      </option>
+                    </select> -->
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label
+                    class="col-lg-3 col-form-label"
+                    for="validationCustom01"
+                    >Driving License No:
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-sm-9">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="validationCustom01"
+                      placeholder="Enter your Dl no."
+                      required=""
+                      formControlName="dl_no"
+                    />
+                    <div
+                      *ngIf="
+                        dl_no && dl_no.invalid && (dl_no.dirty || dl_no.touched)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please your valid Driving license number.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3 mb-0">
+                  <label
+                    class="col-lg-3 col-form-label"
+                    for="validationCustom01"
+                    >Active:
+                    <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    checked=""
+                    id="customCheckBox8"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="right"
+                    title="{{
+                      driverDetails?.is_active == 1 ? 'Active' : 'Inactive'
+                    }}"
+                    required=""
+                    [checked]="driverDetails?.is_active == 1"
+                    (change)="onStatusChange($event)"
+                  />
+                </div>
+
+                <div class="mb-3 row">
+                  <div class="col-lg-6">
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-6 col-form-label"
+                        for="validationCustom01"
+                        >Upload Profile Image:
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <div class="form-file">
+                          <input
+                            type="file"
+                            class="form-file-input form-control"
+                            accept=".png,.jpg,.jpeg"
+                            formControlName="profile_image"
+                            (change)="onProfileUpload($event)"
+                          />
+                          <img
+                            *ngIf="profileUrl"
+                            class="profileImg"
+                            [src]="profileUrl"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-6 col-form-label"
+                        for="validationCustom01"
+                        >Upload Driving License:
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="file"
+                          class="form-file-input form-control"
+                          accept=".png,.jpg,.jpeg"
+                          formControlName="dl_image"
+                          (change)="onDLUpload($event)"
+                        />
+                        <img *ngIf="dlUrl" class="cardImg" [src]="dlUrl" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <div class="col-lg-6">
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-6 col-form-label"
+                        for="validationCustom01"
+                      >
+                        Upload Aadhaar Front side:
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <div class="form-file">
+                          <input
+                            type="file"
+                            class="form-file-input form-control"
+                            accept=".png,.jpg, .jpeg"
+                            formControlName="adhar_front_image"
+                            (change)="onAdharFrontUpload($event)"
+                          />
+
+                          <img
+                            *ngIf="adharFrontUrl"
+                            class="cardImg"
+                            [src]="adharFrontUrl"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="mb-3 row">
+                      <label
+                        class="col-lg-6 col-form-label"
+                        for="validationCustom01"
+                      >
+                        Upload Aadhaar Back side:
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <div class="form-file">
+                          <input
+                            type="file"
+                            class="form-file-input form-control"
+                            accept=".png,.jpg, .jpeg"
+                            formControlName="adhar_Back_image"
+                            (change)="onAdharBackUpload($event)"
+                          />
+
+                          <img
+                            *ngIf="adharBackUrl"
+                            class="cardImg"
+                            [src]="adharBackUrl"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 justify-content-center row">
+                  <div class="col-lg-12">
+                    <a
+                      [routerLink]="['/admin/driver']"
+                      type="submit"
+                      class="btn btn-lg btn-danger float-right m-2"
+                    >
+                      Cancel
+                    </a>
+                    <button
+                      type="submit"
+                      class="btn btn-lg btn-primary float-right m-2"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

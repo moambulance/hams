@@ -1,0 +1,172 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+  <app-admin-spinner></app-admin-spinner>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+
+      <div class="row clearfix">
+        <div class="card">
+          <div class="card-body">
+            <div class="form-validation">
+              <form
+                class="needs-validation"
+                [formGroup]="advertiseForm"
+                (ngSubmit)="CreateAdvertise()"
+              >
+                <div class="mb-3 row">
+                  <label class="col-sm-2 col-form-label col-form-label-sm"
+                    >Link <span class="text-danger">*</span></label
+                  >
+                  <div class="col-sm-10">
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      formControlName="link"
+                      placeholder="Enter Advertise Link"
+                    />
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-sm-2 col-form-label col-form-label-sm"
+                    >Priority <span class="text-danger">*</span></label
+                  >
+                  <div class="col-sm-10">
+                    <div class="m-2">
+                      <label class="radio-inline me-3"
+                        ><input
+                          type="radio"
+                          formControlName="priority"
+                          [value]="1"
+                        />
+                        High</label
+                      >
+                      <label class="radio-inline me-3"
+                        ><input
+                          type="radio"
+                          formControlName="priority"
+                          [value]="2"
+                        />
+                        Medium</label
+                      >
+                      <label class="radio-inline me-3"
+                        ><input
+                          type="radio"
+                          formControlName="priority"
+                          [value]="3"
+                        />
+                        Low</label
+                      >
+                      <label class="radio-inline me-3"
+                        ><input
+                          type="radio"
+                          formControlName="priority"
+                          [value]="0"
+                        />
+                        None</label
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-sm-2 col-form-label col-form-label-sm"
+                    >Type <span class="text-danger">*</span></label
+                  >
+                  <div class="col-sm-10">
+                    <div class="mb-3 m-2">
+                      <label class="radio-inline me-3"
+                        ><input
+                          type="radio"
+                          class="radio-inline me-3"
+                          name="optradio1"
+                          formControlName="type"
+                          [value]="1"
+                        />
+                        Customer landing page</label
+                      >
+                      <label class="radio-inline me-3"
+                        ><input
+                          type="radio"
+                          class="radio-inline me-3"
+                          name="optradio1"
+                          formControlName="type"
+                          [value]="2"
+                        />
+                        Other medical service page</label
+                      >
+                      <label class="radio-inline me-3"
+                        ><input
+                          type="radio"
+                          class="radio-inline me-3"
+                          name="optradio1"
+                          formControlName="type"
+                          [value]="3"
+                        />
+                        Website</label
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label" for="City"
+                    >Image
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-lg-6">
+                    <button
+                      type="button"
+                      class="btn btn-secondary btn-sm"
+                      (click)="profileImageFile.click()"
+                    >
+                      Browse Image
+                    </button>
+                    <input
+                      accept=".jpg, .png, .jpeg"
+                      type="file"
+                      style="display: none"
+                      (change)="onProfileImageChange($event)"
+                      #profileImageFile
+                      formControlName="image"
+                    />
+                    <img
+                      [src]="profileImageBrowse"
+                      alt="Ambulance type image"
+                      class="img-fluid avatar-lg ml-5"
+                      style="width: 25%; margin-left: 10px"
+                      [hidden]="profileImageBrowse == undefined"
+                      *ngIf="profileImageBrowse != ''"
+                    />
+                  </div>
+                </div>
+                <div class="text-right">
+                  <a
+                    class="btn btn-danger m-1 float-right"
+                    routerLink="/admin/advertise"
+                  >
+                    Cancel
+                  </a>
+                  <button type="submit" class="btn btn-primary float-right m-1">
+                    {{
+                      routerUrl === '/admin/advertise/add-advertise'
+                        ? 'Create'
+                        : 'Update'
+                    }}
+                  </button>
+                </div>
+                <div class="mt-2">
+                  <span class="text-success">{{ message }}</span>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-admin-footer></app-admin-footer>
+</div>

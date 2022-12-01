@@ -1,0 +1,198 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+  <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb [breadCrumbData]="breadCrumbData"></app-admin-breadcrumb>
+      <div class="row clearfix">
+        <div class="card">
+          <div class="header float-right">
+            <div id="addrowExample_filter " class="dataTables_filter float-right">
+              <input type="search" class="form-control m-1" placeholder="Search Here" [(ngModel)]="searchText"
+                aria-controls="addrowExample" />
+            </div>
+            <!--  <button class="btn btn-warning text-white m-1" (click)="exportExcel()">
+              <i class="fa-solid fa-file-excel"></i>
+              Export to Excel
+            </button> -->
+            <button class="btn btn-primary m-1" type="button" data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"
+              (click)="onCreateMvitaluserClick()">
+              Create Mvitals User
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="header float-right"></div>
+
+            <div class="body">
+              <!-- For ADD Mvitals user -->
+              <div class="offcanvas offcanvas-end m-2" data-bs-scroll="true" data-bs-backdrop="true" tabindex="-1"
+                id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" style="width: 450px;">
+                <div class="offcanvas-header">
+                  <h5 class="offcanvas-title" id="offcanvasScrollingLabel">
+                    Mvitals user Form
+                  </h5>
+                  <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"
+                    #closeSideModal></button>
+                </div>
+                <div class="offcanvas-body body">
+                  <form [formGroup]="mvitalsUserAddForm" (ngSubmit)="onAddMvitalsUser()">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="mb-3 row">
+                          <label class="col-sm-3 col-form-label">Ambulance
+                            <span class="text-danger">*</span>
+                          </label>
+                          <div class="col-sm-6">
+                            <ng-multiselect-dropdown [placeholder]="'Select Ambulance'" formControlName="ambulance"
+                              [data]="filteredAmbulances" [settings]="ambulanceDropdownSettings" class="ward-list"
+                              (onSelect)="onSelectAmbulance($event)" (onDeSelect)="onDeSelect($event)">
+                            </ng-multiselect-dropdown>
+                            <div class="invalid animated bounceIn text-danger"
+                              *ngIf="(ambulance && ambulance.invalid && (ambulance.dirty || ambulance.touched)) || responseFalure">
+                              Please select one ambulance.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mb-3 row">
+                          <label class="col-lg-3 col-form-label">Username
+                            <span class="text-danger">*</span>
+                          </label>
+                          <div class="col-lg-6">
+                            <input type="text" class="form-control" placeholder="Enter  Username"
+                              formControlName="username" />
+                            <div *ngIf="
+                                username &&
+                                username.invalid &&
+                                (username.dirty || username.touched)
+                              " class="invalid animated bounceIn text-danger">
+                              Please enter Username.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mb-3 row">
+                          <label class="col-lg-3 col-form-label">Password
+                            <span class="text-danger">*</span>
+                          </label>
+                          <div class="col-lg-6">
+                            <input type="taxt" class="form-control" placeholder="Enter  password"
+                              formControlName="password" />
+                            <div *ngIf="
+                                password &&
+                                password.invalid &&
+                                (password.dirty || password.touched)
+                              " class="invalid animated bounceIn text-danger">
+                              Please enter Password.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mb-3 row">
+                          <div class="form-check">
+                            <label>
+                              <input type="checkbox" name="isMHU" formControlName="is_mhu" />
+                              MHU (By Selecting this user will be set as MHU user)
+                            </label>
+                          </div>
+                        </div>
+                        <div class="mb-3 row">
+                          <label class="col-sm-3 col-form-label">Select IOT Companies
+                            <span class="text-danger">*</span>
+                          </label>
+                          <div class="col-sm-6">
+                            <ng-multiselect-dropdown [placeholder]="'Select IOT Companies'"
+                              formControlName="iot_companies" [data]="iotCompanies"
+                              [settings]="iotCompanyDropdownSettings" class="ward-list"
+                              (onSelect)="onSelectIotCompany($event)" (onDeSelect)="onDeSelectIotCompany($event)">
+                            </ng-multiselect-dropdown>
+                            <div class="invalid animated bounceIn text-danger" *ngIf="(
+                                iot_companies && iot_companies.invalid && 
+                                (iot_companies.dirty || iot_companies.touched)
+                                ) || responseFalureIotCompany">
+                              Please select one IOT company.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-3 row justify-content-right">
+                        <div class="col-lg-6">
+                          <span [ngClass]="{'text-danger': !FormValid, 'text-success': FormValid}">{{ message }}</span>
+                        </div>
+                        <div class="col-lg-6">
+                          <button type="submit" class="btn btn-lg btn-success">
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <!--end of For ADD Mvitals user -->
+
+              <div id="example3_wrapper" class="dataTables_wrapper no-footer">
+                <table class="table table-bordered table-hover table-striped text-center" cellspacing="0"
+                  id="addrowExample">
+                  <thead>
+                    <tr role="row">
+                      <th>#</th>
+                      <th>UserName</th>
+                      <th>Ambulance</th>
+                      <th>Ambulance Type</th>
+                      <th>MHU</th>
+                      <th>IOT COMPANY</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let mvitaluser of mvitalusers | searchFilter: searchText; let i = index;">
+                      <td>
+                        <strong>{{ mvitaluser.sl_no }}</strong>
+                      </td>
+                      <td>{{ mvitaluser.username }}</td>
+                      <td>{{ mvitaluser.ambulance_id?.registration_number }}</td>
+                      <td>{{ mvitaluser.ambulance_id?.ambulance_type_id?.name }}</td>
+                      <td>
+                        <span class="badge text-bg-primary" *ngIf="mvitaluser.is_mhu == 1">YES</span>
+                        <span class="badge text-bg-danger" *ngIf="mvitaluser.is_mhu == 0">NO</span>
+                      </td>
+                      <td>
+                        {{ mvitaluser?.iot_company.length > 0 ? mvitaluser?.iot_company : "NA" }}
+                      </td>
+                      <td>
+                        <label class="switch" data-bs-toggle="tooltip" data-bs-placement="right"
+                          title="{{mvitaluser.is_active == 1 ? 'Active' : 'Inactive'}}">
+                          <input type="checkbox" [checked]="mvitaluser.is_active == 1"
+                            (click)="onStatusChange($event, mvitaluser.id, mvitaluser.is_active)" />
+                          <span class="slider round"></span>
+                        </label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <ngb-pagination class="dataTables_paginate paging_simple_numbers" [(page)]="page" [pageSize]="pageSize"
+                  [collectionSize]="mvitalusersLength" (pageChange)="getAllMvitalsUsers()">
+                </ngb-pagination>
+
+                <div class="dataTables_length float-right" id="example3_length">
+                  <label>Show
+                    <select class="p-2" name="form-control" aria-controls="example3" [(ngModel)]="pageSize"
+                      (ngModelChange)="getAllMvitalsUsers()">
+                      <option [ngValue]="5">5</option>
+                      <option [ngValue]="10">10</option>
+                      <option [ngValue]="15">15</option>
+                    </select>
+                    entries</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

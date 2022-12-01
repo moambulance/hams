@@ -1,0 +1,64 @@
+<div id="wrapper">
+  <app-navbar></app-navbar>
+  <app-sidebar></app-sidebar>
+  <app-spinner></app-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-breadcrumb [breadCrumbData]="breadCrumbData"></app-breadcrumb>
+
+      <div class="card">
+        <!-- <div class="header">
+          <form [formGroup]="reportForm" (ngSubmit)="onFilter()">
+            <div class="row">
+              <div class="col-md-5">
+                <div class="row">
+                  <label class="col-sm-3 col-form-label">Start Date:
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-sm-9">
+                    <input type="date" class="form-control" placeholder="Enter a Start date" formControlName="start_date" />
+                    <div *ngIf="start_date && start_date.invalid && (start_date.dirty || start_date.touched)" 
+                      class="invalid animated bounceIn text-danger">
+                      Please enter start date
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="row">
+                  <label class="col-sm-3 col-form-label">End Date:
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-sm-9">
+                    <input type="date" class="form-control" placeholder="Enter a End date" formControlName="end_date" />
+                    <div *ngIf="end_date && end_date.invalid && (end_date.dirty || end_date.touched)" 
+                      class="invalid animated bounceIn text-danger">
+                      Please enter end date
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Filter</button>
+              </div>
+            </div>
+          </form>
+        </div> -->
+        <div class="body">
+          <canvas
+            baseChart
+            [data]="pieChartData"
+            [labels]="pieChartLabels"
+            [chartType]="pieChartType"
+            [options]="pieChartOptions"
+            [plugins]="pieChartPlugins"
+            [legend]="pieChartLegend"
+            [colors]="pieChartColors"
+          >
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

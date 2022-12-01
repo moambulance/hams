@@ -1,0 +1,190 @@
+<div id="left-sidebar" class="sidebar m-0">
+  <div class="sidebar-scroll">
+    <div class="user-account p-0 m-0 pt-1 mt-1">
+      <img
+        *ngIf="hospitalDetails"
+        [src]="hospitalDetails.logo ? baseUrl + hospitalDetails.logo : ''"
+        alt="User Profile Picture"
+      />
+    </div>
+
+    <div class="tab-content p-l-0 p-r-0 cursor-pointer">
+      <div class="tab-pane active" id="menu">
+        <nav class="sidebar-nav">
+          <ul class="main-menu metismenu">
+            <li
+              [routerLink]="['/hospital/dashboard']"
+              routerLinkActive="active box-border"
+            >
+              <a>
+                <i class="icon_style icon-home"></i>
+                <span class="nav-text">Dashboard</span>
+              </a>
+            </li>
+            <li
+              [routerLink]="['/hospital/live-ambulance']"
+              routerLinkActive="active box-border"
+            >
+              <a>
+                <i class="icon_style fa-solid fa-location-crosshairs"></i>
+                <span>Live Ambulance</span>
+              </a>
+            </li>
+            <li
+              [routerLink]="['/hospital/ambulance-booking']"
+              routerLinkActive="active box-border"
+            >
+              <a>
+                <i class="icon_style fa-solid fa-calendar-plus"></i>
+                <span>Book an Ambulance</span>
+              </a>
+            </li>
+            <li
+              [routerLink]="['/hospital/driver']"
+              routerLinkActive="active box-border"
+            >
+              <a>
+                <i class="icon_style fa-solid fa-user-nurse"></i
+                ><span>Drivers</span>
+              </a>
+            </li>
+            <li
+              [routerLink]="['/hospital/ambulance']"
+              routerLinkActive="active box-border"
+            >
+              <a>
+                <i class="icon_style fa fa-ambulance"></i>
+                Ambulances</a
+              >
+            </li>
+            <li
+              [routerLink]="['/hospital/manage-prices']"
+              routerLinkActive="active box-border"
+            >
+              <a>
+                <i class="icon_style fa-solid fa-indian-rupee-sign"></i>
+                Manage Prices</a
+              >
+            </li>
+            <li
+              [routerLink]="['/hospital/manage-beds']"
+              routerLinkActive="active box-border"
+            >
+              <a>
+                <i class="icon_style fa-solid fa-bed"></i>
+                Manage Beds</a
+              >
+            </li>
+
+            <li
+              class="{{ master ? 'active' : '' }}"
+              [routerLinkActive]="'active'"
+            >
+              <a
+                data-bs-target="#uiElements"
+                class="has-arrow"
+                href="javascript:void()"
+                (click)="onClickMaster()"
+                ><i class="icon_style icon-bar-chart"></i>
+                <span>Reports</span></a
+              >
+              <ul class="{{ master ? 'left collapse-in' : 'left collapse' }}">
+                <li
+                  [routerLink]="['/hospital/reports/total-rides']"
+                  routerLinkActive="active box-border"
+                >
+                  <a><i class="icon_style fa-solid fa-car"></i>Total Rides</a>
+                </li>
+                <li
+                  [routerLink]="['/hospital/reports/ambulance-type']"
+                  routerLinkActive="active box-border"
+                >
+                  <a
+                    ><i class="icon_style fas fa-ambulance"></i>Ambulance
+                    Type</a
+                  >
+                </li>
+                <li
+                  [routerLink]="['/hospital/reports/patient-type']"
+                  routerLinkActive="active box-border"
+                >
+                  <a
+                    ><i class="icon_style fas fa-user-tie"></i>Type of
+                    Patient</a
+                  >
+                </li>
+                <li
+                  [routerLink]="['/hospital/reports/time-taken']"
+                  routerLinkActive="active box-border"
+                >
+                  <a><i class="icon_style far fa-clock"></i>Time Taken</a>
+                </li>
+                <!-- <li
+                [routerLink]="['/hospital/reports/patient-condition']"
+                routerLinkActive="active box-border"
+              >
+                <a><i class="icon_style far fa-file-powerpoint"></i>Patient Condition</a>
+              </li> -->
+                <li
+                  [routerLink]="['/hospital/reports/ambulance-revenue']"
+                  routerLinkActive="active box-border"
+                >
+                  <a
+                    ><i class="icon_style fas fa-rupee-sign"></i>Ambulance
+                    Revenue</a
+                  >
+                </li>
+                <!-- <li
+                [routerLink]="['/hospital/reports/patient-location']"
+                routerLinkActive="active box-border"
+              >
+                <a><i class="icon_style fas fa-list-ul"></i>Patient Location</a>
+              </li> -->
+                <li
+                  [routerLink]="['/hospital/reports/moAmbulance-patient']"
+                  routerLinkActive="active box-border"
+                >
+                  <a
+                    ><i class="icon_style fas fa-user"></i>Mo Ambulance
+                    Patients</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li
+              [routerLink]="['/hospital/help']"
+              routerLinkActive="active box-border"
+            >
+              <a>
+                <i class="icon_style fa-solid fa-handshake-angle"></i>
+                Help</a
+              >
+            </li>
+
+            <li>
+              <div class="d-flex">
+                <span class="pl-2 text-dark fs-s m-0">Powered By</span>
+                <a href="javascript:void(0)" class="p-0 m-0"
+                  ><span class="text_theme p-0 m-0 fs-m"
+                    >Clinohealthinovation PVT. LTD.</span
+                  ></a
+                >
+              </div>
+            </li>
+            <li>
+              <a aria-expanded="false"> </a>
+            </li>
+            <li>
+              <a aria-expanded="false"> </a>
+            </li>
+
+            <!-- <li>
+              <a aria-expanded="false"> </a>
+            </li> -->
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <!-- </div> -->
+</div>

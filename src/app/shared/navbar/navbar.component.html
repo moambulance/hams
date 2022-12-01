@@ -1,0 +1,71 @@
+<nav class="navbar navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-btn">
+      <button type="button" class="btn-toggle-offcanvas">
+        <i class="lnr lnr-menu fa fa-bars"></i>
+      </button>
+    </div>
+
+    <div class="navbar-brand">
+      <a href="javascript:void(0)"
+        ><img
+          src="assets/images/logo/hams-logo-final.png"
+          alt="Logo"
+          class="img-responsive logo"
+      /></a>
+    </div>
+
+    <div class="navbar-right">
+      <div id="navbar-menu">
+        <div class="user-account">
+          <img
+            [src]="
+              orderCount > 0
+                ? 'assets/images/alert.gif'
+                : 'assets/images/static_alert.png'
+            "
+            alt="On Trip Ambulance"
+            [class]="
+              orderCount > 0 ? 'ontrip-alert cursor-pointer' : 'ontrip-alert'
+            "
+            (click)="onAmbulanceClick()"
+          />
+          <!-- <i class="fa-solid fa-minus" (click)="soundDecrease()"></i>
+          <i
+            class="fa-solid"
+            [ngClass]="{ 'fa-play': play, 'fa-pause': !play }"
+            (click)="pauseSiren()"
+          ></i> -->
+          <audio
+            #audioPlayer
+            src="assets/audio/AmbulanceSiren.mp3"
+            type="audio/mp3"
+            loop="loop"
+          ></audio>
+          <div class="dropdown text_theme">
+            <span>Welcome,</span>
+            <a
+              href="javascript:void(0);"
+              class="dropdown-toggle user-name t-d-none"
+              data-bs-toggle="dropdown"
+              ><strong>{{ hospitalDetails?.name }}</strong></a
+            >
+            <ul class="dropdown-menu dropdown-menu-right account">
+              <li class="z-10000">
+                <a
+                  [routerLink]="['/hospital/change-password']"
+                  routerLinkActive="active"
+                  *ngIf="CURRENT_URL !== '/hospital/kiosk'"
+                >
+                  <i class="fas fa-key"></i>Change Password</a
+                >
+                <hr *ngIf="CURRENT_URL !== '/hospital/kiosk'" />
+                <a (click)="onLogout()"><i class="icon-power"></i>Logout</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,20 @@
+.profileImg {
+  width: 130px;
+  height: 140px;
+}
+.cardImg {
+  width: 240px;
+  height: 150px;
+}
+.pt-7 {
+  padding-top: 70px;
+}
+.bg-sky {
+  background-color: #84c5f3;
+}
+.bg-pink {
+  background-color: #ed7ea1;
+}
+.bg-yellow {
+  background-color: #fee095;
+}

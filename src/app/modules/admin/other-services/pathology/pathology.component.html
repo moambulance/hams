@@ -1,0 +1,181 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <ngx-spinner
+        bdColor="rgba(51,51,51,0.8)"
+        size="medium"
+        color="#fff"
+        type="ball-scale-multiple"
+      >
+        <p style="font-size: 20px; color: white">Loading...</p>
+      </ngx-spinner>
+      <div class="card">
+        <div class="header">
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              type="search"
+              class="form-control float-right w-100"
+              placeholder="Search Here"
+              [(ngModel)]="searchText"
+              aria-controls="addrowExample"
+            />
+          </div>
+          <button
+            [routerLink]="['add-pathology/']"
+            class="btn btn-primary m-2 float-right"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            type="button"
+          >
+            <i class="icon-plus" aria-hidden="true"></i>
+            Add Pathology Delivery
+          </button>
+          <button
+            class="btn btn-warning m-2 text-white float-right"
+            (click)="exportExcel()"
+            data-bs-toggle="#allList"
+            data-bs-target="#allList"
+          >
+            <i class="fa-solid fa-file-excel"></i>
+            Export to Excel
+          </button>
+        </div>
+        <div class="body">
+          <div
+            id="example3_wrapper"
+            class="dataTables_wrapper no-footer table-scroll"
+          >
+            <table
+              class="table table-bordered table-hover table-striped text-center"
+              cellspacing="0"
+              id="addrowExample"
+              #excelTable
+            >
+              <thead>
+                <tr role="row">
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    #
+                  </th>
+
+                  <th>Customer Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>preferred delivery</th>
+                  <th>Prescription</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let Pathology of pathologyList | searchFilter: searchText;
+                    let i = index
+                  "
+                >
+                  <td>
+                    {{ Pathology?.sl_no }}
+                  </td>
+                  <td>
+                    {{ Pathology?.customer_name }}
+                  </td>
+
+                  <td>{{ Pathology?.customer_email }}</td>
+                  <td>{{ Pathology?.customer_mobile }}</td>
+                  <td>{{ Pathology?.prefered_delivery }}</td>
+                  <td>
+                    <img
+                      class=""
+                      width="35"
+                      src="{{ baseUrl + Pathology?.prescription }}"
+                      alt=""
+                    />
+                  </td>
+
+                  <!-- 0- New, 1- InProgress, 2-Completed -->
+                  <td>
+                    <span
+                      [class]="
+                        Pathology?.status == 0
+                          ? 'badge badge-warning'
+                          : Pathology?.status == 1
+                          ? 'badge badge-success'
+                          : Pathology?.status == 2
+                          ? 'badge badge-secondary'
+                          : 'badge badge-danger'
+                      "
+                      >{{
+                        Pathology?.status == 0
+                          ? 'New'
+                          : Pathology?.status == 1
+                          ? 'In Progress'
+                          : Pathology?.status == 2
+                          ? 'Completed'
+                          : ''
+                      }}
+                    </span>
+                  </td>
+                  <td>
+                    <a
+                      [routerLink]="['edit-pathology/', Pathology?.id]"
+                      routerLinkActive="router-link-active"
+                      class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                      ><i class="icon-pencil" aria-hidden="true"></i
+                    ></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ngb-pagination
+            class="dataTables_paginate paging_simple_numbers"
+            [(page)]="page"
+            [pageSize]="pageSize"
+            [collectionSize]="pathologyLength"
+            (pageChange)="getAllPathology()"
+          >
+          </ngb-pagination>
+          <div class="dataTables_length float-right" id="example3_length">
+            <label
+              >Show
+              <select
+                name="form-control"
+                aria-controls="example3"
+                class="p-2"
+                [(ngModel)]="pageSize"
+                (ngModelChange)="getAllPathology()"
+              >
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="15">15</option>
+                <option id="allList" #allList [ngValue]="pathologyLength">
+                  All
+                </option>
+              </select>
+              entries</label
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-admin-footer></app-admin-footer>
+</div>

@@ -1,0 +1,146 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="card">
+        <div class="header">
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              type="search"
+              class="form-control float-right w-100"
+              placeholder="Search Here"
+              [(ngModel)]="searchText"
+              aria-controls="addrowExample"
+            />
+          </div>
+          <button
+            class="btn btn-warning text-white float-right m-2"
+            (click)="exportExcel()"
+          >
+            <i class="fa-solid fa-file-excel"></i>
+            Export to Excel
+          </button>
+        </div>
+        <div class="body">
+          <div
+            id="example3_wrapper"
+            class="dataTables_wrapper no-footer table-scroll"
+          >
+            <table
+              class="table table-bordered table-hover table-striped text-center"
+              cellspacing="0"
+              id="addrowExample"
+              #excelTable
+            >
+              <thead>
+                <tr role="row">
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    #
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Fist Name
+                  </th>
+                  <th>Last Name</th>
+                  <th>Email</th>
+                  <th>Search Time</th>
+                  <th>Phone</th>
+                  <!-- <th>Location</th> -->
+                  <th>Image</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let customer of customerList | searchFilter: searchText;
+                    let i = index
+                  "
+                >
+                  <td>{{ isVisible ? i + 1 : customer?.sl_no }}</td>
+                  <td>{{ customer?.first_name }}</td>
+                  <td>{{ customer?.last_name }}</td>
+                  <td>{{ customer?.email }}</td>
+                  <td>{{ customer?.search_time | date: 'medium':'UTC' }}</td>
+                  <td>{{ customer?.phone }}</td>
+                  <!-- <td>{{customer?.location}}</td> -->
+                  <td>
+                    <img
+                      class=""
+                      width="35"
+                      src="{{ baseUrl }}{{ customer?.profile_image }}"
+                      alt=""
+                    />
+                  </td>
+
+                  <td>
+                    <div class="d-flex">
+                      <a
+                        [routerLink]="['edit-customer/', customer?.id]"
+                        [routerLinkActive]="'router-Link-Active'"
+                        class="btn btn-success shadow btn-xs sharp me-1"
+                        ><i class="icon-pencil"></i
+                      ></a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <ngb-pagination
+              class="dataTables_paginate paging_simple_numbers"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [collectionSize]="customerLength"
+              (pageChange)="getCustomer()"
+            ></ngb-pagination>
+            <div class="dataTables_length float-right" id="example3_length">
+              <label
+                >Show
+                <select
+                  name="form-control"
+                  aria-controls="example3"
+                  class="p-2"
+                  [(ngModel)]="pageSize"
+                  (ngModelChange)="getCustomer()"
+                >
+                  <option [ngValue]="5">5</option>
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="15">15</option>
+                  <option [ngValue]="customerLength">All</option>
+                </select>
+                entries</label
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

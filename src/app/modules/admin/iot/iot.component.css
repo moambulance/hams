@@ -1,0 +1,285 @@
+/*form styles*/
+#msform {
+  text-align: center;
+  position: relative;
+  margin-top: 15px;
+}
+
+#msform fieldset {
+  background: white;
+  border: 0 none;
+  border-radius: 0px;
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+  padding: 20px 30px;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+
+  /*stacking fieldsets above each other*/
+  position: relative;
+}
+
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+  display: none;
+}
+
+/*inputs*/
+#msform input,
+#msform textarea {
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 0px;
+
+  box-sizing: border-box;
+  font-family: montserrat;
+  color: #2c3e50;
+  font-size: 13px;
+}
+
+#msform input:focus,
+#msform textarea:focus {
+  -moz-box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  border: 1px solid #ee0979;
+  outline-width: 0;
+  transition: All 0.5s ease-in;
+  -webkit-transition: All 0.5s ease-in;
+  -moz-transition: All 0.5s ease-in;
+  -o-transition: All 0.5s ease-in;
+}
+
+/*buttons*/
+#msform .action-button {
+  width: 100px;
+  background: #ff6536;
+
+  color: white;
+  border: 0 none;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
+}
+.btn-hover:hover:disabled {
+  width: 100px;
+  background: #ff6536;
+
+  color: white;
+  border: 0 none;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
+}
+.btn-hover:hover {
+  background-color: cadetblue !important;
+}
+
+#msform .action-button-previous {
+  width: 100px;
+  background: #0b2240;
+  font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
+}
+
+#msform .action-button-previous:hover,
+#msform .action-button-previous:focus {
+  box-shadow: 0 0 0 2px white, 0 0 0 3px #c5c5f1;
+}
+
+/*headings*/
+.fs-title {
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+.fs-subtitle {
+  font-weight: normal;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/*progressbar*/
+#progressbar {
+  margin-bottom: 30px;
+  overflow: hidden;
+  /*CSS counters to number the steps*/
+  counter-reset: step;
+}
+
+#progressbar li {
+  list-style-type: none;
+  color: white;
+  text-transform: uppercase;
+  font-size: 9px;
+  width: 50%;
+  float: left;
+  position: relative;
+  letter-spacing: 1px;
+}
+
+#progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  display: block;
+  font-size: 12px;
+  color: #fff;
+  background: rgb(115, 224, 100);
+  border-radius: 50%;
+  margin: 0 auto 10px auto;
+}
+.completed {
+  content: counter(step);
+  counter-increment: step;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  display: block;
+  font-size: 12px;
+  color: #fff;
+  background: rgb(115, 224, 100);
+  border-radius: 50%;
+  margin: 0 auto 10px auto;
+}
+.ongoing {
+  content: counter(step);
+  counter-increment: step;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  display: block;
+  font-size: 12px;
+  color: #fff;
+  background: rgb(243, 247, 7);
+  border-radius: 50%;
+  margin: 0 auto 10px auto;
+}
+
+/*progressbar connectors*/
+#progressbar li:after {
+  content: '';
+  width: 100%;
+  height: 2px;
+  background: white;
+  position: absolute;
+  left: -50%;
+  top: 9px;
+  z-index: -1; /*put it behind the numbers*/
+}
+
+#progressbar li:first-child:after {
+  /*connector not needed before the first step*/
+  content: none;
+}
+
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+#progressbar li.active:before,
+#progressbar li.active:after {
+  background: #ff6536;
+  color: white;
+}
+
+/* Not relevant to this form */
+.dme_link {
+  margin-top: 30px;
+  text-align: center;
+}
+.dme_link a {
+  background: #fff;
+  font-weight: bold;
+  color: #ee0979;
+  border: 0 none;
+  border-radius: 25px;
+  cursor: pointer;
+  padding: 5px 25px;
+  font-size: 12px;
+}
+
+.dme_link a:hover,
+.dme_link a:focus {
+  background: #c5c5f1;
+  text-decoration: none;
+}
+.w-30 {
+  left: 0;
+  width: 30% !important;
+  margin-left: 5px;
+}
+.l-0 {
+  left: 0;
+  margin-left: 0;
+}
+.widthh-50 {
+  width: 50% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  left: 0 !important;
+}
+.test-card::after {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.test-card:hover {
+  transform: scale(1.02, 1.02);
+  -webkit-transform: scale(1.02, 1.02);
+  backface-visibility: hidden;
+  will-change: transform;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.75) !important;
+}
+
+.test-card:hover::after {
+  opacity: 1;
+}
+
+.test-card:hover .btn-outline-primary {
+  color: white;
+  background: #007bff;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid rgb(241, 217, 217);
+  box-shadow: 0px 0px 5px 5px #e7dddd;
+}
+
+th,
+td {
+  text-align: center;
+  padding: 16px;
+}
+
+th:first-child,
+td:first-child {
+  text-align: left;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}

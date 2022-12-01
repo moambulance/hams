@@ -1,0 +1,194 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="card">
+        <div class="header">
+          <h2 class="card-title">Add Hospital Department</h2>
+        </div>
+        <div class="card-body">
+          <div class="basic-form">
+            <form
+              [formGroup]="hospitalDepartmentForm"
+              (ngSubmit)="CreatehospitalDepartment()"
+            >
+              <div class="mb-3 row">
+                <div class="col-sm-6">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm m-1"
+                    formControlName="name"
+                    placeholder="Enter Hospital Type"
+                  />
+                </div>
+                <div class="text-right col-sm-4">
+                  <button
+                    type="submit"
+                    class="btn btn-primary m-1"
+                    [disabled]="hospitalDepartmentForm.invalid"
+                  >
+                    {{ buttonType }}
+                  </button>
+                  <button
+                    *ngIf="cancelButton !== ''"
+                    type="reset"
+                    (click)="onCancel()"
+                    class="btn btn-danger m-1"
+                  >
+                    {{ cancelButton }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div id="addrowExample_filter" class="dataTables_filter float-right m-2">
+        <input
+          type="search"
+          class="form-control float-right w-100"
+          placeholder="Search Here"
+          [(ngModel)]="searchText"
+          aria-controls="addrowExample"
+        />
+      </div>
+      <button
+        class="btn btn-warning float-right m-2 text-white float-right"
+        (click)="exportExcel()"
+      >
+        <i class="fa-solid fa-file-excel"></i>
+        Export to Excel
+      </button>
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive table-scroll">
+            <table
+              class="table table-bordered table-hover table-striped"
+              cellspacing="0"
+              id="addrowExample"
+              #excelTable
+            >
+              <thead>
+                <tr>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    #
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Name
+                  </th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let hospitalDepartment of hospitalDepartments
+                      | searchFilter;
+                    let i = index
+                  "
+                >
+                  <td>
+                    {{ hospitalDepartment.sl_no }}
+                  </td>
+                  <td>{{ hospitalDepartment.name }}</td>
+                  <td>
+                    <label
+                      *ngIf="!isVisible"
+                      class="switch"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="right"
+                      title="{{
+                        hospitalDepartment.is_active == 1
+                          ? 'Active'
+                          : 'Inactive'
+                      }}"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="hospitalDepartment.is_active == 1"
+                        (click)="
+                          onStatusChange(
+                            $event,
+                            hospitalDepartment.id,
+                            hospitalDepartment.is_active
+                          )
+                        "
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                    <p *ngIf="isVisible">
+                      {{
+                        hospitalDepartment.is_active == 1
+                          ? 'Active'
+                          : 'Inactive'
+                      }}
+                    </p>
+                  </td>
+                  <td>
+                    <a
+                      (click)="edithospitalDepartment(hospitalDepartment.id)"
+                      [routerLinkActive]="'router-Link-Active'"
+                      class="btn btn-warning shadow btn-xs sharp me-1"
+                      ><i class="icon-pencil"></i
+                    ></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <ngb-pagination
+              class="dataTables_paginate paging_simple_numbers"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [collectionSize]="departmentLength"
+              (pageChange)="getHospitalDepartments()"
+            ></ngb-pagination>
+            <div class="dataTables_length float-right" id="example3_length">
+              <label
+                >Show
+                <select
+                  class="p-2"
+                  name="example3_length"
+                  aria-controls="example3"
+                  [(ngModel)]="pageSize"
+                  (ngModelChange)="getHospitalDepartments()"
+                >
+                  <option [ngValue]="5">5</option>
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="15">15</option>
+                  <option [ngValue]="departmentLength">All</option>
+                </select>
+                Entries</label
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-admin-footer></app-admin-footer>
+</div>

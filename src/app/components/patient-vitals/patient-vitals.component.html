@@ -1,0 +1,148 @@
+<div class="row">
+    <aside class="col-xl-8 col-lg-8 col-md-8 col-sm-8">
+        <div class="box-left">
+            <div class="wave-box">
+                <img src="assets/images/vital-icon/wave-1.png" alt="">
+            </div>
+            <div class="wave-box">
+                <img src="assets/images/vital-icon/wave-2.png" alt="">
+            </div>
+            <div class="wave-box">
+                <img src="assets/images/vital-icon/wave-3.png" alt="">
+            </div>
+            <div class="wave-box">
+                <img src="assets/images/vital-icon/wave-4.png" alt="">
+            </div>
+            <div class="download-ecg">
+              <a class="ecg-btn" href="{{patientVitals?.ECG?.pocResult?.url}}" download target="_blank">Download ecg report</a>
+              <a class="ecg-btn m-l-20" href="{{reportUrl}}" download target="_blank">Download Report</a>
+            </div>
+            <div class="history-bar">
+                <div class="row">
+                    <aside class="col-xl-5 col-lg-5 col-md-5">
+                        <h3>Report History</h3>
+                    </aside>
+                    <aside class="col-xl-7 col-lg-7 col-md-7">
+                        <h3 class="ba-ico">Body Analyzer</h3>
+                    </aside>
+                </div>
+            </div>
+            <div class="bottom-box-wrap">
+                <div class="row">
+                    <aside class="col-xl-5 col-lg-5 col-md-5">
+                        <div class="table-box">
+                            <table class="table table-responsive">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>BP</th>
+                                    <th>SpO2</th>
+                                    <th>PR</th>
+                                </tr>
+                                <tr *ngFor="let report of medtelIotDetails; let i = index;" 
+                                  (click)="onScreeningTimeClick(i);"
+                                  [ngClass]="{'selected': i == currentPatientVitalIndex}">
+                                    <td>{{i + 1}}</td>
+                                    <td>{{renderValidatedValue(report?.screening_date)}}</td>
+                                    <td>{{renderValidatedValue(report?.screening_time)}}</td>
+                                    <td>{{renderValidatedValue(report?.bp)}}</td>
+                                    <td>{{renderValidatedValue(report?.spo2)}}</td>
+                                    <td>{{renderValidatedValue(report?.pr)}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </aside>
+                    <aside class="col-xl-7 col-lg-7 col-md-7 left-border">
+                        <ul class="body-analizer-ul">
+                            <li>Weight : <span>{{renderValidatedValue(patientVitals?.Body_Analyzer?.pocResult?.ba_weight)}}</span></li>
+                            <li>Bmi : <span>{{renderValidatedValue(patientVitals?.Body_Analyzer?.pocResult?.ba_bmi)}}</span></li>
+                            <li>Body Fat : <span>{{renderValidatedValue(patientVitals?.Body_Analyzer?.pocResult?.ba_body_fat)}}</span></li>
+                            <li>Free Body Weight : <span>{{renderValidatedValue(patientVitals?.Body_Analyzer?.pocResult?.ba_fat_free_body_weight)}}</span></li>
+                            <li>Subcutaneous fat : <span>{{renderValidatedValue(patientVitals?.Body_Analyzer?.pocResult?.ba_subcutaneous_fat)}}</span></li>
+                            <li>Body water : <span>{{renderValidatedValue(patientVitals?.Body_Analyzer?.pocResult?.ba_body_water)}}</span></li>
+                            <li>Skeletal muscle : <span>{{renderValidatedValue(patientVitals?.Body_Analyzer?.pocResult?.ba_skeletal_muscle)}}</span></li>
+                            <li>Muscle mass : <span>{{renderValidatedValue(patientVitals?.Body_Analyzer?.pocResult?.ba_muscle_mass)}}</span></li>
+                            <li>Bone mass : <span>{{renderValidatedValue(patientVitals?.Body_Analyzer?.pocResult?.ba_bone_mass)}}</span></li>
+                            <li>Protein : <span>{{renderValidatedValue(patientVitals?.Body_Analyzer?.pocResult?.ba_protein)}}</span></li>
+                            <li>BMR : <span>{{renderValidatedValue(patientVitals?.Body_Analyzer?.pocResult?.ba_bmr)}}</span></li>
+                            <li>BSA : <span>{{renderValidatedValue(patientVitals?.Body_Analyzer?.pocResult?.ba_bsa)}}</span></li>
+                        </ul>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <aside class="col-xl-4 col-lg-4 col-md-4 col-sm-4 border-left">
+        <div class="v-right-box">
+            <div class="row">
+                <aside class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                    <div class="pr-icobox">Pulse Rate</div>
+                    <div class="pr-text">{{renderValidatedValue(patientVitals?.SpO2?.pocResult?.spo2_pulse)}}</div>
+                </aside>
+                <aside class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                    <div class="pr-icobox pi-ico">PI</div>
+                    <div class="pr-text pi-text">{{renderValidatedValue(patientVitals?.SpO2?.pocResult?.spo2_pi)}}</div>
+                </aside>
+                <aside class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                    <div class="pr-icobox spo-ico">Sp O2</div>
+                    <div class="pr-text spo-text">{{renderValidatedValue(patientVitals?.SpO2?.pocResult?.spo2)}}</div>
+                </aside>
+            </div>
+            <ul class="date-time">
+                <li class="date-ico">Date : {{renderValidatedValue(patientVitals?.SpO2?.pocDate)}}</li>
+                <li class="time-ico">Time : {{renderValidatedValue(patientVitals?.SpO2?.pocTime)}}</li>
+            </ul>
+        </div>
+        <div class="v-right-box">
+            <div class="row">
+                <aside class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="pr-icobox vital-bp-ico">Vital BP</div>
+                    <div class="pr-text vital-bp-text">{{renderValidatedValue(patientVitals?.Vitals_BP?.pocResult?.bp)}}</div>
+                </aside>
+            </div>
+            <ul class="date-time">
+                <li class="date-ico">Date : {{renderValidatedValue(patientVitals?.Vitals_BP?.pocDate)}}</li>
+                <li class="time-ico">Time : {{renderValidatedValue(patientVitals?.Vitals_BP?.pocTime)}}</li>
+            </ul>
+        </div>
+        <div class="v-right-box pulse-box-right">
+            <div class="row">
+                <aside class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="pr-icobox pulse-rate-light">Pulse Rate</div>
+                    <div class="pr-text pulse-rate-lighttext">{{renderValidatedValue(patientVitals?.Vitals_BP?.pocResult?.pulse)}}</div>
+                </aside>
+            </div>
+            <ul class="date-time">
+              <li class="date-ico">Date : {{renderValidatedValue(patientVitals?.Vitals_BP?.pocDate)}}</li>
+              <li class="time-ico">Time : {{renderValidatedValue(patientVitals?.Vitals_BP?.pocTime)}}</li>
+            </ul>
+        </div>
+        <div class="v-right-box pulse-box-right">
+            <div class="row">
+                <aside class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="pr-icobox pulse-rate-light respiration-ico-box">Respiration Rate</div>
+                    <div class="pr-text pulse-rate-lighttext respiration-box-text">_ _</div>
+                </aside>
+            </div>
+            <ul class="date-time">
+                <li class="date-ico">Date : _ _</li>
+                <li class="time-ico">Time : _ _</li>
+            </ul>
+        </div>
+        <div class="v-right-box pulse-box-right no-border">
+            <div class="row">
+                <aside class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="pr-icobox thermometer-ico-box">Thermometer</div>
+                    <div class="pr-text thermometer-text-box">
+                      {{renderValidatedValue(patientVitals?.Thermometer?.pocResult?.thermometer)}} {{renderValidatedValue(patientVitals?.Thermometer?.pocResult?.thermometer_unit)}} <span>Temprature</span></div>
+                </aside>
+              </div>
+              <ul class="date-time">
+                <li class="date-ico">Date : {{renderValidatedValue(patientVitals?.Thermometer?.pocDate)}}</li>
+                <li class="time-ico">Time : {{renderValidatedValue(patientVitals?.Thermometer?.pocTime)}}</li>
+              </ul>
+              <a href="javascript:void(0)" class="closebtn-vital" (click)="onCloseClick()"><i class="fa-solid fa-table-cells-large"></i> Dashboard</a>
+        </div>
+    </aside>
+</div>

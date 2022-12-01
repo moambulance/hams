@@ -1,0 +1,160 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+
+      <div class="card">
+        <div class="header">
+          <form [formGroup]="reportForm" (ngSubmit)="onFilter()">
+            <div class="row">
+              <!-- <div class="col-md-2 mx-1">
+                <div class="row">
+                  <select
+                    class="form-select"
+                    aria-label="Total Rides"
+                    formControlName="source"
+                  >
+                    <select
+                      class="form-select"
+                      aria-label="Total Rides"
+                      formControlName="source"
+                    >
+                      <option [value]="0">From</option>
+
+                      <option
+                        *ngFor="let hospital of hospitalList"
+                        [value]="hospital?.id"
+                      >
+                        {{ hospital?.name }}
+                      </option>
+                    </select>
+                  </select>
+                </div>
+              </div> -->
+              <div class="col-md-2">
+                <div class="row">
+                  <select
+                    class="form-select"
+                    aria-label="destination"
+                    formControlName="source"
+                  >
+                    <option [value]="0">From</option>
+
+                    <option
+                      *ngFor="let hospital of hospitalList"
+                      [value]="hospital?.id"
+                    >
+                      {{ hospital?.name }}
+                      <!-- <option value="TOTAL">Total</option> -->
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="row">
+                  <select
+                    class="form-select"
+                    aria-label="destination"
+                    formControlName="destination"
+                  >
+                    <option [value]="0">To</option>
+
+                    <option
+                      *ngFor="let hospital of hospitalList"
+                      [value]="hospital?.id"
+                    >
+                      {{ hospital?.name }}
+                      <!-- <option value="TOTAL">Total</option> -->
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="row">
+                      <label class="col-sm-5 col-form-label"
+                        >Start Date:
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-7">
+                        <input
+                          type="date"
+                          class="form-control"
+                          placeholder="Enter a Start date"
+                          formControlName="start_date"
+                        />
+                        <div
+                          *ngIf="
+                            start_date &&
+                            start_date.invalid &&
+                            (start_date.dirty || start_date.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter start date
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="row">
+                      <label class="col-sm-5 col-form-label"
+                        >End Date:
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-7">
+                        <input
+                          type="date"
+                          class="form-control"
+                          placeholder="Enter a End date"
+                          formControlName="end_date"
+                        />
+                        <div
+                          *ngIf="
+                            end_date &&
+                            end_date.invalid &&
+                            (end_date.dirty || end_date.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter end date
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-1">
+                <button type="submit" class="btn btn-primary">Filter</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="body">
+          <canvas
+            *ngIf="message"
+            baseChart
+            [datasets]="totalRides"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [plugins]="barChartPlugins"
+            [legend]="barChartLegend"
+            [chartType]="barChartType"
+          >
+          </canvas>
+          <p *ngIf="!message" class="text-danger">Data Not Found</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

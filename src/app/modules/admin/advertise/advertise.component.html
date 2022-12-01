@@ -1,0 +1,166 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="row clearfix">
+        <div class="card">
+          <div class="header float-right">
+            <div
+              id="addrowExample_filter "
+              class="dataTables_filter float-right"
+            ></div>
+
+            <div class="plus-icon float-right">
+              <a
+                href="javascript:void(0);"
+                class="btn btn-secondary m-2"
+                [routerLink]="['add-advertise/']"
+                ><i class="icon-plus"></i> Add Advertise</a
+              >
+            </div>
+            <button
+              class="btn btn-warning float-right m-2 text-white"
+              (click)="exportExcel()"
+            >
+              <i class="fa-solid fa-file-excel"></i>
+              Export to Excel
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="header float-right"></div>
+
+            <div class="body">
+              <div
+                id="example3_wrapper"
+                class="dataTables_wrapper no-footer table-scroll"
+              >
+                <table
+                  class="table table-bordered table-hover table-striped text-center"
+                  cellspacing="0"
+                  id="addrowExample"
+                  #excelTable
+                >
+                  <thead>
+                    <tr role="row">
+                      <th
+                        class=""
+                        tabindex="0"
+                        aria-controls="example3"
+                        rowspan="1"
+                        colspan="1"
+                        aria-sort="ascending"
+                        aria-label=": activate to sort column descending"
+                      >
+                        #
+                      </th>
+
+                      <th
+                        class=""
+                        tabindex="0"
+                        aria-controls="example3"
+                        rowspan="1"
+                        colspan="1"
+                        aria-label="Department: activate to sort column ascending"
+                      >
+                        Link
+                      </th>
+                      <th>Priority</th>
+                      <th>Type</th>
+                      <th>Status</th>
+                      <th>Image</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let advertise of advertiseLists; let i = index">
+                      <td>
+                        {{ i + 1 }}
+                      </td>
+                      <td>
+                        <a
+                          href="{{ advertise.link }}"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          >{{ advertise.link }}</a
+                        >
+                      </td>
+                      <td>
+                        {{
+                          advertise.priority == 1
+                            ? 'High'
+                            : advertise.priority == 2
+                            ? 'Medium'
+                            : advertise.priority == 1
+                            ? 'Low'
+                            : 'None'
+                        }}
+                      </td>
+                      <td>
+                        {{
+                          advertise.type == 1
+                            ? 'Customer landing page'
+                            : advertise.type == 2
+                            ? 'Other medical service page'
+                            : advertise.type == 3
+                            ? 'Website'
+                            : ''
+                        }}
+                      </td>
+                      <td>
+                        <label
+                          *ngIf="!isVisible"
+                          class="switch"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="top"
+                          title="{{
+                            advertise.is_active == 1 ? 'Active' : 'Inactive'
+                          }}"
+                        >
+                          <input
+                            type="checkbox"
+                            [checked]="advertise.is_active == 1"
+                            (click)="onStatusChange(advertise?.id)"
+                          />
+                          <span class="slider round"></span>
+                        </label>
+                        <p *ngIf="isVisible">
+                          {{ advertise.is_active == 1 ? 'Active' : 'Inactive' }}
+                        </p>
+                      </td>
+
+                      <td>
+                        <img
+                          class=""
+                          width="35"
+                          src="{{ baseUrl }}{{ advertise.image }}"
+                          alt=""
+                        />
+                      </td>
+                      <td>
+                        <a
+                          [routerLink]="['edit-advertise/', advertise.id]"
+                          [routerLinkActive]="'router-Link-Active'"
+                          class="btn btn-warning shadow btn-xs sharp me-1"
+                          ><i class="icon-pencil"></i
+                        ></a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

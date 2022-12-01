@@ -1,0 +1,300 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="card m-0 p-0">
+        <div class="body">
+          <!-- MultiStep Form -->
+
+          <div class="row justify-content-center align-item-center">
+            <div class="col-md-8 col-md-offset-3">
+              <form id="msform">
+                <!-- progressbar -->
+                <!-- <ul id="progressbar">
+                  <div class="progress">
+                    <div
+                      class="progress-bar progress-bar-striped"
+                      [ngClass]="{
+                        background_theme: patientField,
+                        'bg-success': !patientField
+                      }"
+                      role="progressbar"
+                      style="width: 50%"
+                      aria-valuenow="100"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    ></div>
+
+                    <div
+                      class="progress-bar progress-bar-striped"
+                      [ngClass]="{
+                        'bg-danger': patientField,
+                        background_theme: isIotServices
+                      }"
+                      role="progressbar"
+                      style="width: 50%"
+                      aria-valuenow="100"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    ></div>
+
+                    
+                  </div>
+
+              
+                </ul> -->
+
+                <fieldset *ngIf="patientField">
+                  <h2 class="fs-title">Patient Details</h2>
+                  <h3 class="fs-subtitle"></h3>
+                  <form
+                    class="row"
+                    [formGroup]="customerPatientAddForm"
+                    (ngSubmit)="onAddPatientCustomer()"
+                  >
+                    <div class="row">
+                      <div class="col-md-6 my-3">
+                        <input
+                          type="text"
+                          formControlName="phone"
+                          placeholder="Phone Number"
+                          class="form-control p-1"
+                          maxlength="10"
+                          (input)="mobileNumberPatch($event)"
+                        />
+                        <!-- <div
+                        *ngIf="
+                          phone && phone.invalid && (phone.dirty || phone.touched)
+                        "
+                        class="invalid animated bounceIn text-danger"
+                      >
+                        Please enter phone number.
+                        </div> -->
+                      </div>
+                      <div class="col-md-6 my-3">
+                        <input
+                          type="text"
+                          formControlName="email"
+                          placeholder="Email"
+                          class="form-control p-1"
+                        />
+                      </div>
+
+                      <div class="col-md-6 my-3">
+                        <input
+                          type="text"
+                          placeholder="Name"
+                          formControlName="name"
+                          class="form-control p-1"
+                        />
+                      </div>
+                      <div class="col-md-6 my-3">
+                        <input
+                          type="text"
+                          placeholder="Address"
+                          formControlName="p_address"
+                          class="form-control p-1"
+                        />
+                      </div>
+                      <div class="col-md-5 d-flex my-3">
+                        <label for="age" class="me-2 p-1">Date Of Birth:</label>
+                        <input
+                          type="date"
+                          class="w-50"
+                          placeholder="Date Of Birth"
+                          formControlName="age"
+                          id="age"
+                        />
+                      </div>
+
+                      <div class="col-md-4 my-3">
+                        <div class="d-flex">
+                          <span class="me-2 p-1">height:</span>
+                          <input
+                            type="number"
+                            placeholder="in cm"
+                            formControlName="height"
+                            class="form-control w-30 p-1"
+                            min="0"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-3 my-3 d-flex">
+                        <span class="me-2 fw-normal p-1">Weight:</span>
+                        <input
+                          type="number"
+                          placeholder="in kg"
+                          formControlName="weight"
+                          class="form-control me-1"
+                          min="0"
+                        />
+                      </div>
+                      <div class="col-md-6 my-3">
+                        <div class="row">
+                          <div class="col-md-3">
+                            <span class="p-1">Gender:</span>
+                          </div>
+                          <label class="fancy-radio col-md-4">
+                            <input
+                              type="radio"
+                              formControlName="gender"
+                              [value]="1"
+                              required=""
+                            />
+                            <span><i></i>Male</span>
+                          </label>
+
+                          <label class="fancy-radio col-md-4">
+                            <input
+                              class="bg-secondary"
+                              type="radio"
+                              formControlName="gender"
+                              [value]="0"
+                              required=""
+                            />
+                            <span><i></i>Female</span>
+                          </label>
+                        </div>
+                      </div>
+                      <!-- <div class="form-group col-md-4  my-3 mt-2">
+                        <select
+                          class="form-select form-select-lg"
+                          formControlName="sufferingFrom"
+                          (input)="onSufferingFromChange($event)"
+                        >
+                          <option [value]="0">Select Suffering</option>
+                          <option
+                            *ngFor="let suffering of sufferingFromDetails"
+                            [value]="suffering.id"
+                          >
+                            {{ suffering.name }}
+                          </option>
+                        </select>
+                      </div> -->
+                    </div>
+
+                    <div class="form-group col-md-12">
+                      <button
+                        class="next action-button btn-hover float-right"
+                        type="submit"
+                        [disabled]="mobileNumber.length != 10"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </form>
+                </fieldset>
+                <fieldset *ngIf="isIotServices">
+                  <h2 class="fs-title">IOT Services</h2>
+                  <h3 class="fs-subtitle"></h3>
+                  <div class="form-group col-md-12 flex-wrap">
+                    <div class="card card-color">
+                      <div class="card-body">
+                        <h3 class="card-title">Available Tests</h3>
+                        <div class="row">
+                          <div
+                            class="col-lg-3 col-md-4"
+                            *ngFor="let test of allTest"
+                          >
+                            <div
+                              class="card p-0 text-light test-card cursor-pointer"
+                              [ngClass]="{
+                                background_theme: !test.isSelected,
+                                'bg-success': test.isSelected
+                              }"
+                              (click)="onSelectedTest(test)"
+                            >
+                              <div class="card-body p-0">
+                                <!-- <i
+                                  class="fa-solid fa-circle-check text-success float-right"
+                                  *ngIf="test.isSelected"
+                                ></i> -->
+                                <div class="text-center p-0">
+                                  <h5 class="card-title">{{ test?.name }}</h5>
+
+                                  <span class="h2">{{ test?.price }}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      class="btn btn-success float-left"
+                      (click)="getTestFareDetails()"
+                      type="submit"
+                    >
+                      Proceed To Pay
+                    </button>
+                  </div>
+                </fieldset>
+                <fieldset *ngIf="isPaymentScreen">
+                  <h2 class="fs-title">Payment Details</h2>
+                  <h3 class="fs-subtitle"></h3>
+                  <div class="form-group col-md-12 flex-wrap">
+                    <div class="card card-color">
+                      <div class="card-body">
+                        <h3 class="card-title">Available Tests</h3>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <table>
+                              <tr>
+                                <th>#</th>
+                                <th>Basic</th>
+                                <th>Pro</th>
+                              </tr>
+                              <tr
+                                *ngFor="
+                                  let test of fareData.allTest;
+                                  let i = index
+                                "
+                              >
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ test?.name }}</td>
+                                <td>{{ test?.price }}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>Tax</td>
+                                <td>{{ fareData?.fareDetails?.taxes }}</td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>Total</td>
+                                <td>
+                                  {{ fareData?.fareDetails?.total_price }}
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        class="btn btn-success float-left"
+                        (click)="onPaymentSubmit()"
+                        type="submit"
+                      >
+                        Pay
+                      </button>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+              <!-- link to designify.me code snippets -->
+              <!-- /.link to designify.me code snippets -->
+            </div>
+          </div>
+          <!-- /.MultiStep Form -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

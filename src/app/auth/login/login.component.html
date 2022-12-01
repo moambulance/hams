@@ -1,0 +1,140 @@
+<div id="wrapper">
+  <div class="vertical-align-wrap">
+    <div class="vertical-align-middle">
+      <!-- [ngClass]="ROUTER_URL ? 'auth-admin' : 'auth-main'" -->
+      <!-- [ngClass]="ROUTER_URL ? 'auth-admin' : 'auth-main'" -->
+      <div class="auth-box">
+        <div class="top">
+          <img src="assets/images/logo/logo.png" alt="HAMS" />
+        </div>
+        <div class="card">
+          <div class="header">
+            <p class="lead">Login to your account</p>
+          </div>
+          <div class="body">
+            <div
+              *ngIf="responseMessage != ''"
+              class="alert alert-danger alert-dismissible fade show p-15"
+              role="alert"
+            >
+              <strong>{{ responseMessage }}</strong>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+                (click)="onClose()"
+              ></button>
+            </div>
+            <form
+              class="form-auth-small"
+              [formGroup]="hospitalLoginForm"
+              (ngSubmit)="onLogin()"
+            >
+              <div class="form-group">
+                <!-- <label for="signin-email" class="control-label sr-only"
+                  >Email</label
+                > -->
+                <input
+                  type="email"
+                  class="form-control user-ico"
+                  id="signin-email"
+                  formControlName="username"
+                  placeholder="Username"
+                />
+                <div
+                  *ngIf="
+                    username &&
+                    this.success &&
+                    username.invalid &&
+                    (username.dirty || username.touched)
+                  "
+                  class="invalid animated bounceIn text-danger"
+                >
+                  Please Enter Valid Email
+                </div>
+              </div>
+              <div class="form-group">
+                <!-- <label for="signin-password" class="control-label sr-only"
+                  >Password</label
+                > -->
+                <div class="d-flex">
+                  <input
+                    [type]="fieldTextType ? 'text' : 'Password'"
+                    class="form-control pass-ico"
+                    formControlName="password"
+                    placeholder="Password"
+                  />
+                  <i
+                    data-toggle="tooltip"
+                    data-placement="down"
+                    title="ViewPassword"
+                    class="fa"
+                    [ngClass]="{
+                      'fa-eye-slash': !fieldTextType,
+                      'fa-eye': fieldTextType
+                    }"
+                    (click)="toggleFieldTextType()"
+                    for="password"
+                  ></i>
+                </div>
+                <div
+                  *ngIf="
+                    password &&
+                    this.success &&
+                    password.invalid &&
+                    (password.dirty || password.touched)
+                  "
+                  class="w-100 form-group invalid animated bounceIn text-danger"
+                >
+                  Please Enter Password
+                </div>
+              </div>
+              <!-- <div class="form-group clearfix mt-2">
+                <label class="fancy-checkbox element-left">
+                  <input type="checkbox" />
+                  <span>Remember me</span>
+                </label>
+              </div> -->
+              <button
+                *ngIf="!isBtnLoading"
+                type="submit"
+                class="btn btn-primary btn-lg btn-block w-100"
+                [disabled]="isBtnLoading || hospitalLoginForm.invalid"
+              >
+                <i class="icon-login"></i> LOGIN
+              </button>
+              <button
+                *ngIf="isBtnLoading"
+                class="btn btn-primary btn-lg btn-block w-100"
+                type="button"
+                disabled
+              >
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Loading...
+              </button>
+
+              <div class="bottom">
+                <span class="helper-text m-b-10"
+                  ><i class="fa fa-lock"></i>
+                  <a href="javascript:void(0)">Forgot Password?</a></span
+                >
+                <span
+                  >Don't have an account?
+                  <a href="javascript:void(0)">Register</a></span
+                >
+              </div>
+            </form>
+          </div>
+        </div>
+        <p class="copyright">
+          Powered By <a href="#">Clinohealthinovation PVT. LTD.</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

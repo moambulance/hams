@@ -1,0 +1,203 @@
+.profileImg {
+  width: 130px;
+  height: 160px;
+}
+.cardImg {
+  width: 240px;
+  height: 160px;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 35px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(16px);
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+.overflow-x-auto {
+  overflow-x: scroll !important;
+}
+.location-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+
+  float: left;
+  width: 100%;
+}
+
+.location-list li {
+  /* display: block; */
+  margin-bottom: 3px;
+  float: left;
+  width: 100%;
+  border-bottom: 1px dashed #fff;
+}
+
+.location-list li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px;
+  background: #2dd4dc;
+  float: left;
+  width: 100%;
+  position: relative;
+}
+.icon-img {
+  float: left;
+  width: 32px;
+  background: #fff;
+  padding: 5px;
+  border-radius: 6px;
+  margin-right: 5px;
+}
+.icon-selected {
+  float: left !important;
+  z-index: 999;
+}
+.icon-img img {
+  width: 100%;
+}
+.amb-span {
+  float: left;
+  border-right: 1px solid #1eb4bb;
+  font-size: 11px;
+  padding: 0px 10px;
+}
+
+.amb-span:last-child {
+  border: 0;
+}
+
+.amb-span label {
+  display: block;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.location-list li a.active,
+.location-list li a:hover {
+  background: #3db1b7;
+}
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #000;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #000;
+}
+.table-scroll {
+  overflow-x: auto;
+  width: 100%;
+}
+.w-35 {
+  width: 35% !important;
+}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Float four columns side by side */
+.column {
+  float: left;
+  width: 25%;
+  padding: 0 10px;
+}
+
+/* Remove extra left and right margins, due to padding */
+
+/* Clear floats after the columns */
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
+/* Style the counter cards */
+.card1 {
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+  margin: 0;
+  text-align: center;
+  /* background-color: #d8d8d8; */
+  height: 100%;
+}
+.w-10 {
+  width: 10% !important;
+}
+.w-90 {
+  width: 90% !important;
+}

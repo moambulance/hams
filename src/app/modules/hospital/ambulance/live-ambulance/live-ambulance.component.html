@@ -1,0 +1,334 @@
+<div id="wrapper" #fullScreen>
+  <app-spinner></app-spinner>
+
+  <div id="main-content" class="map-container">
+    <div class="container-fluid">
+      <div class="map-topwrapper">
+        <button class="btn btn-danger dashboard-btn" (click)="dashboardClick()">
+          DASHBOARD
+        </button>
+        <div class="maptop-innerbox">
+          <button
+            class="btn btn-info"
+            [ngClass]="{ active: mode == 'incoming' }"
+            (click)="onTripModeChange('incoming')"
+          >
+            In Coming
+          </button>
+          <button
+            class="btn btn-info"
+            [ngClass]="{ active: mode == 'outgoing' }"
+            (click)="onTripModeChange('outgoing')"
+          >
+            Out Going
+          </button>
+          <button
+            class="btn btn-info"
+            [ngClass]="{ active: mode == 'onboarding' }"
+            (click)="onTripModeChange('onboarding')"
+          >
+            On Boarded
+          </button>
+        </div>
+        <i
+          class="fa-solid fa-expand btn btn-default full-screen-btn"
+          [ngClass]="{
+            'fa-expand': !mapFullScreen,
+            'fa-compress': mapFullScreen
+          }"
+          ngbTooltip="{{ mapFullScreen ? 'Minimize Screen' : 'Full Screen' }}"
+          (click)="onMapFullScreenClick()"
+        >
+        </i>
+      </div>
+      <div
+        class="map-sidepanelwrapper"
+        [ngClass]="{ 'close-sidepanelwrapper': !sideToggle }"
+        *ngIf="mode != 'onboarding'"
+      >
+        <header class="sideview-header">
+          <div class="row">
+            <aside class="col-md-9">
+              <h3>Ambulance Details</h3>
+            </aside>
+            <aside class="col-md-3">
+              <a
+                href="javascript:void(0);"
+                class="slide-arrow"
+                [ngClass]="{ 'close-arrow': !sideToggle }"
+                (click)="sideToggle = !sideToggle"
+              ></a>
+            </aside>
+          </div>
+        </header>
+        <ul class="location-list">
+          <li *ngFor="let order of orders; let i = index">
+            <a
+              href="javascript:void(0);"
+              [ngClass]="{ active: order.isActive }"
+              (click)="enableWayPoint(i)"
+            >
+              <span class="icon-img">
+                <img
+                  src="{{ base_url + '/' + order?.ambulance_type_id.image }}"
+                  alt="Ambulance Type"
+                />
+              </span>
+              <span class="amb-span">
+                <label class="text-left" for="">{{
+                  order.ambulance_type_id?.name
+                }}</label>
+                {{ order.ambulance_id?.registration_number }}
+              </span>
+              <span class="amb-span">
+                <label class="text-left" for="">{{
+                  order.driver_id?.name
+                }}</label>
+                {{ order.driver_id?.phone }}
+              </span>
+              <i
+                class="fa-solid fa-xmark cross-ico"
+                (click)="onActiveOrderClose(i)"
+                *ngIf="order.isActive"
+              >
+              </i>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div
+        class="map-bottomwrapper w-50"
+        *ngIf="
+          activeOrder != null && mode != 'onboarding' && !hideBottomwrapper
+        "
+        cdkDragBoundary="#main-content"
+        cdkDrag
+      >
+        <div>
+          <div class="map-detail-box">
+            <i
+              class="fa-solid fa-xmark float-right cursor-pointer p-2"
+              (click)="bottomwrapperClose()"
+            ></i>
+            <ul>
+              <li>
+                <span class="icon-wrap">
+                  <i class="fa-solid fa-location-crosshairs"></i>
+                </span>
+                <span class="amb-span">
+                  <label for="">START POINT</label>
+                  {{ activeOrder.source_location }}
+                </span>
+              </li>
+              <li>
+                <span class="icon-wrap">
+                  <i class="fa-solid fa-location-dot"></i>
+                </span>
+                <span class="amb-span">
+                  <label for="">END POINT</label>
+                  {{ activeOrder.destination_location }}
+                </span>
+              </li>
+              <li>
+                <span class="icon-wrap">
+                  <i class="fa-solid fa-truck-medical"></i>
+                </span>
+                <span class="amb-span">
+                  <label for="">AMBULANCE NO</label>
+                  {{ activeOrder.ambulance_id?.registration_number }}
+                </span>
+              </li>
+              <li>
+                <span class="icon-wrap">
+                  <i class="fa-solid fa-truck-medical"></i>
+                </span>
+                <span class="amb-span">
+                  <label for="">AMBULANCE TYPE</label>
+                  {{ activeOrder.ambulance_type_id?.name }}
+                </span>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <span class="icon-wrap">
+                  <i class="fa-solid fa-user-nurse"></i>
+                </span>
+                <span class="amb-span">
+                  <label for="">DRIVER NAME</label>
+                  {{ activeOrder.driver_id?.name }}
+                </span>
+              </li>
+              <li>
+                <span class="icon-wrap">
+                  <i class="fa-solid fa-mobile-screen-button"></i>
+                </span>
+                <span class="amb-span">
+                  <label for="">MOBILE</label>
+                  {{ activeOrder.driver_id?.phone }}
+                </span>
+              </li>
+              <li>
+                <span class="icon-wrap">
+                  <i class="fa-solid fa-compass"></i>
+                </span>
+                <span class="amb-span">
+                  <label for="">DISTANCE</label>
+                  {{ activeOrder.distance }} KM
+                </span>
+              </li>
+              <li>
+                <span class="icon-wrap">
+                  <i class="fa-solid fa-clock"></i>
+                </span>
+                <span class="amb-span">
+                  <label for="">ESTIMATED TIME</label>
+                  {{ activeOrder.estimated_time }}
+                </span>
+              </li>
+            </ul>
+            <ul class="d-flex flex-wrap bg-greyLight custom-box">
+              <li>
+                <span class="icon-wrap">
+                  <i class="fa-solid fa-hospital-user text-black"></i>
+                </span>
+                <span class="amb-span">
+                  <label for="">PATIENT NAME</label>
+                  {{
+                    activeOrder.customer_id
+                      ? activeOrder.customer_id.first_name +
+                        activeOrder.customer_id.last_name
+                      : activeOrder.patient_id
+                      ? activeOrder.patient_id.name
+                      : 'NA'
+                  }}
+                </span>
+              </li>
+              <li>
+                <span class="icon-wrap">
+                  <i class="fa-solid fa-calendar-days text-black"></i>
+                </span>
+                <span class="amb-span">
+                  <label for="">AGE</label>
+                  {{
+                    activeOrder.customer_id
+                      ? activeOrder.customer_id.age
+                      : activeOrder.patient_id
+                      ? activeOrder.patient_id.age
+                      : 'NA'
+                  }}
+                </span>
+              </li>
+              <li>
+                <span class="icon-wrap">
+                  <i class="fa-solid fa-mobile-screen-button text-black"></i>
+                </span>
+                <span class="amb-span">
+                  <label for="">PHONE NO</label>
+                  {{
+                    activeOrder.customer_id
+                      ? activeOrder.customer_id.phone
+                      : activeOrder.patient_id
+                      ? activeOrder.patient_id.phone
+                      : 'NA'
+                  }}
+                </span>
+              </li>
+              <li>
+                <span class="icon-wrap">
+                  <i class="fa-solid fa-venus-mars text-black"></i>
+                </span>
+                <span class="amb-span">
+                  <label for="">GENDER</label>
+                  {{ activeOrder.patient_id?.gender == 1 ? 'Male' : 'Male' }}
+                </span>
+              </li>
+              <li>
+                <span class="icon-wrap">
+                  <i class="fa-solid fa-disease text-black"></i>
+                </span>
+                <span class="amb-span">
+                  <label for="">DISEASE</label>
+                  {{
+                    activeOrder.suffering_from
+                      ? activeOrder.suffering_from.name
+                      : ''
+                  }}
+                </span>
+              </li>
+              <li>
+                <a href="javascript:void(0);" 
+                  *ngIf="activeOrder?.patient_id != null"
+                  (click)="openPatientVitals()">Patient Vitals</a>
+                <a href="javascript:void(0);" 
+                  *ngIf="activeOrder?.patient_id != null"
+                  (click)="openJanitriVitals()">Janitri</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="overlay overlay-mvital" #patientVitalsOverlay>
+        <div class="vitals-overlay-content" *ngIf="activeOrder != null">
+          <app-patient-vitals (closeClick)="onClosePatientVitalsOverlay($event)"></app-patient-vitals>
+        </div>
+      </div>
+
+      <div class="overlay" #janitriVitalsOverlay>
+        <div class="vitals-overlay-content" *ngIf="activeOrder != null">
+          <app-janitri-vitals (closeClick)="onCloseJanitriVitalsOverlay($event)"></app-janitri-vitals>
+        </div>
+      </div>
+
+      <agm-map
+        [latitude]="latitude"
+        [longitude]="longitude"
+        [zoom]="zoom"
+        [disableDefaultUI]="true"
+        [usePanning]="true"
+        (mapReady)="onMapReady($event)"
+      >
+        <agm-marker
+          *ngFor="let order of orders"
+          [latitude]="order.latitude"
+          [longitude]="order.longitude"
+          [iconUrl]="order.icon"
+          (markerClick)="order.isMarker = !order.isMarker"
+        >
+          <agm-info-window
+            [isOpen]="order.isMarker"
+            [latitude]="order.latitude"
+            [longitude]="order.longitude"
+          >
+            <span class="icon-img">
+              <img
+                src="{{ base_url + order?.ambulance_type_id?.image }}"
+                alt="Ambulance Type"
+              />
+            </span>
+            <span class="amb-span">
+              <label for="">Type</label>
+              {{ order.ambulance_type_id?.name }}
+            </span>
+            <span class="amb-span">
+              <label for="">Ambulance</label>
+              {{ order.ambulance_id?.registration_number }}
+            </span>
+            <span class="amb-span">
+              <label for="">Driver</label>
+              {{ order.driver_id?.name }}
+            </span>
+          </agm-info-window>
+        </agm-marker>
+        <agm-direction
+          *ngIf="activeOrder != null && mode != 'onboarding'"
+          [origin]="activeOrder.origin"
+          [destination]="activeOrder.destination1"
+          [renderOptions]="activeOrder.render_options"
+          [markerOptions]="activeOrder.marker_options"
+        >
+        </agm-direction>
+      </agm-map>
+    </div>
+  </div>
+</div>

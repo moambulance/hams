@@ -1,0 +1,677 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="card">
+        <div class="header float-right">
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              [disabled]="isDriverName || isDriverPhone"
+              type="search"
+              class="form-control float-right w-100"
+              placeholder="Search Ambulance No"
+              (input)="findOrdersByAmbulance($event)"
+              aria-controls="addrowExample"
+            />
+          </div>
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              [disabled]="isAmbulance || isDriverName"
+              type="search"
+              class="form-control float-right w-100"
+              placeholder="Search Driver Number"
+              (input)="findOrdersByDriverNumber($event)"
+              aria-controls="addrowExample"
+            />
+          </div>
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              [disabled]="isAmbulance || isDriverPhone"
+              type="search"
+              class="form-control float-right w-100"
+              placeholder="Search Driver Name"
+              (input)="findOrdersByDriverName($event)"
+              aria-controls="addrowExample"
+            />
+          </div>
+
+          <button
+            class="btn btn-warning float-right m-2 text-white"
+            (click)="exportExcel()"
+          >
+            <i class="fa-solid fa-file-excel"></i>
+            Export to Excel
+          </button>
+        </div>
+        <div class="body">
+          <div
+            id="example3_wrapper"
+            class="dataTables_wrapper no-footer table-scroll"
+          >
+            <h1 class="text-center text-danger" *ngIf="!this.orders?.length">
+              No Data Found
+            </h1>
+
+            <table
+              *ngIf="this.orders?.length"
+              class="table table-bordered table-hover table-striped text-center"
+              cellspacing="0"
+              id="addrowExample"
+              #excelTable
+            >
+              <thead>
+                <tr role="row">
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    #
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    Order No
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Ambulance Number
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Department: activate to sort column ascending"
+                  >
+                    Price
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Customer Name
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Customer Number
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                  >
+                    Driver Name
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                  >
+                    Driver Number
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                  >
+                    Order By
+                  </th>
+                  <!-- <th class="sorting_desc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Tax: activate to sort column ascending" style="width: 43.5312px;" aria-sort="descending">Tax</th> -->
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                    (click)="onOrderDisplayType()"
+                  >
+                    Date<i
+                      [class]="
+                        orderType === 'DESC'
+                          ? 'fa-solid fa-angle-down m-1 text-info'
+                          : 'fa-solid fa-angle-up m-1 text-info'
+                      "
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      [title]="
+                        orderType === 'DESC'
+                          ? 'Descending Order'
+                          : 'Ascending Order'
+                      "
+                    ></i>
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Education: activate to sort column ascending"
+                  >
+                    Confirm Status
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Gender: activate to sort column ascending"
+                  >
+                    Status
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Action: activate to sort column ascending"
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  role="row"
+                  class="odd"
+                  *ngFor="
+                    let order of orders | searchFilter: searchText;
+                    let i = index
+                  "
+                >
+                  <td>
+                    <strong>{{ isVisible ? i + 1 : order?.sl_no }}</strong>
+                  </td>
+                  <td>
+                    <strong>{{ order?.id }}</strong>
+                  </td>
+                  <td class="sorting_1">
+                    {{ order?.ambulance_id?.registration_number }}
+                  </td>
+                  <td>{{ order?.price }}</td>
+                  <td>
+                    {{
+                      order.customer_id
+                        ? order.customer_id.first_name +
+                          ' ' +
+                          order.customer_id.last_name
+                        : order.patient_id
+                        ? order.patient_id.name
+                        : ''
+                    }}
+                  </td>
+                  <td>
+                    {{
+                      order.customer_id
+                        ? order.customer_id.phone
+                        : order.patient_id
+                        ? order.patient_id.phone
+                        : ''
+                    }}
+                  </td>
+                  <td>{{ order?.driver_id?.name }}</td>
+                  <td>{{ order?.driver_id?.phone }}</td>
+                  <td>{{ order?.order_by }}</td>
+                  <td>{{ order?.cretaed_on | date }}</td>
+                  <td>
+                    <span
+                      [class]="
+                        order?.is_confirm == 1
+                          ? 'badge badge-success'
+                          : 'badge badge-danger'
+                      "
+                      >{{
+                        order?.is_confirm == 1 ? 'Confirmed' : 'Not Confirmed'
+                      }}</span
+                    >
+                    <!-- (click)="onConfirmed($event, order?.id,  order?.is_confirm)" -->
+                  </td>
+                  <td>
+                    <span
+                      [class]="
+                        order?.status == 1
+                          ? 'badge badge-success'
+                          : order?.status == 2
+                          ? 'badge badge-secondary text-secondary'
+                          : order?.status == 0 && order?.is_confirm === 1
+                          ? 'badge badge-warning'
+                          : 'badge badge-danger text'
+                      "
+                      >{{
+                        order?.status == 1
+                          ? 'Completed'
+                          : order?.status == 0 && order?.is_confirm === 1
+                          ? 'On Trip'
+                          : order?.status == 0
+                          ? 'New'
+                          : order?.status == 2
+                          ? 'Canceled'
+                          : ''
+                      }}
+                    </span>
+                  </td>
+
+                  <td>
+                    <div class="d-flex">
+                      <fieldset
+                        class="m-1 text-danger"
+                        [disabled]="order.status !== 0"
+                        (click)="onTripData(order)"
+                      >
+                        <i
+                          class="fa-solid fa-ban text-hover h6"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="bottom"
+                          title="End Trip"
+                          [ngClass]="{
+                            'text-disable ': order.status != 0
+                          }"
+                        ></i>
+                      </fieldset>
+                      <fieldset
+                        class="m-1 mx-1 text-primary"
+                        (click)="onDriverOrderDetails(order)"
+                      >
+                        <i
+                          class="fa fa-ambulance text-hover h6"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="bottom"
+                          title="Driver Order Details"
+                        ></i>
+                      </fieldset>
+                      <fieldset
+                        class="m-1 text-theme"
+                        [disabled]="order.status != 1"
+                        (click)="onInvoiceGenerate(order)"
+                      >
+                        <i
+                          class="fa-solid fa-file-invoice-dollar text-theme h6 text-hover"
+                          data-bs-toggle="tooltip"
+                          data-bs-placement="bottom"
+                          title="Invoice"
+                          [ngClass]="{
+                            'text-disable ': order.status != 1
+                          }"
+                        ></i>
+                      </fieldset>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <ngb-pagination
+          *ngIf="this.orders?.length"
+          class="dataTables_paginate paging_simple_numbers"
+          [(page)]="page"
+          [pageSize]="pageSize"
+          [maxSize]="15"
+          [collectionSize]="ordersLength"
+          (pageChange)="getAllOrders()"
+        >
+        </ngb-pagination>
+        <div class="dataTables_length float-right" id="example3_length">
+          <label *ngIf="this.orders?.length"
+            >Show
+            <select
+              class="p-2"
+              name="form-control"
+              aria-controls="example3"
+              [(ngModel)]="pageSize"
+              (ngModelChange)="getAllOrders()"
+              #selectPageSize
+            >
+              <option [ngValue]="5">5</option>
+              <option [ngValue]="10">10</option>
+              <option [ngValue]="15">15</option>
+              <option #total [ngValue]="ordersLength">All</option>
+            </select>
+            entries</label
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary d-none"
+  data-bs-toggle="modal"
+  data-bs-target="#endTripModal"
+  #endTripId
+>
+  Launch demo modal
+</button>
+<!-- End Trip Modal -->
+<div
+  class="modal fade"
+  id="endTripModal"
+  tabindex="-1"
+  aria-labelledby="endTripModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="endTripModalLabel">
+          Do you Want to End The Trip?
+        </h3>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <!-- <div class="modal-body">
+        ...
+      </div> -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="onEndTrip()"
+          data-bs-dismiss="modal"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>
+
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="d-none"
+  data-bs-toggle="modal"
+  data-bs-target="#driverOrders"
+  #driverOrdersModal
+>
+  Launch static backdrop modal
+</button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="driverOrders"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="driverOrdersLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title h6 text_theme" id="driverOrdersLabel">
+          Driver Trip Details
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <table
+          *ngIf="this.orders?.length"
+          class="table table-bordered table-hover table-striped text-center"
+          cellspacing="0"
+          id="addrowExample"
+          #excelDriverTable
+        >
+          <thead>
+            <tr role="row">
+              <th
+                class=""
+                tabindex="0"
+                aria-controls="example3"
+                rowspan="1"
+                colspan="1"
+                aria-sort="ascending"
+                aria-label=": activate to sort column descending"
+              >
+                Order No
+              </th>
+              <th
+                class=""
+                tabindex="0"
+                aria-controls="example3"
+                rowspan="1"
+                colspan="1"
+                aria-label="Email: activate to sort column ascending"
+              >
+                Source
+              </th>
+              <th
+                class=""
+                tabindex="0"
+                aria-controls="example3"
+                rowspan="1"
+                colspan="1"
+                aria-label="Email: activate to sort column ascending"
+              >
+                Destination
+              </th>
+
+              <th
+                class=""
+                tabindex="0"
+                aria-controls="example3"
+                rowspan="1"
+                colspan="1"
+                aria-label="Email: activate to sort column ascending"
+              >
+                Ambulance Number
+              </th>
+              <th
+                class=""
+                tabindex="0"
+                aria-controls="example3"
+                rowspan="1"
+                colspan="1"
+                aria-label="Department: activate to sort column ascending"
+              >
+                Price
+              </th>
+
+              <th
+                class=""
+                tabindex="0"
+                aria-controls="example3"
+                rowspan="1"
+                colspan="1"
+                aria-label="Email: activate to sort column ascending"
+              >
+                Customer Name
+              </th>
+              <th
+                class=""
+                tabindex="0"
+                aria-controls="example3"
+                rowspan="1"
+                colspan="1"
+                aria-label="Email: activate to sort column ascending"
+              >
+                Customer Number
+              </th>
+              <th
+                class=""
+                tabindex="0"
+                aria-controls="example3"
+                rowspan="1"
+                colspan="1"
+                aria-label="Mobile: activate to sort column ascending"
+              >
+                Driver Name
+              </th>
+              <th
+                class=""
+                tabindex="0"
+                aria-controls="example3"
+                rowspan="1"
+                colspan="1"
+                aria-label="Mobile: activate to sort column ascending"
+              >
+                Driver Number
+              </th>
+              <th
+                class=""
+                tabindex="0"
+                aria-controls="example3"
+                rowspan="1"
+                colspan="1"
+                aria-label="Mobile: activate to sort column ascending"
+              >
+                Order By
+              </th>
+              <th
+                class=""
+                tabindex="0"
+                aria-controls="example3"
+                rowspan="1"
+                colspan="1"
+                aria-label="Mobile: activate to sort column ascending"
+              >
+                Date
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              role="row"
+              class="odd"
+              *ngFor="let order of driverOrderData?.result; let i = index"
+            >
+              <td>
+                <strong>{{ order?.id }}</strong>
+              </td>
+              <td>
+                <strong>{{ order?.source_location }}</strong>
+              </td>
+              <td>
+                <strong>{{ order?.destination_location }}</strong>
+              </td>
+              <td class="sorting_1">
+                {{ order?.ambulance_id?.registration_number }}
+              </td>
+              <td>{{ order?.price }}</td>
+              <td>
+                {{
+                  order.customer_id
+                    ? order.customer_id.first_name +
+                      ' ' +
+                      order.customer_id.last_name
+                    : order.patient_id
+                    ? order.patient_id.name
+                    : ''
+                }}
+              </td>
+              <td>
+                {{
+                  order.customer_id
+                    ? order.customer_id.phone
+                    : order.patient_id
+                    ? order.patient_id.phone
+                    : ''
+                }}
+              </td>
+              <td>{{ order?.driver_id?.name }}</td>
+              <td>{{ order?.driver_id?.phone }}</td>
+              <td>{{ order?.order_by }}</td>
+              <td>{{ order?.cretaed_on | date }}</td>
+            </tr>
+            <tr class="">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><strong class="h6">Total:</strong></td>
+
+              <td>
+                <strong>{{ driverOrderData?.totalPrice?.totalPrice }}</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-success btn-sm"
+          (click)="exportDriverExcel()"
+        >
+          Print
+        </button>
+        <!-- <button type="button" class="btn btn-primary">Understood</button> -->
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<nav class="navbar navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-btn">
+      <button type="button" class="btn-toggle-offcanvas">
+        <i class="lnr lnr-menu fa fa-bars"></i>
+      </button>
+    </div>
+
+    <div class="navbar-brand">
+      <a href="javascript:void(0)"
+        ><img
+          src="assets/images/logo/hams-logo-final.png"
+          alt="Logo"
+          class="img-responsive logo"
+      /></a>
+    </div>
+
+    <div class="navbar-right">
+      <div id="navbar-menu">
+        <div class="user-account">
+          <img
+            src="../../../../../assets/images/moAmbulanceLogo.png"
+            class="user-photo"
+            alt="User Profile Picture"
+          />
+          <div class="dropdown text_theme">
+            <span>Welcome,</span>
+            <a
+              href="javascript:void(0);"
+              class="dropdown-toggle user-name t-d-none"
+              data-bs-toggle="dropdown"
+              ><strong>{{ userDetails?.name }}</strong></a
+            >
+            <ul class="dropdown-menu dropdown-menu-right account">
+              <!-- <li>
+                <a href="doctor-profile.html"><i class="icon-user"></i>My Profile</a>
+              </li>
+              <li>
+                <a href="app-inbox.html"><i class="icon-envelope-open"></i>Messages</a>
+              </li>
+              <li>
+                <a href="javascript:void(0);"><i class="icon-settings"></i>Settings</a>
+              </li>
+              <li class="divider"></li> -->
+              <li>
+                <a
+                  [routerLink]="['/admin/change-password']"
+                  routerLinkActive="active"
+                >
+                  <i class="fas fa-key"></i>Change Password</a
+                >
+                <a href="javascript:void(0)" (click)="onLogout()"
+                  ><i class="icon-power"></i>Logout</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

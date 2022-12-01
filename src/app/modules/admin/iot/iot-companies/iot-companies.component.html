@@ -1,0 +1,307 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="card m-0 p-0">
+        <div class="body">
+          <div class="row">
+            <div class="col-md-12">
+              <button
+                class="btn btn-primary m-1 float-right"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasScrolling"
+                aria-controls="offcanvasScrolling"
+              >
+                <i class="icon-plus" aria-hidden="true"></i> Add Company
+              </button>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table
+              class="table table-hover m-b-0 c_list justify-content-center text-center fw-lighter"
+            >
+              <thead class="table-dark">
+                <tr>
+                  <th>#</th>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Customised Price</th>
+                  <th>Status</th>
+                  <th>Customised Allowed</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let company of allCompaniesList; let i = index">
+                  <td>
+                    {{ i + 1 }}
+                  </td>
+
+                  <td>
+                    <img
+                      [src]="baseUrl + company.company_image"
+                      class="rounded-circle avatar"
+                      alt="{{ company.name + i }}"
+                    />
+                  </td>
+                  <td>
+                    <p class="c_name">
+                      {{ company.name }}
+                    </p>
+                  </td>
+
+                  <td>
+                    <p class="c_name">
+                      {{ company.company_customised_price }}%
+                    </p>
+                  </td>
+
+                  <td>
+                    <label
+                      class="switch"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="right"
+                      title="{{
+                        company && company?.status == 1 ? 'Active' : 'In Active'
+                      }}"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="company && company.status == 1"
+                        (click)="onStatusChange('status', company)"
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <label
+                      class="switch"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="right"
+                      title="{{
+                        company && company.is_customised_price == 1
+                          ? 'Allowed'
+                          : 'Not Allowed'
+                      }}"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="company && company.is_customised_price == 1"
+                        (click)="onStatusChange('customPrice', company)"
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      data-bs-toggle="offcanvas"
+                      data-bs-target="#offcanvasScrolling"
+                      aria-controls="offcanvasScrolling"
+                      class="btn btn-sm btn-info"
+                      title="Edit"
+                      (click)="onEdit(company)"
+                    >
+                      <i class="fa fa-edit"></i>
+                    </button>
+                    <span class="mx-1"></span>
+                    <button
+                      type="button"
+                      data-type="confirm"
+                      class="btn btn-sm btn-danger js-sweetalert"
+                      title="Delete"
+                      (click)="onDeleteCompany(company)"
+                    >
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="offcanvas offcanvas-end m-2"
+  data-bs-scroll="true"
+  data-bs-backdrop="false"
+  tabindex="-1"
+  id="offcanvasScrolling"
+  aria-labelledby="offcanvasScrollingLabel"
+>
+  <div class="offcanvas-header">
+    <h3 id="offcanvasScrollingLabel">Add IOT Company</h3>
+    <button
+      #companyForm
+      type="button"
+      class="btn-close text-reset d-none"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body body">
+    <form [formGroup]="iotCompanyAddForm" (ngSubmit)="onSave()">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <label for="exampleFormControlInput1" class="form-label pt-1"
+                ><strong>Name :</strong>
+              </label>
+            </div>
+            <div class="col-md-9">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="name"
+                placeholder="Company Name"
+              />
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <label for="exampleFormControlInput1" class="form-label pt-1"
+                ><strong>Customized Price:</strong>
+              </label>
+            </div>
+            <div class="col-md-9">
+              <input
+                type="number"
+                min="0"
+                max="100"
+                class="form-control"
+                formControlName="company_customised_price"
+                placeholder="price in percentage"
+                (input)="onCustomisedPrice($event)"
+              />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <label for="exampleFormControlInput1" class="form-label"
+                ><strong>Customizable:</strong>
+              </label>
+            </div>
+            <div class="col-md-9">
+              <div class="d-flex">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    formControlName="is_customised_price"
+                    [value]="1"
+                    id="yes"
+                  />
+                  <label class="form-check-label" for="yes"> Yes </label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    formControlName="is_customised_price"
+                    type="radio"
+                    id="no"
+                    [value]="0"
+                  />
+                  <label class="form-check-label" for="no"> No </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div
+            *ngIf="name && name.invalid && (name.dirty || name.touched)"
+            class="invalid animated bounceIn text-danger"
+          >
+            Please Enter Valid Name
+          </div> -->
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <div class="form-check">
+              <label class="form-check-label" for="flexCheckChecked">
+                Status
+              </label>
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="flexCheckChecked"
+                formControlName="status"
+                (change)="onActiveChange($event)"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-xl-10">
+                <div class="d-flex">
+                  <div class="form-check">
+                    <input
+                      class="form-control form-control-sm"
+                      id="formFileSm"
+                      type="file"
+                      formControlName="company_image"
+                      (change)="onProfileImageChange($event)"
+                      placeholder="Company Image"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-2">
+                <img
+                  class="w-75"
+                  [src]="baseUrl + this.profileImageBrowse"
+                  alt=""
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row m-3">
+          <div class="col-xl-4">
+            <button
+              type="submit"
+              class="btn btn-sm btn-rounded btn-success"
+              [disabled]="isBtnLoading || (name && name.invalid)"
+            >
+              <span
+                *ngIf="isBtnLoading"
+                isBtnLoading
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+
+              {{ !isBtnLoading ? buttonType : '  Loading...' }}
+            </button>
+          </div>
+          <div class="col-xl-4">
+            <button
+              class="btn btn-danger btn-sm"
+              type="reset"
+              (click)="closeCompanyForm()"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+
+        <div class="col-md-12 text-success">
+          {{ message }}
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

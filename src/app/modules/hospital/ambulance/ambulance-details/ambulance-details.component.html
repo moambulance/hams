@@ -1,0 +1,377 @@
+<div id="wrapper">
+  <app-navbar></app-navbar>
+  <app-sidebar></app-sidebar>
+  <app-spinner></app-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-breadcrumb [breadCrumbData]="breadCrumbData"></app-breadcrumb>
+
+      <div class="card">
+        <div class="body">
+          <div class="row">
+            <div class="row">
+              <div class="col-lg-3 col-md-6 text-center">
+                <div class="card top_counter p-2 vh-30">
+                  <div class="body">
+                    <div
+                      id="top_counter1"
+                      class="carousel vert slide"
+                      data-ride="carousel"
+                      data-interval="2500"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="icon">
+                            <i class="fa-solid fa-house-medical"></i>
+                          </div>
+                          <div class="content">
+                            <div class="text pb-1 mb-1">Hospital Name</div>
+                            <h5 class="number">
+                              {{ ambulanceDetails?.hospital_id.name }}
+                            </h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 text-center">
+                <div class="card top_counter p-2 vh-30">
+                  <div class="body">
+                    <div
+                      id="top_counter1"
+                      class="carousel vert slide"
+                      data-ride="carousel"
+                      data-interval="2500"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="icon">
+                            <i class="fa-solid fa-truck-medical"></i>
+                          </div>
+                          <div class="content">
+                            <div class="text pb-1 mb-1">Facilities</div>
+                            <h5 class="number">
+                              {{
+                                ambulanceDetails?.ambulance_type_id.facilities
+                              }}
+                            </h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6">
+                <div class="card top_counter p-2 vh-30">
+                  <div class="body">
+                    <div
+                      id="top_counter1"
+                      class="carousel vert slide"
+                      data-ride="carousel"
+                      data-interval="2500"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="icon">
+                            <i class="fa-solid fa-copyright"></i>
+                          </div>
+                          <div class="content">
+                            <div class="text pb-1 mb-1">Ambulance Owner</div>
+                            <h5 class="number">
+                              {{
+                                ambulanceDetails?.owner_type == 1
+                                  ? 'Self/Admin'
+                                  : 'Hospital'
+                              }}
+                            </h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-4 col-md-6 text-center">
+                <div class="card top_counter p-2 vh-30">
+                  <div class="body">
+                    <div
+                      id="top_counter1"
+                      class="carousel vert slide"
+                      data-ride="carousel"
+                      data-interval="2500"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="icon">
+                            <i class="fa-solid fa-calendar-check"></i>
+                          </div>
+                          <div class="content">
+                            <div class="text pb-1 mb-1">Registration Date</div>
+                            <h5 class="number">
+                              {{ ambulanceDetails?.registration_date }}
+                            </h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 text-center">
+                <div class="card top_counter p-2 vh-30">
+                  <div class="body">
+                    <div
+                      id="top_counter1"
+                      class="carousel vert slide"
+                      data-ride="carousel"
+                      data-interval="2500"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="icon">
+                            <i class="fa-solid fa-cash-register"></i>
+                          </div>
+                          <div class="content">
+                            <div class="text pb-1 mb-1">
+                              Registration Number
+                            </div>
+                            <h5 class="number">
+                              {{ ambulanceDetails?.registration_number }}
+                            </h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6">
+                <div class="card top_counter p-2 vh-30">
+                  <div class="body">
+                    <div
+                      id="top_counter1"
+                      class="carousel vert slide"
+                      data-ride="carousel"
+                      data-interval="2500"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="icon">
+                            <i class="fa-solid fa-suitcase-medical"></i>
+                          </div>
+                          <div class="content">
+                            <div class="text pb-1 mb-1">Ambulance Type</div>
+                            <h5 class="number">
+                              {{ ambulanceDetails?.ambulance_type_id.name
+                              }}{{
+                                ambulanceDetails?.ambulance_type_id
+                                  ?.full_name && '('
+                              }}
+                              {{
+                                ambulanceDetails?.ambulance_type_id?.full_name
+                              }}
+                              {{
+                                ambulanceDetails?.ambulance_type_id
+                                  ?.full_name && ')'
+                              }}
+                            </h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-4 col-md-6 text-center">
+                <div class="card top_counter p-2 vh-30">
+                  <div class="body">
+                    <div
+                      id="top_counter1"
+                      class="carousel vert slide"
+                      data-ride="carousel"
+                      data-interval="2500"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="icon">
+                            <i class="fa-brands fa-staylinked"></i>
+                          </div>
+                          <div class="content">
+                            <div class="text pb-1 mb-1">Status</div>
+                            <h5 class="number">
+                              <span
+                                class="{{
+                                  ambulanceDetails?.is_active == 1
+                                    ? 'text-success'
+                                    : 'text-danger'
+                                }}"
+                              >
+                                {{
+                                  ambulanceDetails?.is_active == 1
+                                    ? 'Active'
+                                    : 'Inactive'
+                                }}
+                              </span>
+                            </h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6 text-center">
+                <div class="card top_counter p-2 vh-30">
+                  <div class="body">
+                    <div
+                      id="top_counter1"
+                      class="carousel vert slide"
+                      data-ride="carousel"
+                      data-interval="2500"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="icon">
+                            <i class="fa-solid fa-calendar-pen"></i>
+                          </div>
+                          <div class="content">
+                            <div class="text pb-1 mb-1">Approval</div>
+                            <h5 class="number">
+                              <span
+                                class="{{
+                                  ambulanceDetails?.is_approved == 1
+                                    ? 'text-success'
+                                    : 'text-danger'
+                                }}"
+                              >
+                                {{
+                                  ambulanceDetails?.is_approved == 1
+                                    ? 'Approved'
+                                    : 'Not Approved'
+                                }}
+                              </span>
+                            </h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-6">
+                <div class="card top_counter p-2 vh-30">
+                  <div class="body">
+                    <div
+                      id="top_counter1"
+                      class="carousel vert slide"
+                      data-ride="carousel"
+                      data-interval="2500"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="icon">
+                            <i class="fa-solid fa-circle-dollar"></i>
+                          </div>
+                          <div class="content">
+                            <div class="text pb-1 mb-1">Base Fare</div>
+                            <h5 class="number">
+                              <span>{{
+                                ambulanceDetails?.ambulance_type_id.basefare
+                              }}</span>
+                            </h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-12 text-center"><h1>Ambulance Images</h1></div>
+              <div class="col-lg-6 col-md-12">
+                <div class="card vh-80">
+                  <div class="body">
+                    <div class="ambulance-img">
+                      <img
+                        src="{{ baseUrl }}{{ ambulanceDetails?.front_image }}"
+                        class="ambulance-img"
+                      />
+                      <div class="text-center vh-20">
+                        <h4 class="pt-1 m-b-0">
+                          <strong>Ambulance Front</strong>
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6 col-md-12">
+                <div class="card vh-80">
+                  <div class="body">
+                    <div class="profile-image">
+                      <img
+                        src="{{ baseUrl + ambulanceDetails?.back_image }}"
+                        class="ambulance-img"
+                      />
+                      <div class="text-center vh-20">
+                        <h4 class="pt-1 m-b-0">
+                          <strong>Ambulance Back</strong>
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-12">
+                <div class="card vh-80">
+                  <div class="body">
+                    <div class="profile-image">
+                      <img
+                        src="{{ baseUrl + ambulanceDetails?.right_side_image }}"
+                        class="ambulance-img"
+                      />
+                      <div class="text-center vh-20">
+                        <h4 class="pt-1 m-b-0">
+                          <strong>Ambulance Right</strong>
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-12">
+                <div class="card vh-80">
+                  <div class="body">
+                    <div class="profile-image">
+                      <img
+                        src="{{ baseUrl + ambulanceDetails?.left_side_image }}"
+                        class="ambulance-img"
+                      />
+                      <div class="text-center vh-20">
+                        <h4 class="pt-1 m-b-0">
+                          <strong>Ambulance Left</strong>
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

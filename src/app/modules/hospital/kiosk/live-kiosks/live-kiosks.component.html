@@ -1,0 +1,319 @@
+<div id="wrapper" #fullScreen>
+  <app-spinner></app-spinner>
+  <div id="main-content" class="map-container w-100 m-0 p-0">
+    <div class="container-fluid">
+      <div
+        [class]="
+          sideToggle
+            ? 'map-sidepanelwrapper  d-none'
+            : 'map-sidepanelwrapper close-sidepanelwrapper d-none'
+        "
+      >
+        <header class="sideview-header">
+          <div class="row">
+            <div class="col-xl-8 text-white">
+              <h5>Auto Refresh</h5>
+            </div>
+            <div class="col-xl-2">
+              <label
+                class="switch float-left"
+                data-bs-toggle="tooltip"
+                data-bs-placement="right"
+                title="{{
+                  this.updateToggle
+                    ? 'Update Location On'
+                    : 'Update Location Off'
+                }}"
+              >
+                <input
+                  type="checkbox"
+                  [checked]="this.updateToggle"
+                  (click)="onStatusChange()"
+                />
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <div class="col-xl-2">
+              <a
+                href="javascript:void(0);"
+                [class]="sideToggle ? 'slide-arrow' : 'slide-arrow close-arrow'"
+                (click)="onToggleClick()"
+              >
+              </a>
+            </div>
+          </div>
+          <div class="row">
+            <aside class="col-md-9">
+              <h5 class="text-white fs-12">
+                Total Drivers ({{ driverLength }})
+              </h5>
+            </aside>
+          </div>
+        </header>
+        <!-- <ul [class]="sideToggle ? 'location-list' : 'd-none'">
+          <li>
+            <div class="form-group w90 m-1">
+              <input
+                [disabled]="searchedPhone || searchedAmbulance"
+                type="text"
+                placeholder="Driver Name"
+                class="form-control p2"
+                [value]="searchedName"
+                (input)="onNameFilter($event)"
+              />
+            </div>
+          </li>
+          <li>
+            <div class="form-group w90 m-1">
+              <input
+                [disabled]="searchedName || searchedAmbulance"
+                type="text"
+                placeholder="Driver Mobile No"
+                class="form-control p2"
+                maxlength="10"
+                [value]="searchedPhone"
+                (input)="onPhoneFilter($event)"
+              />
+            </div>
+          </li>
+          <li>
+            <div class="form-group w90 m-1">
+              <input
+                [disabled]="searchedName || searchedPhone"
+                type="text"
+                placeholder="Ambulance No"
+                class="form-control p2"
+                [value]="searchedAmbulance"
+                (input)="onAmbulanceFilter($event)"
+              />
+            </div>
+          </li>
+          <li>
+            <div class="form-group w90">
+              <button
+                [disabled]="
+                  !searchedName && !searchedPhone && !searchedAmbulance
+                "
+                class="btn btn-sm btn-success m-1 float-right p-1"
+                (click)="onSearchDriver()"
+              >
+                Search
+              </button>
+              <button
+                *ngIf="clearFilter"
+                class="btn btn-sm btn-danger text-white m-1 p-1 float-right"
+                (click)="onClearSearch()"
+              >
+                Clear
+              </button>
+            </div>
+          </li>
+        </ul> -->
+      </div>
+      <div class="map-topwrapper">
+        <i
+          class="fa-solid fa-expand btn btn-default full-screen-btn"
+          [ngClass]="{
+            'fa-expand': !mapFullScreen,
+            'fa-compress': mapFullScreen
+          }"
+          ngbTooltip="{{ mapFullScreen ? 'Minimize Screen' : 'Full Screen' }}"
+          (click)="onMapFullScreenClick()"
+        >
+        </i>
+      </div>
+      <div class="map-bottomwrapper" *ngIf="activeOrder != null">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="map-detail-box">
+              <ul>
+                <li>
+                  <span class="icon-wrap">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                  </span>
+                  <span class="amb-span">
+                    <label for="">START POINT</label>
+                    {{ activeOrder.source_location }}
+                  </span>
+                </li>
+                <li>
+                  <span class="icon-wrap">
+                    <i class="fa-solid fa-location-dot"></i>
+                  </span>
+                  <span class="amb-span">
+                    <label for="">END POINT</label>
+                    {{ activeOrder.destination_location }}
+                  </span>
+                </li>
+                <li>
+                  <span class="icon-wrap">
+                    <i class="fa-solid fa-truck-medical"></i>
+                  </span>
+                  <span class="amb-span">
+                    <label for="">AMBULANCE NO</label>
+                    {{ activeOrder.ambulance_id?.registration_number }}
+                  </span>
+                </li>
+                <li>
+                  <span class="icon-wrap">
+                    <i class="fa-solid fa-truck-medical"></i>
+                  </span>
+                  <span class="amb-span">
+                    <label for="">AMBULANCE TYPE</label>
+                    {{ activeOrder.ambulance_type_id?.name }}
+                  </span>
+                </li>
+              </ul>
+              <ul>
+                <li>
+                  <span class="icon-wrap">
+                    <i class="fa-solid fa-user-nurse"></i>
+                  </span>
+                  <span class="amb-span">
+                    <label for="">DRIVER NAME</label>
+                    {{ activeOrder.driver_id?.name }}
+                  </span>
+                </li>
+                <li>
+                  <span class="icon-wrap">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                  </span>
+                  <span class="amb-span">
+                    <label for="">MOBILE</label>
+                    {{ activeOrder.driver_id?.phone }}
+                  </span>
+                </li>
+                <li>
+                  <span class="icon-wrap">
+                    <i class="fa-solid fa-compass"></i>
+                  </span>
+                  <span class="amb-span">
+                    <label for="">DISTANCE</label>
+                    {{ activeOrder.distance }} KM
+                  </span>
+                </li>
+                <li>
+                  <span class="icon-wrap">
+                    <i class="fa-solid fa-clock"></i>
+                  </span>
+                  <span class="amb-span">
+                    <label for="">ESTIMATED TIME</label>
+                    {{ activeOrder.estimated_time }}
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2">
+            <div class="map-detail-box">
+              <ul>
+                <li>
+                  <span class="icon-wrap">
+                    <i class="fa-solid fa-hospital-user"></i>
+                  </span>
+                  <span class="amb-span">
+                    <label for="">PATIENT NAME</label>
+                    {{ activeOrder.patient_id?.name }}
+                  </span>
+                </li>
+                <li>
+                  <span class="icon-wrap">
+                    <i class="fa-solid fa-calendar-days"></i>
+                  </span>
+                  <span class="amb-span">
+                    <label for="">AGE</label>
+                    {{ activeOrder.patient_id?.age }}
+                  </span>
+                </li>
+                <li>
+                  <span class="icon-wrap">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                  </span>
+                  <span class="amb-span">
+                    <label for="">PHONE NO</label>
+                    {{ activeOrder.customer_id?.phone }}
+                  </span>
+                </li>
+              </ul>
+              <ul>
+                <li>
+                  <span class="icon-wrap">
+                    <i class="fa-solid fa-venus-mars"></i>
+                  </span>
+                  <span class="amb-span">
+                    <label for="">GENDER</label>
+                    {{
+                      activeOrder.patient_id?.gender == 1 ? 'Male' : 'Female'
+                    }}
+                  </span>
+                </li>
+                <li>
+                  <span class="icon-wrap">
+                    <i class="fa-solid fa-disease"></i>
+                  </span>
+                  <span class="amb-span">
+                    <label for="">DISEASE</label>
+                    {{ activeOrder.patient_id?.suffering_from_name }}
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <agm-map
+        [latitude]="latitude"
+        [longitude]="longitude"
+        [zoom]="zoom"
+        [disableDefaultUI]="true"
+        [usePanning]="true"
+        (mapReady)="onMapReady($event)"
+      >
+        <agm-marker
+          *ngFor="let order of drivers"
+          [latitude]="order.latitude"
+          [longitude]="order.longitude"
+          [iconUrl]="order.icon"
+          (markerClick)="order.isMarker = !order.isMarker"
+        >
+          <agm-info-window
+            [isOpen]="order?.isMarker"
+            [latitude]="order?.latitude"
+            [longitude]="order?.longitude"
+          >
+            <span class="icon-img">
+              <img
+                [src]="
+                  base_url + order?.drivers?.ambulance?.ambulance_type?.image
+                "
+              />
+            </span>
+            <span class="amb-span">
+              <label class="text-left" for="">{{
+                order?.drivers?.ambulance?.ambulance_type?.name
+              }}</label>
+              {{ order?.drivers?.ambulance?.registration_number }}
+            </span>
+            <span class="amb-span">
+              <label for="" class="text-left">{{ order?.drivers?.name }}</label>
+              {{ order?.drivers?.phone }}
+            </span>
+            <!-- <span class="amb-span">
+              <label for="">Driver</label>
+              {{ order?.name }}
+            </span> -->
+          </agm-info-window>
+        </agm-marker>
+        <!-- <agm-direction
+          *ngIf="activeOrder != null"
+          [origin]="activeOrder.origin"
+          [destination]="activeOrder.destination1"
+          [renderOptions]="activeOrder.render_options"
+          [markerOptions]="activeOrder.marker_options"
+        >
+        </agm-direction> -->
+      </agm-map>
+    </div>
+  </div>
+</div>

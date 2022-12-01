@@ -1,0 +1,815 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+  <app-admin-sidebar *ngIf="!currentRoute"></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content" class="profilepage_1">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+
+      <div class="row clearfix">
+        <div class="row-lg-12 col-md-12" *ngIf="currentRoute">
+          <a [routerLink]="['/hospital/live-ambulance']">Go to Live Ambulance</a>
+        </div>
+        <div class="col-lg-12 col-md-12">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="card gender text-white">
+                <div class="card-body">
+                  <h5 class="card-title col-xl-12">
+                    <h3>
+                      <i class="fa-solid fa-envelope"></i
+                      ><span class="m-1">Gender</span>
+                    </h3>
+                  </h5>
+                  <h6 class="card-subtitle mb-2 text-white">
+                    {{
+                      patientDetails && patientDetails.gender
+                        ? patientDetails.gender == 1
+                          ? 'Male'
+                          : patientDetails.gender == 2
+                          ? 'Female'
+                          : ''
+                        : ''
+                    }}
+                  </h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card age text-white">
+                <div class="card-body">
+                  <h5 class="card-title col-xl-12">
+                    <h3>
+                      <i class="fa-solid fa-envelope"></i
+                      ><span class="m-1">Age</span>
+                    </h3>
+                  </h5>
+                  <h6 class="card-subtitle mb-2 text-white">
+                    {{ patientDetails?.age }}
+                  </h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card email text-white">
+                <div class="card-body">
+                  <h5 class="card-title col-xl-12">
+                    <h3>
+                      <i class="fa-solid fa-envelope"></i
+                      ><span class="m-1">Email</span>
+                    </h3>
+                  </h5>
+                  <h6 class="card-subtitle mb-2 text-white">
+                    {{ patientDetails?.email }}
+                  </h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card phone text-white">
+                <div class="card-body">
+                  <h5 class="card-title col-xl-12">
+                    <h3>
+                      <i class="fa-solid fa-envelope"></i
+                      ><span class="m-1">Phone</span>
+                    </h3>
+                  </h5>
+                  <h6 class="card-subtitle mb-2 text-white">
+                    {{ patientDetails?.phone }}
+                  </h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-12">
+          <div
+            class="accordion"
+            id="accordionPanelsStayOpenExample"
+            *ngFor="let medtelDetails of medtelIotDetails; let i = index"
+          >
+            <div class="accordion-item">
+              <h2
+                class="accordion-header accordion-color text-white p-0 m-0"
+                [attr.id]="'panelsStayOpen-headingOne' + i"
+              >
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="row">
+                      <div class="col-md-2 mt-3">
+                        <i class="fa-solid fa-business-time"></i>
+                      </div>
+                      <div class="col-md-10">
+                        <p class="fs-m p-0 m-0">Screening Time</p>
+                        <p class="fs-m p-0 m-0">
+                          {{
+                            medtelDetails?.screening_date +
+                              ' ' +
+                              medtelDetails?.screening_time | date: 'medium'
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-1"><div class="mt-3 vl"></div></div>
+                  <div class="col-4"></div>
+                  <div class="col-2 mt-2">
+                    <a
+                      class="text-decoration-none text-white hover"
+                      href="{{ medtelDetails?.report_url }}"
+                      download
+                    >
+                      <span class="fs-m">
+                        <i class="ti-download"></i> Download Report</span
+                      >
+                    </a>
+                  </div>
+                  <div class="col-1"></div>
+                  <div class="col-1">
+                    <i
+                      (click)="onAccordionClick(medtelDetails)"
+                      data-bs-toggle="collapse"
+                      [attr.data-bs-target]="'#panelsStayOpen-collapseOne' + i"
+                      [attr.aria-expanded]="medtelDetails.isActive"
+                      aria-controls="panelsStayOpen-collapseOne"
+                      class="accordion-button"
+                    >
+                    </i>
+                  </div>
+                </div>
+              </h2>
+              <div
+                [attr.id]="'panelsStayOpen-collapseOne' + i"
+                class="accordion-collapse collapse show row"
+                aria-labelledby="panelsStayOpen-headingOne"
+              >
+                <div class="accordion-body col-md-12">
+                  <div>
+                    <div class="msg">
+                      <div class="row">
+                        <div
+                          class="col-md-4"
+                          *ngFor="
+                            let screening_detail of medtelDetails.screening_details
+                          "
+                        >
+                          <div
+                            class="row"
+                            *ngIf="
+                              screening_detail?.pocType === 'Body Analyzer'
+                            "
+                          >
+                            <strong class="text-dark">{{
+                              screening_detail?.pocType
+                            }}</strong>
+                            <hr class="ms-2 h-1" />
+                          </div>
+                          <table
+                            class="table table-wrapper-scroll-y my-custom-scrollbar"
+                            *ngIf="
+                              screening_detail?.pocType === 'Body Analyzer'
+                            "
+                          >
+                            <tbody>
+                              <tr>
+                                <td>BMI</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.ba_bmi }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>BMR</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.ba_bmr }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Body Fat</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.ba_body_fat }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Body Water</td>
+                                <td>
+                                  {{
+                                    screening_detail?.pocResult?.ba_body_water
+                                  }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Bone Mass</td>
+                                <td>
+                                  {{
+                                    screening_detail?.pocResult?.ba_bone_mass
+                                  }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>BSA</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.ba_bsa }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Fat Free Body Weight</td>
+                                <td>
+                                  {{
+                                    screening_detail?.pocResult
+                                      ?.ba_fat_free_body_weight
+                                  }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Muscle Mass</td>
+                                <td>
+                                  {{
+                                    screening_detail?.pocResult?.ba_muscle_mass
+                                  }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Protein</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.ba_protein }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Skeletal Muscle</td>
+                                <td>
+                                  {{
+                                    screening_detail?.pocResult
+                                      ?.ba_skeletal_muscle
+                                  }}
+                                </td>
+                              </tr>
+
+                              <tr>
+                                <td>Subcutaneous Fat</td>
+                                <td>
+                                  {{
+                                    screening_detail?.pocResult
+                                      ?.ba_subcutaneous_fat
+                                  }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Visceral Fat</td>
+                                <td>
+                                  {{
+                                    screening_detail?.pocResult?.ba_visceral_fat
+                                  }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Weight</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.ba_weight }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div
+                            class="row"
+                            *ngIf="screening_detail?.pocType === 'Thermometer'"
+                          >
+                            <strong class="text-dark">{{
+                              screening_detail?.pocType
+                            }}</strong>
+                            <hr class="ms-2 h-1" />
+                          </div>
+                          <table
+                            class="table table-wrapper-scroll-y my-custom-scrollbar table-hover"
+                            *ngIf="screening_detail?.pocType === 'Thermometer'"
+                          >
+                            <tbody>
+                              <tr>
+                                <td>Temprature</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.thermometer }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Thermometer Unit</td>
+                                <td>
+                                  {{
+                                    screening_detail?.pocResult
+                                      ?.thermometer_unit
+                                  }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div
+                            class="row"
+                            *ngIf="screening_detail?.pocType === 'SpO2'"
+                          >
+                            <strong class="text-dark">{{
+                              screening_detail?.pocType
+                            }}</strong>
+                            <hr class="ms-2 h-1" />
+                          </div>
+                          <table
+                            class="table table-wrapper-scroll-y my-custom-scrollbar table-hover"
+                            *ngIf="screening_detail?.pocType === 'SpO2'"
+                          >
+                            <tbody>
+                              <tr>
+                                <td>SPO2</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.spo2 }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Spo2 Pi</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.spo2_pi }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Spo2 Pulse Count</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.spo2_pulse }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+
+                          <div
+                            class="row"
+                            *ngIf="screening_detail?.pocType === 'Vitals_BP'"
+                          >
+                            <strong class="text-dark">Blood Pressure</strong>
+                            <hr class="ms-2 h-1" />
+                          </div>
+                          <table
+                            class="table table-wrapper-scroll-y my-custom-scrollbar table-hover"
+                            *ngIf="screening_detail?.pocType === 'Vitals_BP'"
+                          >
+                            <tbody>
+                              <tr>
+                                <td>Blood Pressure</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.bp }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Pulse Count</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.pulse }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+
+                          <div
+                            class="row"
+                            *ngIf="screening_detail?.pocType === 'Stethoscope'"
+                          >
+                            <strong class="text-dark">{{
+                              screening_detail?.pocType
+                            }}</strong>
+                            <hr class="ms-2 h-1" />
+                          </div>
+                          <table
+                            class="table table-wrapper-scroll-y my-custom-scrollbar table-hover"
+                            *ngIf="screening_detail?.pocType === 'Stethoscope'"
+                          >
+                            <tbody>
+                              <tr
+                                *ngFor="
+                                  let item of screening_detail?.pocResult
+                                    ?.stetho_path;
+                                  let i = index
+                                "
+                              >
+                                <td>{{ item.position }}</td>
+                                <td>
+                                  <i
+                                    *ngIf="!isAudio"
+                                    class="fa fa-play text-dark"
+                                    (click)="onPlay(i)"
+                                  ></i>
+                                  <i
+                                    *ngIf="i == currentIndex && isAudio"
+                                    class="fa fa-pause text-dark"
+                                    (click)="onPause(i)"
+                                  ></i>
+                                  <audio
+                                    #audioPlayer
+                                    [src]="item?.path"
+                                    type="audio/wav"
+                                    loop="loop"
+                                  ></audio>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div
+                            class="row"
+                            *ngIf="screening_detail?.pocType === 'Otoscope'"
+                          >
+                            <strong class="text-dark">{{
+                              screening_detail?.pocType
+                            }}</strong>
+                            <hr class="ms-2 h-1" />
+                          </div>
+                          <table
+                            class="table table-wrapper-scroll-y my-custom-scrollbar table-hover"
+                            *ngIf="screening_detail?.pocType === 'Otoscope'"
+                          >
+                            <tbody>
+                              <tr
+                                *ngFor="
+                                  let item of screening_detail?.pocResult
+                                    ?.otoscope_path;
+                                  let i = index
+                                "
+                              >
+                                <td>report {{ i + 1 }}</td>
+                                <td>
+                                  <img
+                                    class="w-25 h-25"
+                                    [src]="item"
+                                    alt=""
+                                    (click)="onimageClick(item)"
+                                  />
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div
+                            class="row"
+                            *ngIf="screening_detail?.pocType === 'Sync'"
+                          >
+                            <strong class="text-dark">{{
+                              screening_detail?.pocType
+                            }}</strong>
+                            <hr class="ms-2 h-1" />
+                          </div>
+                          <table
+                            class="table table-wrapper-scroll-y my-custom-scrollbar table-hover"
+                            *ngIf="screening_detail?.pocType === 'Sync'"
+                          >
+                            <tbody>
+                              <tr>
+                                <td>Glucose</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.glucose }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Glucose Category</td>
+                                <td>
+                                  {{
+                                    screening_detail?.pocResult?.glucoseCategory
+                                  }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div
+                            class="row"
+                            *ngIf="screening_detail?.pocType === 'Hemoglobin'"
+                          >
+                            <strong class="text-dark">{{
+                              screening_detail?.pocType
+                            }}</strong>
+                            <hr class="ms-2 h-1" />
+                          </div>
+                          <table
+                            class="table table-wrapper-scroll-y my-custom-scrollbar table-hover"
+                            *ngIf="screening_detail?.pocType === 'Hemoglobin'"
+                          >
+                            <tbody>
+                              <tr>
+                                <td>Hemoglobin</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.hemoglobin }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div
+                            class="row"
+                            *ngIf="screening_detail?.pocType === 'HbA1c'"
+                          >
+                            <strong class="text-dark">{{
+                              screening_detail?.pocType
+                            }}</strong>
+                            <hr class="ms-2 h-1" />
+                          </div>
+                          <table
+                            class="table table-wrapper-scroll-y my-custom-scrollbar table-hover"
+                            *ngIf="screening_detail?.pocType === 'HbA1c'"
+                          >
+                            <tbody>
+                              <tr>
+                                <td>HbA1c</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.hba1c }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div
+                            class="row"
+                            *ngIf="screening_detail?.pocType === 'Malaria'"
+                          >
+                            <strong class="text-dark">{{
+                              screening_detail?.pocType
+                            }}</strong>
+                            <hr class="ms-2 h-1" />
+                          </div>
+                          <table
+                            class="table table-wrapper-scroll-y my-custom-scrollbar table-hover"
+                            *ngIf="screening_detail?.pocType === 'Malaria'"
+                          >
+                            <tbody>
+                              <tr>
+                                <td>Malaria</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.malaria }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div
+                            class="row"
+                            *ngIf="screening_detail?.pocType === 'Pregnancy'"
+                          >
+                            <strong class="text-dark">{{
+                              screening_detail?.pocType
+                            }}</strong>
+                            <hr class="ms-2 h-1" />
+                          </div>
+                          <table
+                            class="table table-wrapper-scroll-y my-custom-scrollbar table-hover"
+                            *ngIf="screening_detail?.pocType === 'Pregnancy'"
+                          >
+                            <tbody>
+                              <tr>
+                                <td>Pregnancy</td>
+                                <td>
+                                  {{ screening_detail?.pocResult?.pregnancy }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+
+                          <div
+                            class="row"
+                            *ngIf="screening_detail?.pocType === 'ECG'"
+                          >
+                            <strong class="text-dark">{{
+                              screening_detail?.pocType
+                            }}</strong>
+                            <hr class="ms-2 h-1" />
+                          </div>
+                          <table
+                            class="table table-wrapper-scroll-y my-custom-scrollbar table-hover"
+                            *ngIf="screening_detail?.pocType === 'ECG'"
+                          >
+                            <tbody>
+                              <tr>
+                                <td>ECG</td>
+                                <td>
+                                  <a
+                                    class="text-decoration-none text-success"
+                                    href="{{
+                                      screening_detail?.pocResult?.url
+                                    }}"
+                                    download
+                                    target="_blank"
+                                    >Download Report
+                                  </a>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div
+                            class="row"
+                            *ngIf="
+                              screening_detail?.pocType === 'Lipid_Profile'
+                            "
+                          >
+                            <strong class="text-dark">Lipid Profile</strong>
+                            <hr class="ms-2 h-1" />
+                          </div>
+                          <table
+                            class="table table-wrapper-scroll-y my-custom-scrollbar table-hover"
+                            *ngIf="
+                              screening_detail?.pocType === 'Lipid_Profile'
+                            "
+                          >
+                            <tbody>
+                              <tr>
+                                <td>HDL Cholesterol</td>
+
+                                <td>
+                                  {{
+                                    screening_detail?.pocResult?.hdl_cholesterol
+                                  }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>TC HDL</td>
+
+                                <td>
+                                  {{
+                                    screening_detail?.pocResult?.tc_hdl_ratio
+                                  }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>LDL Cholesterol</td>
+
+                                <td>
+                                  {{ screening_detail?.pocResult?.ldl }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Total Cholesterol</td>
+
+                                <td>
+                                  {{
+                                    screening_detail?.pocResult
+                                      ?.total_cholesterol
+                                  }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Triglycerides</td>
+
+                                <td>
+                                  {{
+                                    screening_detail?.pocResult?.triglycerides
+                                  }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Very Low Density Lipoprotein</td>
+
+                                <td>
+                                  {{ screening_detail?.pocResult?.vldl }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="timeline-item danger">
+                    <span class="date">01 Jun 2018</span>
+                    <h6>Blood checkup test</h6>
+                    <p>
+                      Lorem Ipsum is simply dummy text of the printing and
+                      typesetting industry.
+                    </p>
+                  </div>
+                  <div class="timeline-item dark pb-0">
+                    <span class="date">01 Jun 2018</span>
+                    <h6>Admit patient ward no. 21</h6>
+                    <span
+                      ><a href="javascript:void(0);" title=""
+                        >Katherine Lumaad</a
+                      >
+                      Oakland, CA</span
+                    >
+                    <div class="msg">
+                      <div class="timeline_img m-b-20">
+                        <img
+                          class="w-25"
+                          src="../assets/images/image-gallery/10.jpg"
+                          alt="Awesome Image"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+
+                  <!-- <div class="tab-pane" id="billings">
+                  <div>
+                    <h6>Payment Method</h6>
+                    <div class="payment-info">
+                      <h3 class="payment-name">
+                        <i class="fa fa-paypal"></i> PayPal ****2222
+                      </h3>
+                      <span>Next billing charged $29</span>
+                      <br />
+                      <em class="text-muted">Autopay on May 12, 2018</em>
+                      <a href="javascript:void(0);" class="edit-payment-info"
+                        >Edit Payment Info</a
+                      >
+                    </div>
+                    <p class="margin-top-30">
+                      <a href="javascript:void(0);"
+                        ><i class="fa fa-plus-circle"></i> Add Payment Info</a
+                      >
+                    </p>
+                  </div>
+
+                  <div>
+                    <h6>Billing History</h6>
+                    <table class="table table-wrapper-scroll-y my-custom-scrollbar billing-history">
+                      <thead class="sr-only">
+                        <tr>
+                          <th>Plan</th>
+                          <th>Amount</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <h3 class="billing-title">
+                              Basic Plan
+                              <span class="invoice-number">#LA35628</span>
+                            </h3>
+                            <span class="text-muted"
+                              >Charged at April 17, 2018</span
+                            >
+                          </td>
+                          <td class="amount">$29</td>
+                          <td class="action">
+                            <a href="javascript:void(0);">View</a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <h3 class="billing-title">
+                              Pro Plan
+                              <span class="invoice-number">#LA3599</span>
+                            </h3>
+                            <span class="text-muted"
+                              >Charged at March 18, 2018</span
+                            >
+                          </td>
+                          <td class="amount">$59</td>
+                          <td class="action">
+                            <a href="javascript:void(0);">View</a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <h3 class="billing-title">
+                              Platinum Plan
+                              <span class="invoice-number">#LA1245</span>
+                            </h3>
+                            <span class="text-muted"
+                              >Charged at Feb 02, 2018</span
+                            >
+                          </td>
+                          <td class="amount">$89</td>
+                          <td class="action">
+                            <a href="javascript:void(0);">View</a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <button type="button" class="btn btn-primary">
+                      Update
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary">
+                      Cancel
+                    </button>
+                  </div>
+                </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-admin-footer></app-admin-footer>
+  </div>
+  <!--  -->
+</div>
+<button
+  type="button"
+  class="btn btn-primary d-none"
+  data-bs-toggle="modal"
+  data-bs-target="#exampleModal"
+  #imageModal
+>
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-center">
+    <img class="w-75" [src]="currentSrc" alt="" />
+  </div>
+</div>

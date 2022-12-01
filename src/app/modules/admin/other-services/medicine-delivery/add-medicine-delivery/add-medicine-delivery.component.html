@@ -1,0 +1,353 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+
+      <div class="row clearfix">
+        <ngx-spinner
+          bdColor="rgba(51,51,51,0.8)"
+          size="medium"
+          color="#fff"
+          type="ball-scale-multiple"
+        >
+          <p style="font-size: 20px; color: white">Loading...</p>
+        </ngx-spinner>
+        <div class="card">
+          <div class="card-body">
+            <div class="form-validation">
+              <form
+                class="needs-validation"
+                class="needs-validation"
+                [formGroup]="deliveryForm"
+                (ngSubmit)="onAddDelivery()"
+              >
+                <div class="row">
+                  <ngx-spinner
+                    bdColor="rgba(51,51,51,0.8)"
+                    size="medium"
+                    color="#fff"
+                    type="ball-scale-multiple"
+                  >
+                    <p style="font-size: 20px; color: white">Loading...</p>
+                  </ngx-spinner>
+                  <div class="col-lg-12">
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label" for="medicine_name"
+                        >Customer Name
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="customen_name"
+                          placeholder="Enter Customer Name"
+                          formControlName="customer_name"
+                        />
+                        <div
+                          *ngIf="
+                            customer_name &&
+                            customer_name.invalid &&
+                            (customer_name.dirty || customer_name.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please enter Customer name.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="medicine_name"
+                        >Email<span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-6">
+                        <input
+                          type="email"
+                          class="form-control"
+                          placeholder="Enter Email"
+                          formControlName="customer_email"
+                        />
+                        <!-- <div class="invalid animated bounceIn text-danger" *ngIf="
+                        base_fare && base_fare.invalid && (base_fare.dirty || base_fare.touched)
+                      ">
+                      Please enter base fare.
+                    </div> -->
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label" for="slab1">
+                        Mobile Number
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="customer_mobile"
+                          placeholder="Enter Mobile Number"
+                          formControlName="customer_mobile"
+                        />
+                        <div
+                          class="invalid animated bounceIn text-danger"
+                          *ngIf="
+                            customer_mobile &&
+                            customer_mobile.invalid &&
+                            (customer_mobile.dirty || customer_mobile.touched)
+                          "
+                        >
+                          Please enter Valiid Mobile Number
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="slab2"
+                        >Address Lane-1
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-6">
+                        <input
+                          type="text-area"
+                          class="form-control"
+                          id="address_line1"
+                          placeholder="Enter Addres Lane-1"
+                          formControlName="address_line1"
+                        />
+                        <div
+                          class="invalid animated bounceIn text-danger"
+                          *ngIf="
+                            address_line1 &&
+                            address_line1.invalid &&
+                            (address_line1.dirty || address_line1.touched)
+                          "
+                        >
+                          Please enter Valid Address
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="slab2"
+                        >Address Lane-2
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-6">
+                        <input
+                          type="text-area"
+                          class="form-control"
+                          id="address_line2"
+                          placeholder="Enter Addres Lane-2"
+                          formControlName="address_line2"
+                        />
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label"
+                        >Country :<span class="text-danger">*</span></label
+                      >
+
+                      <div class="col-sm-6">
+                        <select
+                          formControlName="country"
+                          (change)="onCountrySelect()"
+                          class="default-select form-control wide mb-3"
+                        >
+                          <option value="0">Select Country</option>
+                          <option [value]="101">India</option>
+                        </select>
+                      </div>
+                      <div
+                        class="invalid animated bounceIn text-danger"
+                        *ngIf="
+                          country &&
+                          country.invalid &&
+                          (country.dirty || country.touched)
+                        "
+                      >
+                        Please enter Valid Country
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label"
+                        >State :<span class="text-danger">*</span></label
+                      >
+
+                      <div class="col-sm-6">
+                        <select
+                          formControlName="state"
+                          (change)="onStateSelect()"
+                          class="default-select form-control wide mb-3"
+                        >
+                          <option value="0">Select State</option>
+                          <option
+                            *ngFor="let state of stateLists"
+                            [value]="state.id"
+                          >
+                            {{ state.name }}
+                          </option>
+                        </select>
+                      </div>
+                      <div
+                        class="invalid animated bounceIn text-danger"
+                        *ngIf="
+                          state &&
+                          state.invalid &&
+                          (state.dirty || state.touched)
+                        "
+                      >
+                        Please enter Valid State
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="City"
+                        >City :
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-6">
+                        <select
+                          formControlName="city"
+                          class="default-select form-control wide mb-3"
+                        >
+                          <option value="0">Select City</option>
+                          <option *ngFor="let city of cities" [value]="city.id">
+                            {{ city.name }}
+                          </option>
+                        </select>
+                      </div>
+                      <div
+                        class="invalid animated bounceIn text-danger"
+                        *ngIf="
+                          state &&
+                          state.invalid &&
+                          (state.dirty || state.touched)
+                        "
+                      >
+                        Please enter Valid City
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="Pincode"
+                        >Pincode :
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="Pincode"
+                          placeholder="Enter Pincode name"
+                          required=""
+                          formControlName="pincode"
+                        />
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="Pincode"
+                        >Expected Delivery :
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="expected_delivery"
+                          placeholder="Enter Pincode name"
+                          required=""
+                          formControlName="expected_delivery"
+                        />
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="Pincode"
+                        >Select Medicines:
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-lg-6">
+                        <ng-multiselect-dropdown
+                          [placeholder]="'Select Department'"
+                          formControlName="medicine_ids"
+                          [data]="allMedicines"
+                          [settings]="medicineDepartmentDropdownSettings"
+                          class="ward-list"
+                          (onSelect)="onSelectMedicineDepartment($event)"
+                          (onDeSelect)="onDeSelectMedicineDepartment($event)"
+                        >
+                        </ng-multiselect-dropdown>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label">Status</label>
+
+                      <div class="col-sm-6">
+                        <select
+                          formControlName="status"
+                          class="default-select form-control wide mb-3"
+                        >
+                          <option value="-1">Select Status</option>
+                          <option [value]="0">New</option>
+                          <option [value]="1">In Progress</option>
+                          <option [value]="2">Completed</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="City"
+                        >Upload Prescription
+                      </label>
+                      <div class="col-sm-6">
+                        <button
+                          type="button"
+                          class="btn btn-secondary btn-sm"
+                          (click)="profileImageFile.click()"
+                        >
+                          Browse Image
+                        </button>
+                        <input
+                          accept=".jpg, .png, .jpeg"
+                          type="file"
+                          style="display: none"
+                          (change)="onPrescriptionUpload($event)"
+                          #profileImageFile
+                          formControlName="prescription"
+                        />
+                        <img
+                          [src]="prescriptionUrl"
+                          alt="Ambulance type image"
+                          class="img-fluid avatar-lg ml-5"
+                          style="width: 25%; margin-left: 10px"
+                          [hidden]="prescriptionUrl == undefined"
+                          *ngIf="prescriptionImg != ''"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3 row justify-content-right">
+                    <div class="col-sm-9">
+                      <a
+                        class="btn btn-danger w-30 float-right m-1"
+                        routerLink="/admin/medicine-delivery"
+                      >
+                        Cancel
+                      </a>
+                      <button
+                        type="submit"
+                        class="btn btn-primary w-30 float-right m-1"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

@@ -1,0 +1,585 @@
+<div id="wrapper" #fullScreen>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content" class="map-container">
+    <div class="container-fluid">
+      <div class="map-topwrapper">
+        <button class="btn btn-danger dashboard-btn" (click)="dashboardClick()">
+          GO TO DASHBOARD
+        </button>
+        <div class="maptop-innerbox">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control source-input"
+              placeholder="Enter Source"
+              (keydown.enter)="$event.preventDefault()"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="off"
+              (click)="onSourceChange($event)"
+              (mouseleave)="sourceLeave($event)"
+              #source
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control destination-input"
+              placeholder="Enter Destination"
+              (keydown.enter)="$event.preventDefault()"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="off"
+              #destination
+            />
+          </div>
+          <div class="map-info-box" *ngIf="dir">
+            <span>Estimated Distance: {{ estimatedDistance }} KM</span>
+            <span>Estimated Time: {{ estimatedTime }}</span>
+          </div>
+        </div>
+        <i
+          class="fa-solid fa-expand btn btn-default full-screen-btn"
+          [ngClass]="{
+            'fa-expand': !mapFullScreen,
+            'fa-compress': mapFullScreen
+          }"
+          ngbTooltip="{{ mapFullScreen ? 'Minimize Screen' : 'Full Screen' }}"
+          (click)="onMapFullScreenClick()"
+        ></i>
+      </div>
+      <div
+        *ngIf="isDetination"
+        class="map-sidepanelwrapper"
+        [ngClass]="{ 'close-sidepanelwrapper': !sideToggle }"
+      >
+        <header class="sideview-header">
+          <div class="row">
+            <aside class="col-md-9">
+              <h3>Patient details</h3>
+            </aside>
+            <aside class="col-md-3">
+              <a
+                href="javascript:void(0);"
+                class="slide-arrow"
+                [ngClass]="{ 'close-arrow': !sideToggle }"
+                (click)="sideToggle = !sideToggle"
+              ></a>
+            </aside>
+          </div>
+        </header>
+        <ngx-spinner
+          name="bookambulanceside"
+          bdOpacity="0.9"
+          bdColor="rgba(51,51,51,0.8)"
+          size="medium"
+          color="#fff"
+          type="ball-scale-multiple"
+          [fullScreen]="false"
+        >
+          <p style="font-size: 16px; color: #ffff26; margin-top: 70px">
+            {{ sidebarLoaderText }} ...
+          </p>
+        </ngx-spinner>
+        <form
+          class="row"
+          [formGroup]="customerPatientAddForm"
+          (ngSubmit)="onAddPatientCustomer()"
+        >
+          <div class="form-group col-md-12">
+            <fieldset [disabled]="!patientField" class="row">
+              <div class="form-group col-md-6">
+                <input
+                  type="text"
+                  formControlName="mobile"
+                  placeholder="Mobile"
+                  class="form-control"
+                  maxlength="10"
+                  (input)="mobileNumberPatch($event)"
+                />
+                <div
+                  *ngIf="
+                    mobile && mobile.invalid && (mobile.dirty || mobile.touched)
+                  "
+                  class="invalid animated bounceIn text-danger"
+                >
+                  Please enter mobile number.
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <input
+                  type="text"
+                  formControlName="email"
+                  placeholder="Email"
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group col-md-6">
+                <input
+                  type="text"
+                  placeholder="Name"
+                  formControlName="name"
+                  class="form-control"
+                />
+                <div
+                  *ngIf="name && name.invalid && (name.dirty || name.touched)"
+                  class="invalid animated bounceIn text-danger"
+                >
+                  Please enter Your name.
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Age"
+                  formControlName="age"
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group col-md-12">
+                <input
+                  type="text"
+                  placeholder="Address"
+                  formControlName="c_address"
+                  class="form-control p-1"
+                />
+              </div>
+              <div class="form-group col-xl-6 p-2">
+                <label class="fancy-radio">
+                  <input
+                    type="radio"
+                    formControlName="gender"
+                    [value]="1"
+                    required=""
+                  />
+                  <span><i></i>Male</span>
+                </label>
+                <label class="fancy-radio">
+                  <input
+                    type="radio"
+                    formControlName="gender"
+                    [value]="2"
+                    required=""
+                  />
+                  <span><i></i>Female</span>
+                </label>
+                <!-- <label class="fancy-radio">
+                  <input
+                    type="radio"
+                    formControlName="gender"
+                    [value]="0"
+                    required=""
+                  />
+                  <span><i></i>Other</span>
+                </label> -->
+              </div>
+              <div class="form-group col-sm-6">
+                <select
+                  formControlName="sufferingFrom"
+                  class="form-select form-control"
+                  (input)="onSufferingFromChange($event)"
+                >
+                  <option [value]="0">Select Suffering</option>
+                  <option
+                    *ngFor="let suffering of sufferingFromDetails"
+                    [value]="suffering.id"
+                  >
+                    {{ suffering.name }}
+                  </option>
+                </select>
+              </div>
+            </fieldset>
+          </div>
+          <div class="form-group" *ngIf="!showCustomerDeatils">
+            <button class="btn btn-danger btn-sm float-right" type="submit">
+              Save
+            </button>
+          </div>
+        </form>
+        <form
+          id="basic-form3"
+          [formGroup]="bookAmbulanceForm"
+          (ngSubmit)="submitPayment()"
+        >
+          <div class="row" *ngIf="showCustomerDeatils">
+            <div class="col-md-3 form-group">
+              <label class="form-label">PPE Include</label>
+              <input
+                type="checkbox"
+                class="m-2"
+                (click)="onPPEkitInclude($event)"
+                formControlName="ppe_include"
+              />
+            </div>
+            <div class="col-md-3 form-group" *ngIf="enableCount">
+              <input
+                type="number"
+                min="0"
+                class="form-control"
+                formControlName="ppe_count"
+              />
+            </div>
+            <div class="form-group col-md-12">
+              <select
+                class="form-select form-control"
+                (change)="onAmbulanceSelect()"
+                aria-label="Default select example"
+                formControlName="ambulance_id"
+              >
+                <option value="0">Select Ambulance</option>
+                <option
+                  [value]="ambulanceAvailable.id"
+                  *ngFor="let ambulanceAvailable of ambulanceLists"
+                >
+                  {{ ambulanceAvailable.registration_number }}(
+                  {{ ambulanceAvailable.typeName }}
+                  )
+
+                  <!-- +
+                    '(' +
+                    ambulanceAvailable?.ambulance_type_name +
+                    ')' -->
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row price_box" *ngIf="showFareDeatils">
+            <div class="form-group col-md-3">
+              <label for="">Base Fare</label>
+              <input
+                type="text"
+                formControlName="base_fare"
+                placeholder="Base Fare"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="">Distance Fare</label>
+              <input
+                type="text"
+                formControlName="distance_fare"
+                placeholder="Distance fare"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="">Platform Fare</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Platform Fare"
+                formControlName="platform_fare"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="">Tax</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="0.00"
+                formControlName="taxes"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="">PPE KIT</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="PPE_KIT"
+                formControlName="ppe_kit"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="">Total Fare</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Total fare"
+                formControlName="total_fare"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="">Driver Name</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Driver"
+                formControlName="driver"
+              />
+            </div>
+            <fieldset [disabled]="true" class="form-group col-md-3">
+              <label for="">Total Amount</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Round off"
+                formControlName="round_off"
+              />
+            </fieldset>
+            <div *ngIf="enablbookButton" class="form-group col-md-3">
+              <label for="">Discount</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Discount"
+                formControlName="discount_amount"
+                [value]="discount"
+              />
+            </div>
+            <div *ngIf="enablbookButton" class="form-group col-md-3">
+              <label for="">Other Charges</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Other Charges"
+                formControlName="other_charges"
+                [value]="otherCharges"
+              />
+            </div>
+            <div *ngIf="enablbookButton" class="form-group col-md-3">
+              <label for="">Net Payble</label>
+              <input
+                [disabled]="true"
+                type="text"
+                class="form-control"
+                placeholder="Net Payble"
+                formControlName="payble"
+              />
+            </div>
+          </div>
+          <div class="button-wr mb-3" *ngIf="showFareDeatils">
+            <button
+              [disabled]="enablbookButton"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+              (click)="onPay()"
+              class="btn btn-default m-2"
+            >
+              Pay
+            </button>
+            <button
+              type="submit"
+              [disabled]="!enablbookButton"
+              class="btn btn-success m-2"
+            >
+              Book Ambulance
+            </button>
+            <button type="button" class="btn btn-warning" (click)="onReset()">
+              Reset
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="map-bottomwrapper" *ngIf="otpDisplay">
+        <fieldset [disabled]="otpDisplay">
+          <div class="map-bottom-innerbox">
+            <div class="cross-button">
+              <i class="fa-solid fa-xmark" (click)="onReset()"></i>
+            </div>
+            <div class="map-bottom-otp">OTP</div>
+            <input
+              class="form-control"
+              type="text"
+              [value]="otp[0]"
+              maxlength="1"
+            />
+            <input
+              class="form-control"
+              type="text"
+              [value]="otp[1]"
+              maxlength="1"
+            />
+            <input
+              class="form-control"
+              type="text "
+              [value]="otp[2]"
+              maxlength="1"
+            />
+            <input
+              class="form-control"
+              type="text"
+              [value]="otp[3]"
+              maxlength="1"
+            />
+          </div>
+        </fieldset>
+      </div>
+      <agm-map
+        [latitude]="latitude"
+        [longitude]="longitude"
+        [zoom]="zoom"
+        [disableDefaultUI]="true"
+        [usePanning]="true"
+        (mapReady)="onMapReady($event)"
+      >
+        <agm-direction
+          *ngIf="dir"
+          [origin]="dir.origin"
+          [destination]="dir.destination"
+          [markerOptions]="dir.markerOptions"
+          [renderOptions]="dir.renderOptions"
+        >
+        </agm-direction>
+      </agm-map>
+      <!-- Payment save popup -->
+      <div
+        class="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Payment</h5>
+              <button
+                type="button"
+                class="btn-close"
+                #closeModal
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-validation">
+                <form
+                  id="basic-form"
+                  [formGroup]="makePaymentForm"
+                  (ngSubmit)="addPayment()"
+                >
+                  <div class="mb-3 row">
+                    <div class="col-xl-9">
+                      <label class="fancy-radio">
+                        <input
+                          type="radio"
+                          (change)="onPymentMethodChange()"
+                          formControlName="payment_method"
+                          value="cash"
+                          required=""
+                          data-parsley-multiple="gender"
+                        />
+                        <span><i></i>Cash</span>
+                      </label>
+                      <label class="fancy-radio">
+                        <input
+                          type="radio"
+                          (change)="onPymentMethodChange()"
+                          formControlName="payment_method"
+                          value="card"
+                          required=""
+                          data-parsley-multiple="gender"
+                        />
+                        <span><i></i>Card</span>
+                      </label>
+                      <label class="fancy-radio">
+                        <input
+                          type="radio"
+                          (change)="onPymentMethodChange()"
+                          formControlName="payment_method"
+                          value="upi"
+                          required=""
+                          data-parsley-multiple="gender"
+                        />
+                        <span><i></i>UPI</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <div class="col-xl-9">
+                      <div class="row">
+                        <fieldset [disabled]="true" class="col-xl-4">
+                          <label for="exampleInputPassword1" class="form-label"
+                            >Total Amount</label
+                          >
+                          <input
+                            [disabled]="true"
+                            type="text"
+                            formControlName="amount"
+                            placeholder="Enter Amount"
+                            class="form-control"
+                          />
+                        </fieldset>
+                        <div class="col-xl-4">
+                          <label for="exampleInputPassword1" class="form-label"
+                            >Discount</label
+                          >
+                          <input
+                            type="number"
+                            [min]="0"
+                            [max]="this.makePaymentForm.value['amount']"
+                            formControlName="discount"
+                            placeholder="Enter Amount"
+                            class="form-control"
+                            [value]="discount"
+                            (input)="onDiscountChange($event)"
+                          />
+                        </div>
+                        <div class="col-xl-4">
+                          <label for="exampleInputPassword1" class="form-label"
+                            >Other Charges</label
+                          >
+                          <input
+                            type="number"
+                            [min]="0"
+                            formControlName="other_charges"
+                            placeholder="Enter Amount"
+                            class="form-control"
+                            (input)="onOtherChargesChange($event)"
+                            [value]="otherCharges"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <fieldset
+                      [disabled]="true"
+                      class="col-xl-9"
+                      *ngIf="showCash"
+                    >
+                      <label for="exampleInputPassword1" class="form-label"
+                        >Net Payble</label
+                      >
+                      <input
+                        [disabled]="true"
+                        type="text"
+                        formControlName="cash"
+                        placeholder="Enter cash"
+                        class="form-control"
+                      />
+                    </fieldset>
+                    <div class="col-xl-9" *ngIf="showCard">
+                      <label for="exampleInputPassword1" class="form-label"
+                        >Receipt No.</label
+                      >
+                      <input
+                        type="text"
+                        formControlName="receipt_no"
+                        placeholder="Enter Receipt number"
+                        class="form-control"
+                      />
+                    </div>
+                    <div class="col-xl-9" *ngIf="showUpi">
+                      <img src="assets/Image/payment.jpg" alt="" />
+                    </div>
+                  </div>
+
+                  <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                    <button type="submit" class="btn btn-primary">Save</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

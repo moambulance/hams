@@ -1,0 +1,22 @@
+.w-5 {
+  width: 5%;
+}
+.hr-help {
+  width: 7%;
+  color: rgb(138, 16, 36);
+  border: solid 2px;
+}
+.hr-heading {
+  width: 50%;
+  color: rgb(16, 44, 138);
+  border: solid 2px;
+  justify-content: center;
+  align-items: center;
+}
+a:hover {
+  color: rgb(45, 176, 180);
+}
+a,
+a:hover {
+  text-decoration: none;
+}

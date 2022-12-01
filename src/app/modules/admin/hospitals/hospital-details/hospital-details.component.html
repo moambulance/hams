@@ -1,0 +1,231 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+
+      <div class="row clearfix">
+        <div class="card">
+          <div class="card-header border-0 flex-wrap align-items-start">
+            <div class="col-md-8">
+              <div class="user d-sm-flex d-block pe-md-5 pe-0">
+                <img src="{{ baseUrl }}{{ hospitalDetails?.logo }}" alt="" />
+                <div class="row">
+                  <h5 class="mb-1 font-w600">
+                    <a href="javascript:void(0);">{{
+                      hospitalDetails?.name
+                    }}</a>
+                  </h5>
+                  <div class="listline-wrapper mb-2">
+                    <span class="item"
+                      ><i class="far fa-envelope"></i
+                      >{{ hospitalDetails?.email }}</span
+                    >
+                    <span class="item"
+                      ><i class="far fa-id-badge"></i>hospital</span
+                    >
+                    <span class="item"
+                      ><i class="fas fa-map-marker-alt"></i>India</span
+                    >
+                  </div>
+                  <!-- <p>
+                    A data analyst collects, interprets and visualizes data to
+                    uncover insights. A data analyst assigns a numerical value
+                    to business functions so performance.
+                  </p> -->
+                </div>
+              </div>
+            </div>
+            <!-- <div class="col-md-4 col-12 text-end">
+              <a href="javascript:void(0);" class="btn btn-sm btn-primary me-2"
+                >Ask</a
+              >
+              <a href="javascript:void(0);" class="btn btn-sm btn-info">Hire</a>
+              <div class="mt-3">
+                <h6 class="text-start">
+                  Progress
+                  <span class="float-end">85%</span>
+                </h6>
+                <div class="progress">
+                  <div
+                    class="progress-bar bg-danger progress-animated"
+                    style="width: 85%; height: 6px"
+                    role="progressbar"
+                  >
+                    <span class="sr-only">60% Complete</span>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+          </div>
+          <div class="card-body">
+            <h4 class="fs-20">Description</h4>
+            <div class="row">
+              <div class="col-xl-6 col-md-6">
+                <p class="font-w600 mb-4 d-flex">
+                  <span class="custom-label-2 m-2">Full Name : </span
+                  ><span class="font-w400 m-2">{{
+                    hospitalDetails?.name
+                  }}</span>
+                </p>
+                <p class="font-w600 mb-4 d-flex">
+                  <span class="custom-label-2 m-2">Email : </span
+                  ><span class="font-w400 m-2">{{
+                    hospitalDetails?.email
+                  }}</span>
+                </p>
+                <p class="font-w600 mb-4 d-flex">
+                  <span class="custom-label-2 m-2">Contact No : </span
+                  ><span class="font-w400 m-2">{{
+                    hospitalDetails?.mobile
+                  }}</span>
+                </p>
+                <p class="font-w600 mb-4 d-flex">
+                  <span class="custom-label-2 m-2"
+                    >Emergency Doctor Name : </span
+                  ><span class="font-w400 m-2">{{
+                    hospitalDetails?.emergency_doctor_name
+                  }}</span>
+                </p>
+                <p class="font-w600 mb-4 d-flex">
+                  <span class="custom-label-2 m-2">Emergency Number : </span
+                  ><span class="font-w400 m-2">{{
+                    hospitalDetails?.emergency_number
+                  }}</span>
+                </p>
+                <p class="font-w600 mb-4 d-flex">
+                  <span class="custom-label-2 m-2">Address : </span
+                  ><span class="font-w400 m-2"
+                    >{{ hospitalDetails?.address1.address }},
+                    {{ hospitalDetails?.address1.pincode }},
+                    {{ hospitalDetails?.address1.city }}</span
+                  >
+                </p>
+                <!-- <p class="font-w600 mb-4 d-flex">
+                    <span class="custom-label-2 m-2">Departments: </span
+                    ><span class="font-w400 m-2">{{
+                      hospitalDetails?.adhar_no
+                    }}</span>
+                  </p> -->
+                <p class="font-w600 mb-4 d-flex">
+                  <span class="custom-label-2 m-2">Status: </span
+                  ><span
+                    [class]="
+                      hospitalDetails?.is_active == 1
+                        ? 'font-w400 m-2 text-success'
+                        : 'font-w400 m-2 text-danger'
+                    "
+                    >{{
+                      hospitalDetails?.is_active == 1 ? 'Active' : 'Inactive'
+                    }}</span
+                  >
+                </p>
+                <p class="font-w600 mb-4 d-flex">
+                  <span class="custom-label-2 m-2">Approved: </span>
+                  <span
+                    [class]="
+                      hospitalDetails?.is_approved == 1
+                        ? 'font-w400 m-2 text-success'
+                        : 'font-w400 m-2 text-danger'
+                    "
+                    >{{
+                      hospitalDetails?.is_approved == 1 ? 'Yes' : 'No'
+                    }}</span
+                  >
+                </p>
+                <!-- <p class="font-w600 mb-2 d-flex">
+                  <span class="custom-label-2 m-2">Preferred Location : </span
+                  ><span class="font-w400 m-2">USA</span>
+                </p> -->
+                <!-- <p class="font-w600 mb-4 d-flex">
+                    <span class="custom-label-2 m-2">FCM: </span
+                    ><span class="font-w400 m-2"> </span>
+                  </p> -->
+                <p class="font-w600 mb-4 d-flex">
+                  <span class="custom-label-2 m-2">Country: </span
+                  ><span class="font-w400 m-2"> India </span>
+                </p>
+                <p class="font-w600 mb-4 d-flex">
+                  <span class="custom-label-2 m-2">Join Date: </span
+                  ><span class="font-w400 m-2">{{
+                    hospitalDetails?.cretaed_on.slice(0, 10)
+                  }}</span>
+                </p>
+                <!-- <p class="font-w600 mb-2 d-flex">
+                  <span class="custom-label-2 m-2">Key Skills: </span
+                  ><span class="font-w400 m-2"
+                    >Good Communication, Planning and research skills</span
+                  >
+                </p> -->
+              </div>
+              <!-- <div class="col-xl-6 col-md-6">
+                  <p class="font-w600 mb-2 d-flex">
+                    <span class="custom-label-2 m-2 pt-7">Aadhaar Front:</span>
+                    <img
+                      src="{{ baseUrl }}{{
+                        hospitalDetails?.adhar_front_image
+                      }}"
+                      alt=""
+                      class="cardImg rounded"
+                    />
+                  </p>
+                  <p class="font-w600 mb-2 d-flex">
+                    <span class="custom-label-2 m-2 pt-7">Aadhaar Back:</span>
+                    <img
+                      src="{{ baseUrl }}{{ hospitalDetails?.adhar_back_image }}"
+                      alt=""
+                      class="cardImg rounded"
+                    />
+                  </p>
+                  <p class="font-w600 mb-2 d-flex">
+                    <span class="custom-label-2 m-2 pt-7">Driving License:</span>
+                    <img
+                      src="{{ baseUrl }}{{ hospitalDetails?.dl_image }}"
+                      alt=""
+                      class="cardImg rounded"
+                    />
+                  </p>
+                </div> -->
+            </div>
+          </div>
+          <!-- <div class="card-footer d-flex flex-wrap justify-content-between">
+            <div class="mb-md-2 mb-3">
+              <span class="d-block mb-1"
+                ><i class="fas fa-circle me-2"></i>Currently Working at
+                <strong>Abcd Pvt Ltd</strong></span
+              >
+              <span
+                ><i class="fas fa-circle me-2"></i>3 Yrs Of Working Experience
+                in <strong>Abcd Pvt Ltd</strong></span
+              >
+            </div>
+            <div>
+              <a
+                href="javascript:void(0);"
+                class="btn btn-primary btn-md me-2 mb-2"
+                ><i class="fas fa-download me-2"></i>Download Ruseme</a
+              >
+              <a
+                href="javascript:void(0);"
+                class="btn btn-warning btn-md me-2 mb-2"
+                ><i class="fas fa-share-alt me-2"></i>Share Profile</a
+              >
+              <a
+                href="javascript:void(0);"
+                class="btn btn-info btn-md me-2 mb-2"
+                ><i class="fas fa-phone-alt me-2"></i>Contact</a
+              >
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

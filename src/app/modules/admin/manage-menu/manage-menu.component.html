@@ -1,0 +1,241 @@
+<div id="wrapper">
+    <app-admin-navbar></app-admin-navbar>
+     <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+    <div id="main-content">
+        <div class="container-fluid">
+            <app-admin-breadcrumb [breadCrumbData]="breadCrumbData"></app-admin-breadcrumb>
+            <app-admin-spinner></app-admin-spinner>
+
+            <div class="row" id="menu-form">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <button class="btn btn-primary float-right mb-3" (click)="openAddMenuForm()">Add Menu</button>
+                </div>
+            </div>
+            <div class="card collapse" [@collapse]="collapse">
+                <div class="card-body">
+                    <div class="basic-form">
+                        <form [formGroup]="menuForm" (ngSubmit)="saveMenu()">
+                            <div class="row mb-3">
+                                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                    <label class="col-form-label">Name: <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm m-1" formControlName="name"
+                                        placeholder="Enter Name"
+                                        [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                        Please enter name.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                    <label class="col-form-label">Display Name: <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm m-1"
+                                        formControlName="displayLabel" placeholder="Enter Display Name"
+                                        [ngClass]="{ 'is-invalid': submitted && f.displayLabel.errors }" />
+                                    <div *ngIf="submitted && f.displayLabel.errors" class="invalid-feedback">
+                                        Please enter display name.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                    <label class="col-form-label">Router Link: <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm m-1"
+                                        formControlName="routerLink" placeholder="Enter Router Link"
+                                        [ngClass]="{ 'is-invalid': submitted && f.routerLink.errors }" 
+                                        [readonly]="f.is_submenu.value"
+                                    />
+                                    <div *ngIf="submitted && f.routerLink.errors" class="invalid-feedback">
+                                        Please enter router link.
+                                    </div>
+                                    <div *ngIf="f.is_submenu.value" class="text-warning">
+                                        This Filed Has been disabled as you have selected to add sub menu
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                    <label class="col-form-label">Icon: <span class="text-danger">*</span></label>
+                                    <i [class]="f.icon.value + ' ms-3'"></i>
+                                    <input type="text" 
+                                        class="form-control form-control-sm m-1" 
+                                        formControlName="icon"
+                                        placeholder="Enter icon class name"
+                                        [ngClass]="{ 'is-invalid': submitted && f.icon.errors }" />
+                                    <div *ngIf="submitted && f.icon.errors" class="invalid-feedback">
+                                        Please enter icon class name
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                    <label class="col-form-label me-3">{{f.is_active.value ? 'Active' : 'InActive'}}:</label>
+                                    <label class="switch">
+                                        <input type="checkbox" formControlName="is_active" [checked]="f.is_active" />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                    <label class="col-form-label">Menu Type: <span class="text-danger">*</span></label>
+                                    <select type="text" class="form-control" formControlName="type">
+                                        <option [ngValue]="1">Admin</option>
+                                        <option [ngValue]="2">Hospital</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                    <label>
+                                        <input type="checkbox"
+                                           name="isSubMenu"
+                                           formControlName="is_submenu"
+                                           (change)="OnAddSubmenuSelected($event)"
+                                        />
+                                        Add Sub Menu(Navigation link will be removed from menu)*
+                                    </label>
+                                    <button type="button" class="btn btn-success ms-3" 
+                                        (click)="addSubMenuField()" *ngIf="f.is_submenu.value">
+                                        <i class="fa-regular fa-square-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <ng-container formArrayName="subMenus">
+                                <div class="row mb-3"
+                                    [formGroupName]="i" 
+                                    *ngFor="let subMenu of f.subMenus.controls; let i = index;">
+                                    <div class="col-md-11 col-lg-11 col-sm-11 left-box-submenu">
+                                        <div class="row">
+                                            <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                                <label class="col-form-label">Name: <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm m-1" formControlName="name"
+                                                    placeholder="Enter Sub Menu Name"
+                                                    [ngClass]="{ 'is-invalid': submitted && subMenus.controls[i]?.get('name')?.errors }" />
+                                                <div *ngIf="submitted && subMenus.controls[i]?.get('name')?.errors" class="invalid-feedback">
+                                                    Please enter name.
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                                <label class="col-form-label">Display Name: <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm m-1"
+                                                    formControlName="displayLabel" placeholder="Enter Display Name"
+                                                    [ngClass]="{ 'is-invalid': submitted && subMenus.controls[i]?.get('displayLabel')?.errors }" />
+                                                <div *ngIf="submitted && subMenus.controls[i]?.get('displayLabel')?.errors" class="invalid-feedback">
+                                                    Please enter display name.
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                                <label class="col-form-label">Router Link: <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm m-1"
+                                                    formControlName="routerLink" placeholder="Enter Router Link"
+                                                    [ngClass]="{ 'is-invalid': submitted && subMenus.controls[i]?.get('routerLink')?.errors }" />
+                                                <div *ngIf="submitted && subMenus.controls[i]?.get('routerLink')?.errors" class="invalid-feedback">
+                                                    Please enter router link.
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                                                <label class="col-form-label">Icon: <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control form-control-sm m-1" formControlName="icon"
+                                                    placeholder="Enter icon class name"
+                                                    [ngClass]="{ 'is-invalid': submitted && subMenus.controls[i]?.get('icon')?.errors }" />
+                                                <div *ngIf="submitted && subMenus.controls[i]?.get('icon')?.errors" class="invalid-feedback">
+                                                    Please enter icon class name
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 col-lg-1 col-sm-1">
+                                        <button type="button" class="btn btn-danger"
+                                            (click)="removeSubMenuField(i)"
+                                            [disabled]="buttonType == 'Save'">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+                                    <button type="submit" class="btn btn-primary m-1">
+                                        {{ buttonType }}
+                                    </button>
+                                    <button type="reset" (click)="onCancel()"
+                                        class="btn btn-warning m-1">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-12 col-lg-12 col-sm-12">
+                    <div class="card" *ngFor="let menu of menuList; let i = index;">
+                        <div class="card-head menu-head">
+                            <h5 class="menu-header">
+                                {{ i + 1 }}. <i [class]="menu.icon"></i> 
+                                <span class="ms-3 me-3">{{ menu.display_name }}</span>
+                                <span class="badge" 
+                                    [ngClass]="{'badge-primary': menu.type == 1, 'badge-success': menu.type == 2}">
+                                    {{menu.type == 1 ? 'Admin' : 'Hospital'}}
+                                </span>
+                                <label class="col-form-label ms-3 me-3">{{menu.is_active == "1" ? 'Active' : 'InActive'}}:</label>
+                                <label class="switch">
+                                    <input type="checkbox" 
+                                        [(ngModel)]="menu.isActive" 
+                                        [checked]="menu.isActive" 
+                                        (change)="onMenuStatusChange($event, i)"
+                                    />
+                                    <span class="slider round"></span>
+                                </label>
+                               
+                                <i class="icon-pencil btn btn-warning ms-3 me-3" 
+                                    ngbTooltip="Edit Menu"
+                                    (click)="onEditMenuClick(i)"></i>
+                                <i class="fa-solid fa-eye btn" 
+                                    [ngClass]="{
+                                        'btn-primary fa-eye': !menu.showSubMenu, 
+                                        'btn-danger fa-delete-left': menu.showSubMenu
+                                    }"
+                                    (click)="onViewSubMenu(i)"
+                                    *ngIf="menu.is_submenu == 1">
+                                </i>
+                            </h5>
+                        </div>
+                        <div class="card-body" *ngIf="menu.showSubMenu">
+                            <p *ngIf="menu.subMenu.length == 0">No Sub Menu Present</p>
+                            <div class="table-responsive table-scroll" *ngIf="menu.subMenu.length > 0">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Sub Menu</th>
+                                            <th>Icon</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let subMenu of menu.subMenu; let j = index;">
+                                            <td>{{ j + 1 }}</td>
+                                            <td>
+                                                {{ subMenu.display_name }} 
+                                            </td>
+                                            <td><i [class]="subMenu.icon"></i></td>
+                                            <td>
+                                                <label class="col-form-label ms-3 me-3">{{subMenu.is_active == "1" ? 'Active' : 'InActive'}}:</label>
+                                                <label class="switch">
+                                                    <input type="checkbox" 
+                                                        [(ngModel)]="subMenu.isActive" 
+                                                        [checked]="subMenu.isActive" 
+                                                        (change)="onSubMenuStatusChange($event, i, j)"
+                                                    />
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

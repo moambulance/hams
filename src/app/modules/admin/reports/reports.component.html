@@ -1,0 +1,155 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="card">
+        <div class="body">
+          <div class="row m-3">
+            <div class="col-md-2 select-menu">
+              <ng-select
+                class="custom"
+                [items]="hospitalList"
+                bindLabel="name"
+                [placeholder]="!selectedHospital ? 'Select Hospital' : ''"
+                [(ngModel)]="selectedHospital"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-2">
+              <ng-select
+                class="custom"
+                [items]="ambulanceTypes"
+                bindLabel="name"
+                [placeholder]="
+                  !selectedAmbulanceType ? 'Select Ambulance Type' : ''
+                "
+                [(ngModel)]="selectedAmbulanceType"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-2">
+              <ng-select
+                class="custom"
+                [items]="sufferingFrom"
+                bindLabel="name"
+                [placeholder]="
+                  !selectedSufferingFrom ? 'Select Suffering From' : ''
+                "
+                [(ngModel)]="selectedSufferingFrom"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-2">
+              <ng-select
+                class="custom"
+                [items]="hospitalTypes"
+                bindLabel="name"
+                [placeholder]="
+                  !selectedHospitalType ? 'Select Hospital Type' : ''
+                "
+                [(ngModel)]="selectedHospitalType"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-2">
+              <ng-select
+                class="custom"
+                [items]="driverList"
+                bindLabel="name"
+                [placeholder]="!selectedDriver ? 'Select Driver' : ''"
+                [(ngModel)]="selectedDriver"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-2">
+              <ng-select
+                class="custom"
+                [items]="ambulanceList"
+                bindLabel="name"
+                [placeholder]="!selectedAmbulance ? 'Select Ambulance' : ''"
+                [(ngModel)]="selectedAmbulance"
+              >
+              </ng-select>
+            </div>
+          </div>
+          <div class="row m-3">
+            <div class="col-md-2">
+              <ng-select
+                class="custom"
+                [items]="hospitalServiceList"
+                bindLabel="name"
+                [placeholder]="
+                  !selectedHospitalService ? 'Select Hospital Service' : ''
+                "
+                [(ngModel)]="selectedHospitalService"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-2">
+              <ng-select
+                class="custom"
+                [items]="patientList"
+                bindLabel="name"
+                [placeholder]="!selectedPatient ? 'Select Patient' : ''"
+                [(ngModel)]="selectedPatient"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-2">
+              <ng-select
+                class="custom"
+                [items]="hospitalDepartmentList"
+                bindLabel="name"
+                [placeholder]="
+                  !selectedHospitalDepartment
+                    ? 'Select Hospital Department'
+                    : ''
+                "
+                [(ngModel)]="selectedHospitalDepartment"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-2">
+              <ng-select
+                class="custom"
+                [items]="specialistList"
+                bindLabel="name"
+                [placeholder]="!selectedSpecialist ? 'Select Specialist' : ''"
+                [(ngModel)]="selectedSpecialist"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-2">
+              <ng-select
+                class="custom"
+                [items]="testList"
+                bindLabel="name"
+                [placeholder]="!selectedTest ? 'Select Test Type' : ''"
+                [(ngModel)]="selectedTest"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-2">
+              <ng-select
+                class="custom"
+                [items]="serviceList"
+                bindLabel="name"
+                [placeholder]="!selectedService ? 'Select Service Type' : ''"
+                [(ngModel)]="selectedService"
+              >
+              </ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

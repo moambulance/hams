@@ -1,0 +1,277 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+
+      <div class="row clearfix">
+        <div class="card">
+          <div class="card-body">
+            <div class="form-validation">
+              <form
+                class="needs-validation"
+                class="needs-validation"
+                [formGroup]="customerAddForm"
+                (ngSubmit)="onAddCustomer()"
+              >
+                <div class="row">
+                  <ngx-spinner
+                    bdColor="rgba(51,51,51,0.8)"
+                    size="medium"
+                    color="#fff"
+                    type="ball-scale-multiple"
+                  >
+                    <p style="font-size: 20px; color: white">Loading...</p>
+                  </ngx-spinner>
+                  <div class="col-lg-12">
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label" for="hospital_name"
+                        >First Name
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="hospital_name"
+                          placeholder="Enter first name"
+                          formControlName="first_name"
+                        />
+                        <!-- <div *ngIf="name && name.invalid && (name.dirty || name.touched)"
+                    class="invalid animated bounceIn text-danger">
+                    Please enter Ambulance Type name.
+                  </div> -->
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="hospital_name"
+                        >Last Name <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Enter last name"
+                          formControlName="last_name"
+                        />
+                        <!-- <div class="invalid animated bounceIn text-danger" *ngIf="
+                      base_fare && base_fare.invalid && (base_fare.dirty || base_fare.touched)
+                    ">
+                    Please enter base fare.
+                  </div> -->
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="slab1"
+                        >Country code
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="slab1"
+                          placeholder="Enter Country code"
+                          formControlName="country_code"
+                        />
+                        <!-- <div class="invalid animated bounceIn text-danger" *ngIf="
+                      slab1 && slab1.invalid && (slab1.dirty || slab1.touched)
+                    ">
+                    Please enter Per KM Charge Slab1
+                  </div> -->
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="slab2"
+                        >Email
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="slab2"
+                          placeholder="Enter Email"
+                          formControlName="email"
+                        />
+                        <!-- <div class="invalid animated bounceIn text-danger" *ngIf="
+                      slab2 &&
+                      slab2.invalid &&
+                      (slab2.dirty || slab2.touched)
+                    ">
+                    Please enter Per KM Charge Slab2
+                  </div> -->
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="oxygen"
+                        >Phone
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="oxygen"
+                          placeholder="Enter Phone number"
+                          required=""
+                          formControlName="phone"
+                        />
+                        <div
+                          *ngIf="
+                            phone &&
+                            phone.invalid &&
+                            (phone.dirty || phone.touched)
+                          "
+                          class="invalid animated bounceIn text-danger"
+                        >
+                          Please Enter Your Phone Number
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="Municipality"
+                        >Latitude
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="Municipality"
+                          placeholder="Enter Latitude"
+                          required=""
+                          formControlName="latitude"
+                        />
+                        <!-- <div *ngIf="
+                      ppe_kit && ppe_kit.invalid && (ppe_kit.dirty || ppe_kit.touched)
+                    " class="invalid animated bounceIn text-danger">
+                    Please enter PPE KIT charges.
+                  </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="Municipality"
+                        >Longitude
+                        <span class="text-danger">*</span>
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="Municipality"
+                          placeholder="Enter Longitude"
+                          required=""
+                          formControlName="longitude"
+                        />
+                        <!-- <div *ngIf="
+                      ppe_kit && ppe_kit.invalid && (ppe_kit.dirty || ppe_kit.touched)
+                    " class="invalid animated bounceIn text-danger">
+                    Please enter PPE KIT charges.
+                  </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="Municipality"
+                        >Current Address
+                      </label>
+                      <div class="col-sm-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="Municipality"
+                          placeholder="Enter Current Address"
+                          required=""
+                          formControlName="c_address"
+                        />
+                        <!-- <div *ngIf="
+                      ppe_kit && ppe_kit.invalid && (ppe_kit.dirty || ppe_kit.touched)
+                    " class="invalid animated bounceIn text-danger">
+                    Please enter PPE KIT charges.
+                  </div> -->
+                      </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                      <label class="col-sm-3 col-form-label">Status</label>
+
+                      <div class="col-sm-6">
+                        <select
+                          formControlName="status"
+                          class="default-select form-control wide mb-3"
+                        >
+                          <option value="-1">Select State</option>
+                          <option [ngValue]="1">Active</option>
+                          <option [ngValue]="0">In active</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-lg-3 col-form-label" for="City"
+                        >Image
+                      </label>
+                      <div class="col-sm-9">
+                        <button
+                          type="button"
+                          class="btn btn-info btn-sm"
+                          (click)="profileImageFile.click()"
+                        >
+                          Browse Image
+                        </button>
+                        <input
+                          accept=".jpg, .png, .jpeg"
+                          type="file"
+                          style="display: none"
+                          (change)="onProfileImageChange($event)"
+                          #profileImageFile
+                          formControlName="profile_image"
+                        />
+                        <img
+                          [src]="profileImageBrowse"
+                          alt="Customer image"
+                          class="img-fluid avatar-lg ml-5"
+                          style="width: 25%; margin-left: 10px"
+                          [hidden]="profileImageBrowse == undefined"
+                          *ngIf="profileImageBrowse != ''"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3 row justify-content-right">
+                    <div class="col-lg-4">
+                      <span class="text-success">{{ message }}</span>
+                    </div>
+                    <div class="col-lg-8">
+                      <a
+                        *ngIf="customerId !== 0"
+                        class="btn btn-danger w-30 float-right m-1"
+                        routerLink="/admin/customers"
+                      >
+                        Cancel
+                      </a>
+                      <button
+                        type="submit"
+                        class="btn btn-primary w-30 float-right m-1"
+                        [disabled]="phone.invalid"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

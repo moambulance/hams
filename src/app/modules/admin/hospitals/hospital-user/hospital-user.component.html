@@ -1,0 +1,519 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <!-- row -->
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="row clearfix">
+        <div class="card">
+          <div class="header float-right">
+            <div
+              id="addrowExample_filter"
+              class="dataTables_filter float-right m-2"
+            >
+              <input
+                type="search"
+                class="form-control float-right"
+                placeholder="Search Here"
+                [(ngModel)]="searchText"
+                aria-controls="addrowExample"
+              />
+            </div>
+            <button
+              class="btn btn-warning float-right m-2 text-white"
+              (click)="exportExcel()"
+            >
+              <i class="fa-solid fa-file-excel"></i>
+              Export to Excel
+            </button>
+            <button
+              class="btn btn-primary m-2"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasScrolling"
+              aria-controls="offcanvasScrolling"
+            >
+              Add Hospital User
+            </button>
+          </div>
+
+          <div class="body">
+            <div
+              class="offcanvas offcanvas-end w-30 m-2 p-2"
+              data-bs-scroll="true"
+              data-bs-backdrop="false"
+              tabindex="-1"
+              id="offcanvasScrolling"
+              aria-labelledby="offcanvasScrollingLabel"
+            >
+              <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">
+                  Hospital User Form
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close text-reset"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"
+                ></button>
+              </div>
+
+              <div class="offcanvas-body body">
+                <div class="form-validation mt-2">
+                  <form
+                    class="needs-validation"
+                    [formGroup]="hospitalUserForm"
+                    (ngSubmit)="addHospitalUser()"
+                  >
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="mb-3 row">
+                          <label class="col-sm-3 col-form-label"
+                            >Hospital</label
+                          >
+                          <div class="col-sm-6">
+                            <select
+                              formControlName="hospital_id"
+                              class="default-select form-control wide mb-3"
+                            >
+                              <option value="">Select Hospital</option>
+                              <option
+                                *ngFor="let hospital of hospitalsList"
+                                [value]="hospital.id"
+                              >
+                                {{ hospital.name }}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="mb-3 row">
+                          <label class="col-lg-3 col-form-label"
+                            >Username
+                            <span class="text-danger">*</span>
+                          </label>
+                          <div class="col-lg-6">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="hospital_name"
+                              placeholder="Enter  Username"
+                              formControlName="username"
+                            />
+                            <div
+                              *ngIf="
+                                username &&
+                                username.invalid &&
+                                (username.dirty || username.touched)
+                              "
+                              class="invalid animated bounceIn text-danger"
+                            >
+                              Please enter Username.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mb-3 row">
+                          <label class="col-lg-3 col-form-label"
+                            >Password
+                            <span class="text-danger">*</span>
+                          </label>
+                          <div class="col-lg-6">
+                            <input
+                              type="taxt"
+                              class="form-control"
+                              id="hospital_name"
+                              placeholder="Enter  password"
+                              formControlName="password"
+                            />
+                            <div
+                              *ngIf="
+                                password &&
+                                password.invalid &&
+                                (password.dirty || password.touched)
+                              "
+                              class="invalid animated bounceIn text-danger"
+                            >
+                              Please enter Password.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <label class="col-form-label col-sm-3 pt-0"
+                            >Role</label
+                          >
+                          <div class="col-sm-9">
+                            <div class="form-check">
+                              <input
+                                class="form-check-input"
+                                type="radio"
+                                checked
+                                formControlName="role"
+                                id="role1"
+                                name="role"
+                                [value]="1"
+                              />
+                              <label class="form-check-label" for="role1">
+                                Super User
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input
+                                class="form-check-input"
+                                type="radio"
+                                name="role"
+                                id="role"
+                                formControlName="role"
+                                [value]="2"
+                              />
+                              <label class="form-check-label" for="role">
+                                User
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input
+                                class="form-check-input"
+                                type="radio"
+                                name="role"
+                                id="role"
+                                formControlName="role"
+                                [value]="3"
+                              />
+                              <label class="form-check-label" for="role">
+                                Kiosks
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input
+                                class="form-check-input"
+                                type="radio"
+                                name="role"
+                                id="role"
+                                formControlName="role"
+                                [value]="4"
+                              />
+                              <label class="form-check-label" for="role">
+                                MHU
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-3 row justify-content-right">
+                        <div class="col-lg-4">
+                          <span class="text-success">{{ message }}</span>
+                        </div>
+                        <div class="col-lg-8">
+                          <button type="submit" class="btn btn-lg btn-success">
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <!-- <form
+                  [formGroup]="medicineAddForm"
+                  (ngSubmit)="onAddMedicine()"
+                >
+                  <div class="row">
+                    <div class="row mb-3">
+                      <label
+                        for="exampleFormControlInput1"
+                        class="form-label pt-1 w-40"
+                        ><strong>Medicine Name :</strong>
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control w-50"
+                        formControlName="medicine_name"
+                        placeholder="Medicine Name"
+                      />
+                    </div>
+                    <div
+                      *ngIf="
+                        medicine_name &&
+                        medicine_name.invalid &&
+                        (medicine_name.dirty || medicine_name.touched)
+                      "
+                      class="invalid animated bounceIn text-danger"
+                    >
+                      Please Enter Valid Name
+                    </div>
+                  </div>
+                  <div class="row mb-3 mt-3">
+                    <div class="w-50">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          id="flexCheckChecked"
+                          checked
+                          (change)="onActiveChange($event)"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="flexCheckChecked"
+                          formControlName="is_active"
+                        >
+                          Status
+                        </label>
+                      </div>
+                    </div>
+                    <div class="w-50">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value=""
+                          id="flexCheckDefault"
+                          (change)="onAddPrescribed($event)"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="flexCheckDefault"
+                          formControlName="is_prescribed"
+                        >
+                          Prescribed
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row m-3">
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-rounded btn-success m-2 w-40"
+                      [disabled]="
+                        isBtnLoading || (medicine_name && medicine_name.invalid)
+                      "
+                    >
+                      <span
+                        *ngIf="isBtnLoading"
+                        isBtnLoading
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+
+                      {{ !isBtnLoading ? buttonSave : '  Loading...' }}
+                    </button>
+
+                    <button
+                      #cancel
+                      type="reset"
+                      class="btn w-40 btn-rounded btn-danger m-2"
+                      data-bs-toggle="offcanvas"
+                      data-bs-target="#offcanvasScrolling"
+                      aria-controls="offcanvasScrolling"
+                      (click)="onCancel()"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+
+                  <div class="col-md-12 text-success">
+                    {{ message }}
+                  </div>
+                </form> -->
+              </div>
+            </div>
+
+            <div id="example3_wrapper" class="dataTables_wrapper no-footer">
+              <!-- <button (click)="exportExcel()">Export to Excel</button> -->
+              <table
+                class="table table-bordered table-hover table-striped text-center"
+                cellspacing="0"
+                id="addrowExample"
+              >
+                <thead>
+                  <tr role="row">
+                    <th
+                      class=""
+                      tabindex="0"
+                      aria-controls="example3"
+                      rowspan="1"
+                      colspan="1"
+                      aria-sort="ascending"
+                      aria-label=": activate to sort column descending"
+                    >
+                      #
+                    </th>
+
+                    <th
+                      class=""
+                      tabindex="0"
+                      aria-controls="example3"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="Department: activate to sort column ascending"
+                    >
+                      Name
+                    </th>
+
+                    <!-- <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Address
+                  </th> -->
+                    <!-- <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                  >
+                    City
+                  </th> -->
+                    <th
+                      class=""
+                      tabindex="0"
+                      aria-controls="example3"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="Mobile: activate to sort column ascending"
+                    >
+                      State
+                    </th>
+                    <!-- <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Education: activate to sort column ascending"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Gender: activate to sort column ascending"
+                  >
+                    Approve
+                  </th> -->
+                    <th
+                      class=""
+                      tabindex="0"
+                      aria-controls="example3"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="Action: activate to sort column ascending"
+                    >
+                      Action
+                    </th>
+                    <th
+                      class=""
+                      tabindex="0"
+                      aria-controls="example3"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="Action: activate to sort column ascending"
+                    >
+                      Role
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    role="row"
+                    class="odd"
+                    *ngFor="
+                      let hospital of hospitalUsers | searchFilter: searchText;
+                      let i = index
+                    "
+                  >
+                    <td>
+                      <strong>{{ hospital.sl_no }}</strong>
+                    </td>
+
+                    <td>{{ hospital.username }}</td>
+                    <!-- <td>{{ hospital.address1.address }}</td> -->
+                    <!-- <td>{{ hospital.address1.city }}</td> -->
+                    <td>Odisha</td>
+                    <td>
+                      <label
+                        class="switch"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="right"
+                        title="{{
+                          hospital.is_active == 1 ? 'Active' : 'Inactive'
+                        }}"
+                      >
+                        <input
+                          type="checkbox"
+                          [checked]="hospital.is_active == 1"
+                          (click)="
+                            onStatusChange(
+                              $event,
+                              hospital.id,
+                              hospital.is_active
+                            )
+                          "
+                        />
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <span
+                        [class]="
+                          hospital.role === 1
+                            ? 'badge badge-success cursor-pointer'
+                            : 'badge badge-warning cursor-pointer'
+                        "
+                      >
+                        <!-- (click)="onRoleChange(hospital.id, hospital.role)" -->
+                        {{ hospital?.role == 1 ? 'Super User' : 'User' }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <ngb-pagination
+                class="dataTables_paginate paging_simple_numbers"
+                [(page)]="page"
+                [pageSize]="pageSize"
+                [collectionSize]="hospitalUsersLength"
+                (pageChange)="getAllHospitalUsers()"
+              >
+              </ngb-pagination>
+
+              <div class="dataTables_length float-right" id="example3_length">
+                <label
+                  >Show
+                  <select
+                    class="p-2"
+                    name="form-control"
+                    aria-controls="example3"
+                    [(ngModel)]="pageSize"
+                    (ngModelChange)="getAllHospitalUsers()"
+                  >
+                    <option [ngValue]="5">5</option>
+                    <option [ngValue]="10">10</option>
+                    <option [ngValue]="15">15</option>
+                  </select>
+                  entries</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-admin-footer></app-admin-footer>
+</div>

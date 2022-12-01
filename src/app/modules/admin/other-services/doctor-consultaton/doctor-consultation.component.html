@@ -1,0 +1,178 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+
+      <div class="card">
+        <div class="header">
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              type="search"
+              class="form-control float-right w-100"
+              placeholder="Search Here"
+              [(ngModel)]="searchText"
+              aria-controls="addrowExample"
+            />
+          </div>
+          <button
+            [routerLink]="['add-doctor-consultation/']"
+            class="btn btn-primary m-2 float-right"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            type="button"
+          >
+            <i class="icon-plus" aria-hidden="true"></i>
+            Add Doctor Consultation
+          </button>
+          <button
+            class="btn btn-warning m-2 text-white float-right"
+            (click)="exportExcel()"
+            data-bs-toggle="#allList"
+          >
+            <i class="fa-solid fa-file-excel"></i>
+            Export to Excel
+          </button>
+        </div>
+        <div class="body">
+          <div
+            id="example3_wrapper"
+            class="dataTables_wrapper no-footer table-scroll"
+          >
+            <table
+              class="table table-bordered table-hover table-striped text-center"
+              cellspacing="0"
+              id="addrowExample"
+              #excelTable
+            >
+              <thead>
+                <tr role="row">
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    #
+                  </th>
+
+                  <th>Customer Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>Appointment Date</th>
+                  <th>Appointment Start time</th>
+                  <th>Appointment End time</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let doctorConsultation of doctorConsultationList
+                      | searchFilter: searchText;
+                    let i = index
+                  "
+                >
+                  <td>
+                    {{ doctorConsultation?.sl_no }}
+                  </td>
+                  <td>
+                    {{ doctorConsultation?.customer_name }}
+                  </td>
+
+                  <td>{{ doctorConsultation?.customer_email }}</td>
+                  <td>{{ doctorConsultation?.customer_mobile }}</td>
+                  <td>{{ doctorConsultation?.appointment_date }}</td>
+                  <td>{{ doctorConsultation?.prefer_time_from }}</td>
+                  <td>{{ doctorConsultation?.prefer_time_to }}</td>
+
+                  <!-- 0- New, 1- InProgress, 2-Completed -->
+                  <td>
+                    <span
+                      [class]="
+                        doctorConsultation?.status == 0
+                          ? 'badge badge-warning'
+                          : doctorConsultation?.status == 1
+                          ? 'badge badge-success'
+                          : doctorConsultation?.status == 2
+                          ? 'badge badge-primary'
+                          : 'badge badge-danger'
+                      "
+                      >{{
+                        doctorConsultation?.status == 0
+                          ? 'New'
+                          : doctorConsultation?.status == 1
+                          ? 'In Progress'
+                          : doctorConsultation?.status == 2
+                          ? 'Completed'
+                          : ''
+                      }}
+                    </span>
+                  </td>
+                  <td>
+                    <a
+                      [routerLink]="[
+                        'edit-doctor-consultation/',
+                        doctorConsultation?.id
+                      ]"
+                      routerLinkActive="router-link-active"
+                      class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                      ><i class="icon-pencil" aria-hidden="true"></i
+                    ></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ngb-pagination
+            class="dataTables_paginate paging_simple_numbers"
+            [(page)]="page"
+            [pageSize]="pageSize"
+            [collectionSize]="doctorConsultationLength"
+            (pageChange)="getAllDoctorConsultation()"
+          >
+          </ngb-pagination>
+          <div class="dataTables_length float-right" id="example3_length">
+            <label
+              >Show
+              <select
+                name="form-control"
+                aria-controls="example3"
+                class="p-2"
+                [(ngModel)]="pageSize"
+                (ngModelChange)="getAllDoctorConsultation()"
+              >
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="15">15</option>
+                <option
+                  id="allList"
+                  #allList
+                  [ngValue]="doctorConsultationLength"
+                >
+                  All
+                </option>
+              </select>
+              entries</label
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-admin-footer></app-admin-footer>
+</div>

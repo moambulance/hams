@@ -1,0 +1,160 @@
+<div id="wrapper">
+  <app-admin-navbar></app-admin-navbar>
+   <!-- <app-side-nav></app-side-nav> -->
+  <app-admin-sidebar></app-admin-sidebar>
+  <app-admin-spinner></app-admin-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-admin-breadcrumb
+        [breadCrumbData]="breadCrumbData"
+      ></app-admin-breadcrumb>
+      <div class="card">
+        <div class="header">
+          <div id="addrowExample_filter" class="dataTables_filter">
+            <input
+              type="search"
+              class="form-control float-right m-2 w-25"
+              placeholder="Search Here"
+              [(ngModel)]="searchText"
+              aria-controls="addrowExample"
+            />
+          </div>
+          <button
+            class="btn btn-warning float-right m-2 text-white"
+            (click)="exportExcel()"
+          >
+            <i class="fa-solid fa-file-excel"></i>
+            Export to Excel
+          </button>
+        </div>
+        <div class="body">
+          <div id="example3_wrapper" class="dataTables_wrapper no-footer">
+            <table
+              class="table table-bordered table-hover table-striped text-center"
+              cellspacing="0"
+              id="addrowExample"
+              #excelTable
+            >
+              <thead>
+                <tr role="row">
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    #
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Name
+                  </th>
+                  <th>Age</th>
+                  <th>Gender</th>
+                  <th>Address</th>
+                  <th>Pre Existing Disease</th>
+                  <th>Suffering From</th>
+
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let patient of patients | searchFilter: searchText;
+                    let i = index
+                  "
+                >
+                  <!-- <td>
+                    <span class="list-icon"
+                      ><img
+                        class="patients-img"
+                        src="../assets/images/xs/avatar1.jpg"
+                        alt=""
+                    /></span>
+                  </td> -->
+                  <td>
+                    <span class="list-name">{{ patient.sl_no }}</span>
+                  </td>
+                  <td>{{ patient?.name }}</td>
+                  <td>{{ patient?.age }}</td>
+                  <td>
+                    {{ patient?.gender == 1 ? 'Male' : 'Female' }}
+                  </td>
+                  <td>{{ patient?.p_address }}</td>
+                  <td>{{ patient?.preExistingDisease }}</td>
+                  <td>
+                    {{
+                      patient.suffering_from_id
+                        ? patient.suffering_from_id.name
+                        : 'N/A'
+                    }}
+                  </td>
+                  <td>
+                    <span class="badge badge-success">{{
+                      patient?.is_active == 1 ? 'Yes' : 'No'
+                    }}</span>
+                  </td>
+                  <td>
+                    <a
+                      [routerLink]="[
+                        '/admin/patients/patientDetails',
+                        patient.id
+                      ]"
+                      routerLinkActive="router-link-active"
+                    >
+                      <i class="fa fa-eye text-success p-2 custom-hover"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <ngb-pagination
+              *ngIf="patientsLength"
+              class="dataTables_paginate paging_simple_numbers"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [maxSize]="15"
+              [collectionSize]="patientsLength"
+              (pageChange)="getAllPatients()"
+            >
+            </ngb-pagination>
+            <div class="dataTables_length float-right" id="example3_length">
+              <label *ngIf="patientsLength"
+                >Show
+                <select
+                  class="p-2"
+                  name="form-control"
+                  aria-controls="example3"
+                  [(ngModel)]="pageSize"
+                  (ngModelChange)="getAllPatients()"
+                  #selectPageSize
+                >
+                  <option [ngValue]="5">5</option>
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="15">15</option>
+                  <option #total [ngValue]="patientsLength">All</option>
+                </select>
+                entries</label
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-admin-footer></app-admin-footer>
+</div>

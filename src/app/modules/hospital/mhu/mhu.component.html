@@ -1,0 +1,678 @@
+<div id="wrapper" #fullScreen>
+  <app-spinner></app-spinner>
+  <div id="main-content" class="map-container">
+    <div class="container-fluid">
+      <div class="map-topwrapper">
+        <div class="maptop-innerbox">
+          <div class="row">
+            <div class="col-md-6">
+              <img class="logo" src="assets/images/vital-icon/logo.png" alt="M-vitals logo" srcset="">
+            </div>
+            <div class="col-md-6">
+              <button class="btn add-patient-btn" 
+                (click)="onAddPatientClick()">
+                <i></i> Add Patient
+              </button>
+              <button type="button" class="d-none" 
+                data-bs-toggle="modal" 
+                data-bs-target="#staticBackdrop" #patientAddModal></button>
+              <button class="btn ride-info-btn" (click)="onRideInfoClick()">
+                <i></i> Ride Info
+              </button>
+              <button class="btn patient-vitals-btn" (click)="onPatientVitalsClick()">
+                <i></i>Patient Vitals
+              </button>
+              <button class="btn log-out-btn" (click)="onLogout()">
+                <i></i>
+              </button>
+              <i class="fa-solid fa-expand btn btn-default full-screen-btn" [ngClass]="{
+                    'fa-expand': !mapFullScreen,
+                    'fa-compress': mapFullScreen
+                  }" ngbTooltip="{{ mapFullScreen ? 'Minimize Screen' : 'Full Screen' }}"
+                (click)="onMapFullScreenClick()">
+              </i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="overlay" #rideInfoOverlay>
+        <a href="javascript:void(0)" class="closebtn" (click)="onCloseRideInfoOverlay()">&times;</a>
+        <div class="overlay-content map-detail-box" *ngIf="activeOrder != null">
+          <ul>
+            <li>
+              <span class="icon-wrap">
+                <i class="fa-solid fa-location-crosshairs"></i>
+              </span>
+              <span class="amb-span">
+                <label for="">START POINT</label>
+                {{ activeOrder.source_location }}
+              </span>
+            </li>
+            <li>
+              <span class="icon-wrap">
+                <i class="fa-solid fa-location-dot"></i>
+              </span>
+              <span class="amb-span">
+                <label for="">END POINT</label>
+                {{ activeOrder.destination_location }}
+              </span>
+            </li>
+            <li>
+              <span class="icon-wrap">
+                <i class="fa-solid fa-truck-medical"></i>
+              </span>
+              <span class="amb-span">
+                <label for="">AMBULANCE NO</label>
+                {{ activeOrder.ambulance_id?.registration_number }}
+              </span>
+            </li>
+            <li>
+              <span class="icon-wrap">
+                <i class="fa-solid fa-truck-medical"></i>
+              </span>
+              <span class="amb-span">
+                <label for="">AMBULANCE TYPE</label>
+                {{ activeOrder.ambulance_type_id?.name }}
+              </span>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <span class="icon-wrap">
+                <i class="fa-solid fa-user-nurse"></i>
+              </span>
+              <span class="amb-span">
+                <label for="">DRIVER NAME</label>
+                {{ activeOrder.driver_id?.name }}
+              </span>
+            </li>
+            <li>
+              <span class="icon-wrap">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+              </span>
+              <span class="amb-span">
+                <label for="">MOBILE</label>
+                {{ activeOrder.driver_id?.phone }}
+              </span>
+            </li>
+            <li>
+              <span class="icon-wrap">
+                <i class="fa-solid fa-compass"></i>
+              </span>
+              <span class="amb-span">
+                <label for="">DISTANCE</label>
+                {{ activeOrder.distance }} KM
+              </span>
+            </li>
+            <li>
+              <span class="icon-wrap">
+                <i class="fa-solid fa-clock"></i>
+              </span>
+              <span class="amb-span">
+                <label for="">ESTIMATED TIME</label>
+                {{ activeOrder.estimated_time }}
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="overlay" #patientVitalsOverlay>
+        <div class="vitals-overlay-content map-detail-box" *ngIf="activeOrder != null">
+          <a href="javascript:void(0)" class="closebtn" (click)="onClosePatientVitalsOverlay()">&times;</a>
+          <ul class="d-flex flex-wrap bg-greyLight custom-box">
+            <li>
+              <span class="icon-wrap">
+                <i class="fa-solid fa-hospital-user text-black"></i>
+              </span>
+              <span class="amb-span">
+                <label for="">PATIENT NAME</label>
+                {{
+                activeOrder.patient_id
+                ? activeOrder.patient_id.name
+                : 'NA'
+                }}
+              </span>
+            </li>
+            <li>
+              <span class="icon-wrap">
+                <i class="fa-solid fa-calendar-days text-black"></i>
+              </span>
+              <span class="amb-span">
+                <label for="">AGE</label>
+                {{
+                activeOrder.patient_id
+                ? activeOrder.patient_id.age
+                : 'NA'
+                }}
+              </span>
+            </li>
+            <li>
+              <span class="icon-wrap">
+                <i class="fa-solid fa-mobile-screen-button text-black"></i>
+              </span>
+              <span class="amb-span">
+                <label for="">PHONE NO</label>
+                {{
+                activeOrder.patient_id
+                ? activeOrder.patient_id.phone
+                : 'NA'
+                }}
+              </span>
+            </li>
+            <li>
+              <span class="icon-wrap">
+                <i class="fa-solid fa-venus-mars text-black"></i>
+              </span>
+              <span class="amb-span">
+                <label for="">GENDER</label>
+                {{ activeOrder.patient_id?.gender == 1 ? 'Male' : 'FeMale' }}
+              </span>
+            </li>
+          </ul>
+          <div class="row mt-3">
+            <div class="col-lg-12 col-md-12">
+              <div class="accordion" id="accordionPanelsStayOpenExample"
+                *ngFor="let medtelDetails of medtelIotDetails; let i = index">
+                <div class="accordion-item">
+                  <h4 class="accordion-header accordion-color text-white m-0 header-row"
+                    [attr.id]="'panelsStayOpen-headingOne' + i">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <i class="fa-solid fa-business-time"></i>
+                        <label class="screening-time-label">Screening Time: </label>
+                        <span>{{
+                            medtelDetails?.screening_date +
+                            ' ' +
+                            medtelDetails?.screening_time | date: 'medium'
+                            }}
+                        </span>
+                      </div>
+                      <div class="col-md-5 col-left-border">
+                        <a class="download-report" href="{{ medtelDetails?.report_url }}" download>
+                          <i class="ti-download"></i> Download Report
+                        </a>
+                      </div>
+                      <div class="col-md-1">
+                        <i (click)="onAccordionClick(medtelDetails)" data-bs-toggle="collapse"
+                          [attr.data-bs-target]="'#panelsStayOpen-collapseOne' + i"
+                          [attr.aria-expanded]="medtelDetails.isActive" aria-controls="panelsStayOpen-collapseOne"
+                          class="accordion-button custom-accord-btn">
+                        </i>
+                      </div>
+                    </div>
+                  </h4>
+                  <div [attr.id]="'panelsStayOpen-collapseOne' + i" 
+                    class="accordion-collapse collapse show"
+                    aria-labelledby="panelsStayOpen-headingOne">
+                    <div class="accordion-body" style="padding: 20px 0;">
+                      <div class="row">
+                        <div class="col-md-4" *ngFor="let screening_detail of medtelDetails.screening_details">
+                          <div [ngSwitch]="screening_detail?.pocType">
+                            <div class="card custom-card" *ngSwitchCase="'Thermometer'">
+                              <div class="card-head">
+                                <h4>Thermometer</h4>
+                              </div>
+                              <div class="card-body">
+                                <p>{{screening_detail?.pocResult?.thermometer}} {{screening_detail?.pocResult?.thermometer_unit}}</p>
+                                <span>Temprature</span>
+                              </div>
+                            </div>
+                            <div class="card custom-card" *ngSwitchCase="'HbA1c'">
+                              <div class="card-head">
+                                <h4>HbA1c</h4>
+                              </div>
+                              <div class="card-body">
+                                <p>{{screening_detail?.pocResult?.hba1c}}</p>
+                                <span>HbA1c</span>
+                              </div>
+                            </div>
+                            <div class="card custom-card" *ngSwitchCase="'Hemoglobin'">
+                              <div class="card-head">
+                                <h4>Hemoglobin</h4>
+                              </div>
+                              <div class="card-body">
+                                <p>{{screening_detail?.pocResult?.hemoglobin}}</p>
+                                <span>hemoglobin</span>
+                              </div>
+                            </div>
+                            <div class="card custom-card" *ngSwitchCase="'Malaria'">
+                              <div class="card-head">
+                                <h4>Malaria</h4>
+                              </div>
+                              <div class="card-body">
+                                <p>{{screening_detail?.pocResult?.malaria}}</p>
+                                <span>Result</span>
+                              </div>
+                            </div>
+                            <div class="card custom-card" *ngSwitchCase="'Pregnancy'">
+                              <div class="card-head">
+                                <h4>Pregnancy</h4>
+                              </div>
+                              <div class="card-body">
+                                <p>{{screening_detail?.pocResult?.pregnancy}}</p>
+                                <span>Result</span>
+                              </div>
+                            </div>
+                            <div class="card custom-card" *ngSwitchCase="'ECG'">
+                              <div class="card-head">
+                                <h4>ECG</h4>
+                              </div>
+                              <div class="card-body" style="padding: 56px;">
+                                  <a href="{{screening_detail?.pocResult?.url}}" download target="_blank">Download Report 
+                                    <i class="ti-download" style="font-size: 22px;"></i>
+                                  </a>
+                              </div>
+                            </div>
+
+                            <div class="card multiline-custom-card" *ngSwitchCase="'Body Analyzer'">
+                              <div class="card-head">
+                                <h4>Body Analyzer</h4>
+                              </div>
+                              <div class="card-body">
+                                <ul>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.ba_weight}}</p>
+                                    <span>Weight</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.ba_bmi}}</p>
+                                    <span>Bmi</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.ba_body_fat}}</p>
+                                    <span>Body Fat</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.ba_fat_free_body_weight}}</p>
+                                    <span>Free Body Weight</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.ba_subcutaneous_fat}}</p>
+                                    <span>Subcutaneous fat</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.ba_body_water}}</p>
+                                    <span>Body water</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.ba_skeletal_muscle}}</p>
+                                    <span>Skeletal muscle</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.ba_muscle_mass}}</p>
+                                    <span>Muscle mass</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.ba_bone_mass}}</p>
+                                    <span>Bone mass</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.ba_protein}}</p>
+                                    <span>Protein</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.ba_bmr}}</p>
+                                    <span>BMR</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.ba_bsa}}</p>
+                                    <span>BSA</span>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="card multiline-custom-card" *ngSwitchCase="'SpO2'">
+                              <div class="card-head">
+                                <h4>SpO2</h4>
+                              </div>
+                              <div class="card-body">
+                                <ul>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.spo2}}</p>
+                                    <span>Spo2</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.spo2_pulse}}</p>
+                                    <span>Pulse</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.spo2_pi}}</p>
+                                    <span>Pi</span>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="card multiline-custom-card bp" *ngSwitchCase="'Vitals_BP'">
+                              <div class="card-head">
+                                <h4>Vitals_BP</h4>
+                              </div>
+                              <div class="card-body">
+                                <ul>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.bp}}</p>
+                                    <span>Blood Pressure</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.pulse}}</p>
+                                    <span>Pulse</span>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="card multiline-custom-card" *ngSwitchCase="'Urinalysis'">
+                              <div class="card-head">
+                                <h4>Urin Analysis</h4>
+                              </div>
+                              <div class="card-body">
+                                <ul>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.urine_protein}}</p>
+                                    <span>Protein</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.urine_glucose}}</p>
+                                    <span>Glucose</span>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="card multiline-custom-card" *ngSwitchCase="'Sync'">
+                              <div class="card-head">
+                                <h4>Sync</h4>
+                              </div>
+                              <div class="card-body">
+                                <ul>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.glucose}}</p>
+                                    <span>Glucose</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.glucoseCategory}}</p>
+                                    <span>Glucose Category</span>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="card multiline-custom-card" *ngSwitchCase="'Lipid_Profile'">
+                              <div class="card-head">
+                                <h4>Lipid Profile</h4>
+                              </div>
+                              <div class="card-body">
+                                <ul>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.hdl_cholesterol}}</p>
+                                    <span>HDL Cholesterol</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.tc_hdl_ratio}}</p>
+                                    <span>TC HDL</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.ldl}}</p>
+                                    <span>LDL Cholesterol</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.total_cholesterol}}</p>
+                                    <span>Total Cholesterol</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.triglycerides}}</p>
+                                    <span>Triglycerides</span>
+                                  </li>
+                                  <li>
+                                    <p>{{screening_detail?.pocResult?.vldl}}</p>
+                                    <span>Low Density Lipoprotein</span>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+
+                            <div class="card multiline-custom-card" *ngSwitchCase="'Stethoscope'">
+                              <div class="card-head">
+                                <h4>Stethoscope {{screening_detail?.pocResult?.stethoscope_type}}</h4>
+                              </div>
+                              <div class="card-body">
+                                <table class="table table-wrapper-scroll-y my-custom-scrollbar">
+                                  <tbody>
+                                    <tr *ngFor="
+                                        let item of screening_detail?.pocResult
+                                          ?.stetho_path;
+                                        let i = index
+                                      ">
+                                      <td>{{ item.position }}</td>
+                                      <td style="cursor: pointer;">
+                                        <i *ngIf="!isAudio" class="fa fa-play text-dark" (click)="onPlay(i)"></i>
+                                        <i *ngIf="i == currentIndex && isAudio" class="fa fa-pause text-dark"
+                                          (click)="onPause(i)"></i>
+                                        <audio #audioPlayer [src]="item?.path" type="audio/wav" loop="loop"></audio>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+
+                            <div class="card multiline-custom-card" *ngSwitchCase="'Otoscope'">
+                              <div class="card-head">
+                                <h4>Otoscope</h4>
+                              </div>
+                              <div class="card-body">
+                                <ul>
+                                  <li *ngFor="let item of screening_detail?.pocResult?.otoscope_path; let i = index">
+                                    <span>Report {{ i + 1 }}</span><br>
+                                    <img [src]="item" 
+                                      alt="Report image view"
+                                      ngbTooltip="Click to show full report" 
+                                      (click)="onimageClick(item)"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#imagePreviewModal"
+                                      #imageModal />
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom" [disableDefaultUI]="true" [usePanning]="true"
+        (mapReady)="onMapReady($event)">
+        <agm-marker *ngFor="let order of orders" [latitude]="order.latitude" [longitude]="order.longitude"
+          [iconUrl]="order.icon" (markerClick)="order.isMarker = !order.isMarker">
+          <agm-info-window [isOpen]="order.isMarker" [latitude]="order.latitude" [longitude]="order.longitude">
+            <span class="icon-img">
+              <img src="{{ base_url + order?.ambulance_type_id?.image }}" alt="Ambulance Type" />
+            </span>
+            <span class="amb-span">
+              <label for="">Type</label>
+              {{ order.ambulance_type_id?.name }}
+            </span>
+            <span class="amb-span">
+              <label for="">Ambulance</label>
+              {{ order.ambulance_id?.registration_number }}
+            </span>
+            <span class="amb-span">
+              <label for="">Driver</label>
+              {{ order.driver_id?.name }}
+            </span>
+          </agm-info-window>
+        </agm-marker>
+        <agm-direction *ngIf="activeOrder != null" [origin]="activeOrder.origin"
+          [destination]="activeOrder.destination1" [renderOptions]="activeOrder.render_options"
+          [markerOptions]="activeOrder.marker_options">
+        </agm-direction>
+      </agm-map>
+    </div>
+  </div>
+</div>
+
+<!-- Popup for patient add -->
+<div class="modal modal-xl fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Enter Patient details</h5>
+        <button type="button" class="btn-close" #closeModal data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="row" [formGroup]="customerPatientAddForm" (ngSubmit)="onAddPatientCustomer()" *ngIf="patientField">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Patient Mobile Number</label>
+            <input type="text" formControlName="phone" 
+              placeholder="Enter Patient Mobile Number"
+              class="form-control p-1" maxlength="10"
+              (change)="mobileNumberPatch($event)">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Patient Name</label>
+            <input type="text" formControlName="name" placeholder="Enter Patient Name" class="form-control p-1">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Email</label>
+            <input type="text" formControlName="email" placeholder="Enter Patient Email" class="form-control p-1">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Address</label>
+            <input type="text" formControlName="p_address" placeholder="Enter Patient Address" class="form-control p-1">
+          </div>
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Date Of Birth:</label>
+            <input type="date" formControlName="age" placeholder="Enter Date Of Birth" class="form-control p-1">
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="row">
+              <div class="col-md-3">
+                <span class="p-1">Gender:</span>
+              </div>
+              <label class="fancy-radio col-md-4">
+                <input type="radio" formControlName="gender" [value]="1" required="" />
+                <span><i></i>Male</span>
+              </label>
+
+              <label class="fancy-radio col-md-4">
+                <input class="bg-secondary" type="radio" formControlName="gender" [value]="0" required="" />
+                <span><i></i>Female</span>
+              </label>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label class="form-label">height(in CM)</label>
+            <input type="number" formControlName="height" placeholder="Enter height" class="form-control p-1">
+          </div>
+          <div class="col-md-3 mb-3">
+            <label class="form-label">wight(in KG)</label>
+            <input type="number" formControlName="weight" placeholder="Enter weight" class="form-control p-1">
+          </div>
+          <div class="col-md-12 mb-3">
+            <button type="submit" class="btn btn-primary float-right"
+              [disabled]="mobileNumber.length != 10">
+              <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                  *ngIf="showNextBtnLoader"
+                ></span>
+                {{showNextBtnLoader ? 'Saving Patient...' : 'Next'}}
+            </button>
+          </div>
+        </form>
+        <fieldset *ngIf="isIotServices">
+          <h2 class="fs-title">Choose Test Vitals</h2>
+          <div class="form-group col-md-12 flex-wrap">
+            <div class="card card-color">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-3 col-md-4" *ngFor="let test of allTest">
+                    <div class="card p-0 text-light test-card cursor-pointer" [ngClass]="{
+                        background_theme: !test.isSelected,
+                        'bg-success': test.isSelected
+                      }" (click)="onSelectedTest(test)">
+                      <div class="card-body p-0">
+                        <div class="text-center p-0">
+                          <h5 class="card-title">{{ test?.name }}</h5>
+                          <span class="h2">{{ test?.price }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-success float-right" (click)="getTestFareDetails()" type="submit">
+              Proceed To Book
+            </button>
+          </div>
+        </fieldset>
+        <fieldset *ngIf="isPaymentScreen">
+          <h2 class="fs-title">Payment Details</h2>
+          <div class="form-group col-md-12 flex-wrap">
+            <div class="card card-color">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <table class="tabel table-responsive">
+                      <tr>
+                        <th>#</th>
+                        <th>Basic</th>
+                        <th>Pro</th>
+                      </tr>
+                      <tr *ngFor="
+                          let test of fareData.allTest;
+                          let i = index
+                        ">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ test?.name }}</td>
+                        <td>{{ test?.price }}</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>Tax</td>
+                        <td>{{ fareData?.fareDetails?.taxes }}</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>Total</td>
+                        <td>
+                          {{ fareData?.fareDetails?.total_price }}
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-success float-right" (click)="onPaymentSubmit()" type="submit">
+                Pay
+              </button>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of patient add popup -->
+
+<!-- Popup to show large image view -->
+<div
+  class="modal fade"
+  id="imagePreviewModal"
+  tabindex="-1"
+  aria-labelledby="imagePreviewModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-center">
+    <img class="w-75" [src]="currentSrc" alt="" />
+  </div>
+</div>
+<!-- End of large image view popup -->

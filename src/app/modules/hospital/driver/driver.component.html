@@ -1,0 +1,299 @@
+<div id="wrapper">
+  <app-navbar></app-navbar>
+  <app-sidebar></app-sidebar>
+  <app-spinner></app-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-breadcrumb [breadCrumbData]="breadCrumbData"></app-breadcrumb>
+      <div class="card">
+        <div class="header">
+          <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right m-2"
+          >
+            <input
+              type="search"
+              class="form-control float-right w-100"
+              placeholder="Search Here"
+              [(ngModel)]="searchText"
+              aria-controls="addrowExample"
+            />
+          </div>
+          <!-- <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right mx-2"
+          >
+            <input
+              [disabled]="nameFilter"
+              type="search"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              class="form-control float-left w-100 m-2"
+              placeholder="Search By Phone"
+              (input)="findDriverByMobile($event)"
+              aria-controls="addrowExample"
+            />
+          </div> -->
+          <!-- <div
+            id="addrowExample_filter"
+            class="dataTables_filter float-right mx-2"
+          >
+            <input
+              [disabled]="phoneFilter"
+              type="search"
+              class="form-control float-left w-100 m-2"
+              placeholder="Search By Name"
+              (input)="findDriverByName($event)"
+              aria-controls="addrowExample"
+            />
+          </div> -->
+          <button
+            class="btn btn-warning float-right m-2 text-white"
+            (click)="exportExcel()"
+          >
+            <i class="fa-solid fa-file-excel"></i>
+            Export to Excel
+          </button>
+          <button
+            [routerLink]="['add-driver']"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="Add Driver"
+            id="addToTable"
+            class="btn btn-primary float-right m-2"
+            type="button"
+          >
+            <i class="icon-plus" aria-hidden="true"></i> Add Driver
+          </button>
+        </div>
+        <div class="body">
+          <div id="example3_wrapper" class="dataTables_wrapper no-footer">
+            <table
+              class="table table-bordered table-hover table-striped text-center"
+              cellspacing="0"
+              id="addrowExample"
+              #excelTable
+            >
+              <thead>
+                <tr role="row">
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending"
+                    aria-label=": activate to sort column descending"
+                  >
+                    #
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                  >
+                    Profile Image
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Department: activate to sort column ascending"
+                    style="width: 126.578px"
+                  >
+                    Name
+                  </th>
+
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Email: activate to sort column ascending"
+                    style="width: 115.781px"
+                  >
+                    Email
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                    style="width: 75.125px"
+                  >
+                    Mobile
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Mobile: activate to sort column ascending"
+                    style="width: 75.125px"
+                  >
+                    Country
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Education: activate to sort column ascending"
+                    style="width: 99.1719px"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Gender: activate to sort column ascending"
+                    style="width: 56.2812px"
+                  >
+                    Approve
+                  </th>
+                  <th
+                    class=""
+                    tabindex="0"
+                    aria-controls="example3"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="Action: activate to sort column ascending"
+                    style="width: 50.3906px"
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr
+                  role="row"
+                  class="odd"
+                  *ngFor="let driver of drivers | searchFilter: searchText"
+                >
+                  <td>
+                    <strong>{{ driver?.sl_no }}</strong>
+                  </td>
+                  <td class="sorting_1">
+                    <img
+                      class=""
+                      width="35"
+                      src="{{ baseUrl }}{{ driver?.profile_image }}"
+                      alt=""
+                    />
+                  </td>
+                  <td>{{ driver?.name }}</td>
+                  <td>{{ driver?.email }}</td>
+                  <td>{{ driver?.phone }}</td>
+                  <td>{{ driver?.country_code }}</td>
+                  <td>
+                    <label
+                      *ngIf="!isVisible"
+                      class="switch"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="right"
+                      title="{{
+                        driver?.is_active == 1 ? 'Active' : 'Inactive'
+                      }}"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="driver?.is_active == 1"
+                        (click)="
+                          onStatusChange($event, driver?.id, driver?.is_active)
+                        "
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                    <span *ngIf="isVisible" class="">
+                      {{ driver?.is_active == 1 ? 'Active' : 'Inactive' }}</span
+                    >
+                  </td>
+                  <td>
+                    <span
+                      class="{{
+                        driver?.is_approved == 1
+                          ? 'badge badge-success'
+                          : 'badge badge-danger'
+                      }}"
+                      >{{
+                        driver?.is_approved == 1 ? 'Approved' : 'Not Approved'
+                      }}</span
+                    >
+                  </td>
+
+                  <td>
+                    <div class="d-flex">
+                      <a
+                        [routerLink]="['driver-details/', driver?.id]"
+                        routerLinkActive="router-link-active"
+                        class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                        data-toggle="tooltip"
+                        data-original-title="View"
+                        ><i class="icon-eye" aria-hidden="true"></i
+                      ></a>
+
+                      <a
+                        [routerLink]="['edit-driver/', driver?.id]"
+                        routerLinkActive="router-link-active"
+                        class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                        data-toggle="tooltip"
+                        data-original-title="Edit"
+                        ><i class="icon-pencil" aria-hidden="true"></i
+                      ></a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <ngb-pagination
+              class="dataTables_paginate paging_simple_numbers"
+              id="example3_paginate"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [collectionSize]="driversLength"
+              (pageChange)="getAllDrivers()"
+            >
+            </ngb-pagination>
+            <div class="dataTables_length float-right" id="example3_length">
+              <label
+                >Show
+
+                <select
+                  name="example3_length"
+                  aria-controls="example3"
+                  class="p-2"
+                  [(ngModel)]="pageSize"
+                  (ngModelChange)="getAllDrivers()"
+                >
+                  <option [ngValue]="5">5</option>
+                  <option [ngValue]="10">10</option>
+                  <option [ngValue]="15">15</option>
+                  <option [ngValue]="driversLength">All</option>
+                </select>
+                Entries</label
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

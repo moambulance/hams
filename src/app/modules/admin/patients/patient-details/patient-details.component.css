@@ -1,0 +1,51 @@
+.gender {
+  background-color: #600de8 !important;
+}
+.age {
+  background-color: #00c1b1 !important;
+}
+.email {
+  background-color: #0053ed !important;
+}
+.phone {
+  background-color: #222437 !important;
+}
+.accordion-color {
+  background-color: #04a2c6 !important;
+}
+
+.accordion-button {
+  background-color: #04a2c6 !important;
+}
+
+.vl {
+  border-left: 2px solid #fff;
+  height: 30px;
+}
+.fs-s {
+  font-size: 10px !important;
+}
+.fs-m {
+  font-size: 13px !important;
+}
+
+.my-custom-scrollbar {
+  position: relative;
+  height: 200px;
+  overflow: auto;
+}
+.table-wrapper-scroll-y {
+  display: block;
+}
+.hover:hover {
+  color: chartreuse !important;
+}
+.text-theme {
+  color: hsl(191deg 99% 39%) !important;
+}
+hr {
+  width: 50% !important;
+  color: #04a2c6 !important;
+  opacity: 1;
+  height: 0.5vh !important;
+}

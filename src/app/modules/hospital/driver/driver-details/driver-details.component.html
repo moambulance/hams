@@ -1,0 +1,202 @@
+<div id="wrapper">
+  <app-navbar></app-navbar>
+  <app-sidebar></app-sidebar>
+  <app-spinner></app-spinner>
+
+  <div id="main-content">
+    <div class="container-fluid">
+      <app-breadcrumb [breadCrumbData]="breadCrumbData"></app-breadcrumb>
+      <div class="card">
+        <div class="row clearfix mt-1">
+          <div class="col-lg-4 col-md-12 text-center">
+            <div class="card profile-header p-2">
+              <div class="body">
+                <div class="profile-image">
+                  <img
+                    src="{{ baseUrl + driverDetails?.profile_image }}"
+                    class="profileImg"
+                  />
+                </div>
+                <div>
+                  <h4 class="m-0">
+                    {{ driverDetails?.name }}
+                  </h4>
+                  <h4 class="m-0">
+                    {{ driverDetails?.email }}
+                  </h4>
+                  <h4 class="m-0">
+                    {{ driverDetails?.phone }}
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <div class="card p-1">
+              <h1>DL Image</h1>
+              <div class="body">
+                <div class="profile-image">
+                  <img
+                    src="{{ baseUrl + driverDetails?.dl_image }}"
+                    class="cardImg"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-8 col-md-12 mt-1 text-center">
+            <div class="row clearfix">
+              <div class="col-lg-6 col-md-6">
+                <div class="card top_counter p-3">
+                  <div class="body">
+                    <div
+                      id="top_counter1"
+                      class="carousel vert slide"
+                      data-ride="carousel"
+                      data-interval="2500"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="icon">
+                            <i class="fa-solid fa-id-card"></i>
+                          </div>
+                          <div class="content">
+                            <div class="text">Aadhaar No</div>
+                            <h5 class="number">
+                              {{ driverDetails.adhar_no }}
+                            </h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <div class="card top_counter p-3">
+                  <div class="body">
+                    <div
+                      id="top_counter1"
+                      class="carousel vert slide"
+                      data-ride="carousel"
+                      data-interval="2500"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="icon">
+                            <i class="fa-solid fa-cash-register"></i>
+                          </div>
+                          <div class="content">
+                            <div class="text">Driving License No:</div>
+                            <h5 class="number">
+                              {{ driverDetails.dl_no }}
+                            </h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <div class="card top_counter p-3">
+                  <div class="body">
+                    <div
+                      id="top_counter1"
+                      class="carousel vert slide"
+                      data-ride="carousel"
+                      data-interval="2500"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="icon">
+                            <i class="fa-solid fa-id-card"></i>
+                          </div>
+                          <div class="content">
+                            <div class="text">Status:</div>
+                            <h5 class="number">
+                              <span
+                                [class]="
+                                  driverDetails?.is_active == 1
+                                    ? 'font-w400 text-success'
+                                    : 'font-w400 text-danger'
+                                "
+                                >{{
+                                  driverDetails?.is_active == 1
+                                    ? 'Active'
+                                    : 'Inactive'
+                                }}</span
+                              >
+                            </h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <div class="card top_counter p-3">
+                  <div class="body">
+                    <div
+                      id="top_counter1"
+                      class="carousel vert slide"
+                      data-ride="carousel"
+                      data-interval="2500"
+                    >
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <div class="icon">
+                            <i class="fa-solid fa-id-card"></i>
+                          </div>
+                          <div class="content">
+                            <div class="text">Approved:</div>
+                            <h5 class="number">
+                              <span
+                                [class]="
+                                  driverDetails?.is_approved == 1
+                                    ? 'font-w400 text-success'
+                                    : 'font-w400 text-danger'
+                                "
+                                >{{
+                                  driverDetails?.is_approved == 1 ? 'Yes' : 'No'
+                                }}</span
+                              >
+                            </h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="card profile-header">
+                  <h1>Aadhar Images</h1>
+                  <div class="body row">
+                    <div class="col-lg-6 col-md-12">
+                      <div class="profile-image">
+                        <img
+                          src="{{ baseUrl + driverDetails?.adhar_front_image }}"
+                          class="cardImg"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                      <div class="profile-image">
+                        <img
+                          src="{{ baseUrl + driverDetails?.adhar_back_image }}"
+                          class="cardImg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-footer></app-footer>
+  </div>
+</div>

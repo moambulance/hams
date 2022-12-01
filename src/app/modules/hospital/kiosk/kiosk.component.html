@@ -1,0 +1,1946 @@
+<div id="wrapper" #fullScreen>
+  <app-navbar class="app-navbar"></app-navbar>
+
+  <app-spinner></app-spinner>
+
+  <div id="main-content" class="map-container p-0 m-0">
+    <div class="container-fluid p-0 m-0">
+      <div class="card mt-5">
+        <div class="body">
+          <div class="form-validation row mt-1 d-flex">
+            <div class="col-md-8 p-0 m-0">
+              <div class="row">
+                <nav>
+                  <div class="nav nav-tabs mb-2" id="nav-tab" role="tablist">
+                    <button
+                      class="nav-link active col-xl-3 active-btn"
+                      id="nav-create-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#create"
+                      type="button"
+                      role="tab"
+                      aria-controls="create"
+                      aria-selected="true"
+                    >
+                      <b>Create</b>
+                    </button>
+                    <button
+                      class="nav-link col-xl-3 active-btn"
+                      id="nav-rideData-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#rideData"
+                      type="button"
+                      role="tab"
+                      aria-controls="rideData"
+                      aria-selected="false"
+                      (click)="getOrders()"
+                    >
+                      <b>Ride Data</b>
+                    </button>
+
+                    <button
+                      class="nav-link col-xl-3 active-btn"
+                      id="nav-manage-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#manage"
+                      type="button"
+                      role="tab"
+                      aria-controls="manage"
+                      aria-selected="false"
+                      (click)="manageOrders()"
+                    >
+                      <b>Manage</b>
+                    </button>
+                    <button
+                      class="nav-link col-xl-3 active-btn"
+                      id="nav-help-tab"
+                      data-bs-toggle="tab"
+                      data-bs-target="#help"
+                      type="button"
+                      role="tab"
+                      aria-controls="help"
+                      aria-selected="false"
+                    >
+                      <b>Help !</b>
+                    </button>
+                  </div>
+                </nav>
+              </div>
+              <div class="tab-content" id="nav-tabContent">
+                <div
+                  class="tab-pane fade show active"
+                  id="create"
+                  role="tabpanel"
+                  aria-labelledby="nav-create-tab "
+                >
+                  <div class="container">
+                    <div class="stepwizard">
+                      <div class="stepwizard-row setup-panel">
+                        <div class="stepwizard-step col-xs-3">
+                          <a
+                            data-bs-target="#step-1"
+                            type="button"
+                            [class]="
+                              !isPatient
+                                ? 'btn btn-success btn-circle'
+                                : 'btn btn-warning btn-circle'
+                            "
+                          >
+                            <div *ngIf="isPatient; else templateName">
+                              <i class="fa-solid fa-1 text-white"></i>
+                            </div>
+
+                            <ng-template #templateName>
+                              <i
+                                class="fa-solid fa-circle-check text-white"
+                              ></i>
+                            </ng-template>
+                          </a>
+                          <p><small>PATIENT FORM</small></p>
+                        </div>
+                        <div class="stepwizard-step col-xs-3">
+                          <a
+                            data-bs-target="#step-2"
+                            type="button"
+                            [class]="
+                              !isPatient && !ambulanceData
+                                ? 'btn btn-success btn-circle'
+                                : ambulanceData
+                                ? 'btn btn-warning btn-circle'
+                                : 'btn btn-secondary btn-circle'
+                            "
+                            disabled="disabled"
+                          >
+                            <div
+                              *ngIf="
+                                !isPatient && !ambulanceData;
+                                else ambulanceTemplate
+                              "
+                              e
+                            >
+                              <i
+                                class="fa-solid fa-circle-check text-white"
+                              ></i>
+                            </div>
+
+                            <ng-template #ambulanceTemplate>
+                              <i class="fa-solid fa-2 text-white"></i>
+                            </ng-template>
+                          </a>
+                          <p><small>PAYMENT</small></p>
+                        </div>
+                        <div class="stepwizard-step col-xs-3">
+                          <a
+                            data-bs-target="#step-3"
+                            type="button"
+                            [class]="
+                              otpDisplay
+                                ? 'btn btn-success btn-circle'
+                                : 'btn btn-secondary btn-circle'
+                            "
+                            disabled="disabled"
+                          >
+                            <div *ngIf="otpDisplay; else otpTemplate">
+                              <i
+                                class="fa-solid fa-circle-check text-white"
+                              ></i>
+                            </div>
+
+                            <ng-template #otpTemplate>
+                              <i
+                                class="fa-solid fa-3 text-white"
+                              ></i> </ng-template
+                          ></a>
+                          <p><small>OTP</small></p>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="panel panel-primary setup-content"
+                      id="step-1"
+                      *ngIf="isPatient"
+                    >
+                      <div class="panel-body">
+                        <form
+                          class="row"
+                          [formGroup]="customerPatientAddForm"
+                          (ngSubmit)="onAddPatientCustomer()"
+                        >
+                          <div class="form-group col-md-12">
+                            <div class="row">
+                              <div class="form-group col-md-6 mb-2">
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Enter Source"
+                                  (keydown.enter)="$event.preventDefault()"
+                                  autocorrect="off"
+                                  autocapitalize="off"
+                                  spellcheck="off"
+                                  (click)="onSourceChange($event)"
+                                  (mouseleave)="sourceLeave($event)"
+                                  #source
+                                />
+                              </div>
+                              <div class="form-group col-md-6 mb-2">
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Enter Destination"
+                                  (keydown.enter)="$event.preventDefault()"
+                                  autocorrect="off"
+                                  autocapitalize="off"
+                                  spellcheck="off"
+                                  #destination
+                                  (click)="onSourceChange($event)"
+                                />
+                              </div>
+                            </div>
+                            <fieldset [disabled]="!patientField" class="row">
+                              <div class="form-group col-md-6 mb-2">
+                                <input
+                                  type="text"
+                                  formControlName="mobile"
+                                  placeholder="Mobile"
+                                  class="form-control"
+                                  maxlength="10"
+                                  (input)="mobileNumberPatch($event)"
+                                />
+                                <div
+                                  *ngIf="
+                                    mobile &&
+                                    mobile.invalid &&
+                                    (mobile.dirty || mobile.touched)
+                                  "
+                                  class="invalid animated bounceIn text-danger"
+                                >
+                                  Please enter mobile number.
+                                </div>
+                              </div>
+                              <div class="form-group col-md-6 mb-2">
+                                <input
+                                  type="text"
+                                  formControlName="email"
+                                  placeholder="Email"
+                                  class="form-control"
+                                />
+                              </div>
+
+                              <div class="form-group col-md-6 mb-2">
+                                <input
+                                  type="text"
+                                  placeholder="Name"
+                                  formControlName="name"
+                                  class="form-control"
+                                />
+                                <div
+                                  *ngIf="
+                                    name &&
+                                    name.invalid &&
+                                    (name.dirty || name.touched)
+                                  "
+                                  class="invalid animated bounceIn text-danger"
+                                >
+                                  Please enter Your name.
+                                </div>
+                              </div>
+                              <div class="form-group col-md-6 mb-2">
+                                <input
+                                  type="number"
+                                  min="0"
+                                  placeholder="Age"
+                                  formControlName="age"
+                                  class="form-control"
+                                />
+                              </div>
+
+                              <div class="form-group col-md-6 mb-2">
+                                <input
+                                  type="text"
+                                  placeholder="Address"
+                                  formControlName="p_address"
+                                  class="form-control"
+                                />
+                              </div>
+                              <div class="form-group col-xl-6 mb-2 p-2">
+                                <label class="fancy-radio">
+                                  <input
+                                    type="radio"
+                                    formControlName="gender"
+                                    [value]="1"
+                                    required=""
+                                  />
+                                  <span><i></i>Male</span>
+                                </label>
+                                <label class="fancy-radio">
+                                  <input
+                                    type="radio"
+                                    formControlName="gender"
+                                    [value]="2"
+                                    required=""
+                                  />
+                                  <span><i></i>Female</span>
+                                </label>
+                              </div>
+                              <div class="form-group col-sm-6 mb-2">
+                                <select
+                                  formControlName="sufferingFrom"
+                                  class="form-select form-control"
+                                  (input)="onSufferingFromChange($event)"
+                                >
+                                  <option [value]="0">Select Suffering</option>
+                                  <option
+                                    *ngFor="
+                                      let suffering of sufferingFromDetails
+                                    "
+                                    [value]="suffering.id"
+                                  >
+                                    {{ suffering.name }}
+                                  </option>
+                                </select>
+                              </div>
+                            </fieldset>
+                          </div>
+                          <div class="form-group">
+                            <button
+                              class="btn btn-danger btn-sm float-right"
+                              type="submit"
+                              [disabled]="
+                                !showCustomerDeatils ||
+                                !destinationLocation ||
+                                !mobile
+                              "
+                            >
+                              Save
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+
+                      <!-- <agm-map
+                        [latitude]="latitude"
+                        [longitude]="longitude"
+                        [zoom]="zoom"
+                        [disableDefaultUI]="true"
+                        [usePanning]="true"
+                        (mapReady)="onMapReady($event)"
+                      >
+                        <agm-direction
+                          *ngIf="dir"
+                          [origin]="dir.origin"
+                          [destination]="dir.destination"
+                          [markerOptions]="dir.markerOptions"
+                          [renderOptions]="dir.renderOptions"
+                        >
+                        </agm-direction>
+                      </agm-map> -->
+                      <!-- Payment save popup -->
+                      <div
+                        class="modal fade"
+                        id="staticBackdrop"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                        tabindex="-1"
+                        aria-labelledby="staticBackdropLabel"
+                        aria-hidden="true"
+                      >
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="staticBackdropLabel">
+                                Payment
+                              </h5>
+                              <button
+                                type="button"
+                                class="btn-close"
+                                #closeModal
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                              ></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="form-validation">
+                                <form
+                                  id="basic-form"
+                                  [formGroup]="makePaymentForm"
+                                  (ngSubmit)="addPayment()"
+                                >
+                                  <div class="mb-3 row">
+                                    <div class="col-xl-9">
+                                      <label class="fancy-radio">
+                                        <input
+                                          type="radio"
+                                          (change)="onPymentMethodChange()"
+                                          formControlName="payment_method"
+                                          value="cash"
+                                          required=""
+                                          data-parsley-multiple="gender"
+                                        />
+                                        <span><i></i>Cash</span>
+                                      </label>
+                                      <label class="fancy-radio">
+                                        <input
+                                          type="radio"
+                                          (change)="onPymentMethodChange()"
+                                          formControlName="payment_method"
+                                          value="card"
+                                          required=""
+                                          data-parsley-multiple="gender"
+                                        />
+                                        <span><i></i>Card</span>
+                                      </label>
+                                      <label class="fancy-radio">
+                                        <input
+                                          type="radio"
+                                          (change)="onPymentMethodChange()"
+                                          formControlName="payment_method"
+                                          value="upi"
+                                          required=""
+                                          data-parsley-multiple="gender"
+                                        />
+                                        <span><i></i>UPI</span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="mb-3">
+                                    <div class="col-xl-9">
+                                      <div class="row">
+                                        <div class="col-xl-6">
+                                          <label
+                                            for="exampleInputPassword1"
+                                            class="form-label"
+                                            >Discount</label
+                                          >
+                                          <input
+                                            type="number"
+                                            [min]="0"
+                                            [max]="
+                                              this.makePaymentForm.value[
+                                                'amount'
+                                              ]
+                                            "
+                                            formControlName="discount"
+                                            placeholder="Enter Amount"
+                                            class="form-control"
+                                            (input)="onDiscountChange($event)"
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-xl-9" *ngIf="showCash">
+                                      <label
+                                        for="exampleInputPassword1"
+                                        class="form-label"
+                                        >Net Payble</label
+                                      >
+                                      <input
+                                        type="text"
+                                        formControlName="cash"
+                                        placeholder="Enter cash"
+                                        class="form-control"
+                                      />
+                                    </div>
+                                    <div class="col-xl-9" *ngIf="showCard">
+                                      <label
+                                        for="exampleInputPassword1"
+                                        class="form-label"
+                                        >Receipt No.</label
+                                      >
+                                      <input
+                                        type="text"
+                                        formControlName="receipt_no"
+                                        placeholder="Enter Receipt number"
+                                        class="form-control"
+                                      />
+                                    </div>
+                                    <div class="col-xl-9" *ngIf="showUpi">
+                                      <img
+                                        src="assets/Image/payment.jpg"
+                                        alt=""
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div class="modal-footer">
+                                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                                    <button
+                                      type="submit"
+                                      class="btn btn-primary"
+                                    >
+                                      Save
+                                    </button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="panel panel-primary setup-content"
+                      id="step-2"
+                      *ngIf="ambulanceData"
+                    >
+                      <div class="panel-heading">
+                        <h3 class="panel-title">Confirm Booking</h3>
+                      </div>
+                      <div class="panel-body">
+                        <form
+                          id="basic-form3"
+                          [formGroup]="bookAmbulanceForm"
+                          (ngSubmit)="submitPayment()"
+                        >
+                          <div class="row" *ngIf="showCustomerDeatils">
+                            <div class="col-md-3 form-group">
+                              <label class="form-label">PPE Include</label>
+                              <input
+                                type="checkbox"
+                                class="m-2"
+                                (click)="onPPEkitInclude($event)"
+                                formControlName="ppe_include"
+                              />
+                            </div>
+                            <div
+                              class="col-md-3 form-group"
+                              *ngIf="enableCount"
+                            >
+                              <input
+                                type="number"
+                                min="0"
+                                class="form-control"
+                                formControlName="ppe_count"
+                              />
+                            </div>
+                            <div class="form-group col-md-4">
+                              <select
+                                class="form-select form-control"
+                                formControlName="ambulance_type_id"
+                                (change)="onAmbulanceTypeSelect($event)"
+                              >
+                                <option [value]="0">Select Ambulance</option>
+                                <option
+                                  value="{{ atype.id }}"
+                                  *ngFor="let atype of ambulanceType"
+                                >
+                                  {{ atype.name }}
+                                </option>
+                              </select>
+                            </div>
+
+                            <!-- <div
+                              [class]="'form-group col-md-4'"
+                              *ngIf="
+                                ambulanceDetails && ambulanceDetails.length > 1
+                              "
+                            >
+                              <select
+                                class="form-select form-control"
+                                formControlName="ambulance_id"
+                                (change)="onAmbulanceChange($event)"
+                              >
+                                <option [value]="0">Select Queue</option>
+                                <option
+                                  value="{{ ambulance?.ambulance_id }}"
+                                  *ngFor="let ambulance of ambulanceDetails"
+                                >
+                                  {{ ambulance?.name }}
+                                </option>
+                              </select>
+                            </div> -->
+                          </div>
+                          <!-- <div class="card" *ngIf="showFareDeatils"> -->
+
+                          <div
+                            [class]="
+                              showFareDeatils
+                                ? 'col-xl-12 ridge mb-3 p-2'
+                                : 'd-none'
+                            "
+                          >
+                            <fieldset disabled class="row">
+                              <div class="form-group col-md-3">
+                                <label for="">Number</label>
+                                <input
+                                  type="text"
+                                  formControlName="aNumber"
+                                  placeholder="Ambulance Number"
+                                  class="form-control"
+                                />
+                              </div>
+                              <div class="form-group col-md-3">
+                                <label for="">Type</label>
+                                <input
+                                  type="text"
+                                  formControlName="aType"
+                                  placeholder="Ambulance Type"
+                                  class="form-control"
+                                />
+                              </div>
+                              <div class="form-group col-md-3">
+                                <label for="">Base Fare</label>
+                                <input
+                                  type="text"
+                                  formControlName="base_fare"
+                                  placeholder="Base Fare"
+                                  class="form-control"
+                                />
+                              </div>
+                              <div class="form-group col-md-3">
+                                <label for="">Distance Fare</label>
+                                <input
+                                  type="text"
+                                  formControlName="distance_fare"
+                                  placeholder="Distance fare"
+                                  class="form-control"
+                                />
+                              </div>
+                              <div class="form-group col-md-3">
+                                <label for="">Platform Fare</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Platform Fare"
+                                  formControlName="platform_fare"
+                                />
+                              </div>
+                              <div class="form-group col-md-3">
+                                <label for="">Tax</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="0.00"
+                                  formControlName="taxes"
+                                />
+                              </div>
+                              <div class="form-group col-md-3">
+                                <label for="">PPE KIT</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="PPE_KIT"
+                                  formControlName="ppe_kit"
+                                />
+                              </div>
+                              <div class="form-group col-md-3">
+                                <label for="">Total Fare</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Total fare"
+                                  formControlName="total_fare"
+                                />
+                              </div>
+                              <div class="form-group col-md-3">
+                                <label for="">Driver Name</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Driver"
+                                  formControlName="driver"
+                                />
+                              </div>
+                              <!-- <div class="form-group col-md-3">
+                                <label for="">Total Amount</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Round off"
+                                  formControlName="round_off"
+                                />
+                              </div> -->
+                              <fieldset
+                                [disabled]="true"
+                                class="form-group col-md-3"
+                              >
+                                <label for="">Total Amount</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Round off"
+                                  formControlName="round_off"
+                                />
+                              </fieldset>
+                              <div
+                                *ngIf="enablbookButton"
+                                class="form-group col-md-3"
+                              >
+                                <label for="">Discount</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Discount"
+                                  formControlName="discount_amount"
+                                  [value]="discount"
+                                />
+                              </div>
+                              <div
+                                *ngIf="enablbookButton"
+                                class="form-group col-md-3"
+                              >
+                                <label for="">Other Charges</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Other Charges"
+                                  formControlName="other_charges"
+                                  [value]="otherCharges"
+                                />
+                              </div>
+
+                              <div
+                                *ngIf="enablbookButton"
+                                class="form-group col-md-3"
+                              >
+                                <label for="">Net Payble</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Net Payble"
+                                  formControlName="payble"
+                                />
+                              </div>
+                            </fieldset>
+                          </div>
+                          <div
+                            [class]="
+                              showFareDeatils
+                                ? 'button-wr mb-3 footer'
+                                : 'd-none'
+                            "
+                          >
+                            <button
+                              [disabled]="enablbookButton"
+                              type="button"
+                              data-bs-toggle="modal"
+                              data-bs-target="#staticBackdrop"
+                              (click)="onPay()"
+                              class="btn m-2 hover background_theme"
+                            >
+                              Pay
+                            </button>
+
+                            <button
+                              type="submit"
+                              [disabled]="!enablbookButton"
+                              class="btn btn-success m-2 hover"
+                            >
+                              Book Ambulance
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-warning hover"
+                              (click)="onReset()"
+                            >
+                              Reset
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                    <div
+                      class="panel panel-primary setup-content"
+                      id="step-3"
+                      *ngIf="otpDisplay"
+                    >
+                      <div class="panel-heading">
+                        <h3 class="panel-title">OTP</h3>
+                      </div>
+                      <div class="panel-body">
+                        <div class="row" *ngIf="otpDisplay">
+                          <div class="row">
+                            <fieldset class="col-xl-6" [disabled]="otpDisplay">
+                              <div class="cross-button w-50 m-2">
+                                <i
+                                  class="fa-solid fa-xmark float-right text-danger"
+                                  (click)="onReset()"
+                                ></i>
+                              </div>
+                              <div class="row text-center">OTP</div>
+                              <div class="d-flex w-50 text-center">
+                                <input
+                                  class="form-control p-2"
+                                  type="text"
+                                  [value]="otp[0]"
+                                  maxlength="1"
+                                />
+                                <input
+                                  class="form-control p-2"
+                                  type="text"
+                                  [value]="otp[1]"
+                                  maxlength="1"
+                                />
+                                <input
+                                  class="form-control p-2"
+                                  type="text "
+                                  [value]="otp[2]"
+                                  maxlength="1"
+                                />
+                                <input
+                                  class="form-control p-2"
+                                  type="text"
+                                  [value]="otp[3]"
+                                  maxlength="1"
+                                />
+                              </div>
+                            </fieldset>
+                            <div class="col-xl-2 position-absolute m-4">
+                              <a class="float-right p-1" (click)="onPrintOtp()">
+                                <i class="fa-solid fa-print p-2"></i>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="tab-pane fade"
+                  id="rideData"
+                  role="tabpanel"
+                  aria-labelledby="nav-rideData-tab "
+                >
+                  <div class="row">
+                    <div
+                      class="col-lg-6 mt-1 text-center text-danger"
+                      *ngIf="!completeOrders"
+                    >
+                      <h1>No Completed Rides Avialable</h1>
+                    </div>
+                    <div
+                      class="col-lg-6 mt-1 text-center text-danger"
+                      *ngIf="!orders"
+                    >
+                      <h1>No Ongoing Rides Avialable</h1>
+                    </div>
+                    <div class="col-lg-6 mt-1" *ngIf="completeOrders">
+                      <div class="row clearfix">
+                        <div class="body row">
+                          <h1 class="text-center"><u>Completed Rides</u></h1>
+                        </div>
+
+                        <div
+                          id="example3_wrapper"
+                          class="dataTables_wrapper no-footer table-scroll"
+                        >
+                          <table
+                            class="table table-bordered table-hover table-striped text-center"
+                            cellspacing="0"
+                            id="addrowExample"
+                            #excelTable
+                          >
+                            <thead>
+                              <tr role="row">
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-sort="ascending"
+                                  aria-label=": activate to sort column descending"
+                                >
+                                  #
+                                </th>
+                                <!-- <th
+                                class=""
+                                tabindex="0"
+                                aria-controls="example3"
+                                rowspan="1"
+                                colspan="1"
+                                aria-sort="ascending"
+                                aria-label=": activate to sort column descending"
+                              >
+                                Order No
+                              </th> -->
+
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Email: activate to sort column ascending"
+                                >
+                                  Ambulance Number
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Department: activate to sort column ascending"
+                                >
+                                  Price
+                                </th>
+
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Email: activate to sort column ascending"
+                                >
+                                  Customer Name
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Email: activate to sort column ascending"
+                                >
+                                  Customer Number
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Mobile: activate to sort column ascending"
+                                >
+                                  Driver Name
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Mobile: activate to sort column ascending"
+                                >
+                                  Driver Number
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Mobile: activate to sort column ascending"
+                                >
+                                  Order By
+                                </th>
+                                <!-- <th class="sorting_desc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Tax: activate to sort column ascending" style="width: 43.5312px;" aria-sort="descending">Tax</th> -->
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Mobile: activate to sort column ascending"
+                                >
+                                  Date
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Education: activate to sort column ascending"
+                                >
+                                  Confirm Status
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Gender: activate to sort column ascending"
+                                >
+                                  Status
+                                </th>
+                                <!-- <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Gender: activate to sort column ascending"
+                                >
+                                  Action
+                                </th> -->
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                role="row"
+                                class="odd"
+                                *ngFor="
+                                  let order of completeOrders
+                                    | searchFilter: searchText;
+                                  let i = index
+                                "
+                              >
+                                <td>
+                                  <strong>{{ order?.sl_no }}</strong>
+                                </td>
+                                <!-- <td>
+                                <strong>{{ order?.id }}</strong>
+                              </td> -->
+                                <td class="sorting_1">
+                                  {{ order?.ambulance_id?.registration_number }}
+                                </td>
+                                <td>{{ order?.price }}</td>
+                                <td>
+                                  {{
+                                    order.customer_id
+                                      ? order.customer_id.first_name +
+                                        ' ' +
+                                        order.customer_id.last_name
+                                      : order.patient_id
+                                      ? order.patient_id.name
+                                      : ''
+                                  }}
+                                </td>
+                                <td>
+                                  {{
+                                    order.customer_id
+                                      ? order.customer_id.phone
+                                      : order.patient_id
+                                      ? order.patient_id.phone
+                                      : ''
+                                  }}
+                                </td>
+                                <td>{{ order?.driver_id?.name }}</td>
+                                <td>{{ order?.driver_id?.phone }}</td>
+                                <td>{{ order?.order_by }}</td>
+                                <td>{{ order?.cretaed_on.slice(0, 10) }}</td>
+                                <td>
+                                  <span
+                                    [class]="
+                                      order?.is_confirm == 1
+                                        ? 'badge badge-success'
+                                        : 'badge badge-danger'
+                                    "
+                                    >{{
+                                      order?.is_confirm == 1
+                                        ? 'Confirmed'
+                                        : 'Not Confirmed'
+                                    }}</span
+                                  >
+                                  <!-- (click)="onConfirmed($event, order?.id,  order?.is_confirm)" -->
+                                </td>
+                                <td>
+                                  <span
+                                    [class]="
+                                      order?.status == 1
+                                        ? 'badge badge-success'
+                                        : order?.status == 2
+                                        ? 'badge badge-secondary text-secondary'
+                                        : order?.status == 0 &&
+                                          order?.is_confirm === 1
+                                        ? 'badge badge-warning'
+                                        : 'badge badge-danger text'
+                                    "
+                                    >{{
+                                      order?.status == 1
+                                        ? 'Completed'
+                                        : order?.status == 0 &&
+                                          order?.is_confirm === 1
+                                        ? 'On Trip'
+                                        : order?.status == 0
+                                        ? 'New'
+                                        : order?.status == 2
+                                        ? 'Canceled'
+                                        : ''
+                                    }}
+                                  </span>
+                                </td>
+                                <!-- <td>
+                                  <button
+                                    class="btn btn-success"
+                                    (click)="onPrint(order)"
+                                  >
+                                    Print
+                                  </button>
+                                </td> -->
+                                <!-- 
+                              <td>
+                                <button type="button" class="btn btn-success">
+                                  Print
+                                </button> -->
+                                <!-- <div class="d-flex"> -->
+
+                                <!--   <a
+                        [routerLink]="['edit-order/', order?.id]"
+                        routerLinkActive="router-link-active"
+                        class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                        ><i class="icon-pencil" aria-hidden="true"></i
+                      ></a>
+                    </div>
+                              </td> -->
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <ngb-pagination
+                        class="dataTables_paginate paging_simple_numbers"
+                        [(page)]="page"
+                        [pageSize]="pageSize"
+                        [maxSize]="15"
+                        [collectionSize]="completeOrdersLength"
+                        (pageChange)="getCompletedOrders()"
+                      >
+                      </ngb-pagination>
+                      <div
+                        class="dataTables_length float-right"
+                        id="example3_length"
+                      >
+                        <label
+                          >Show
+                          <select
+                            class="p-2"
+                            name="form-control"
+                            aria-controls="example3"
+                            [(ngModel)]="pageSize"
+                            (ngModelChange)="getCompletedOrders()"
+                          >
+                            <option [ngValue]="5">5</option>
+                            <option [ngValue]="10">10</option>
+                            <option [ngValue]="15">15</option>
+                            <option [ngValue]="ordersLength">All</option>
+                          </select>
+                          entries</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-lg-6 mt-1" *ngIf="orders">
+                      <div class="row clearfix">
+                        <div class="body row">
+                          <h1 class="text-center"><u>Ongoing Rides</u></h1>
+                        </div>
+
+                        <div
+                          id="example3_wrapper"
+                          class="dataTables_wrapper no-footer table-scroll"
+                        >
+                          <table
+                            class="table table-bordered table-hover table-striped text-center"
+                            cellspacing="0"
+                            id="addrowExample"
+                            #excelTable
+                          >
+                            <thead>
+                              <tr role="row">
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-sort="ascending"
+                                  aria-label=": activate to sort column descending"
+                                >
+                                  #
+                                </th>
+                                <!-- <th
+                                class=""
+                                tabindex="0"
+                                aria-controls="example3"
+                                rowspan="1"
+                                colspan="1"
+                                aria-sort="ascending"
+                                aria-label=": activate to sort column descending"
+                              >
+                                Order No
+                              </th> -->
+
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Email: activate to sort column ascending"
+                                >
+                                  Ambulance Number
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Department: activate to sort column ascending"
+                                >
+                                  Price
+                                </th>
+
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Email: activate to sort column ascending"
+                                >
+                                  Customer Name
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Email: activate to sort column ascending"
+                                >
+                                  Customer Number
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Mobile: activate to sort column ascending"
+                                >
+                                  Driver Name
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Mobile: activate to sort column ascending"
+                                >
+                                  Driver Number
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Mobile: activate to sort column ascending"
+                                >
+                                  Order By
+                                </th>
+                                <!-- <th class="sorting_desc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Tax: activate to sort column ascending" style="width: 43.5312px;" aria-sort="descending">Tax</th> -->
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Mobile: activate to sort column ascending"
+                                >
+                                  Date
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Education: activate to sort column ascending"
+                                >
+                                  Confirm Status
+                                </th>
+                                <th
+                                  class=""
+                                  tabindex="0"
+                                  aria-controls="example3"
+                                  rowspan="1"
+                                  colspan="1"
+                                  aria-label="Gender: activate to sort column ascending"
+                                >
+                                  Status
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                role="row"
+                                class="odd"
+                                *ngFor="
+                                  let order of orders
+                                    | searchFilter: searchText;
+                                  let i = index
+                                "
+                              >
+                                <td>
+                                  <strong>{{ order?.sl_no }}</strong>
+                                </td>
+                                <!-- <td>
+                                <strong>{{ order?.id }}</strong>
+                              </td> -->
+                                <td class="sorting_1">
+                                  {{ order?.ambulance?.registration_number }}
+                                </td>
+                                <td>{{ order?.price }}</td>
+                                <td>
+                                  {{
+                                    order.customer_id
+                                      ? order.customer_id.first_name +
+                                        ' ' +
+                                        order.customer_id.last_name
+                                      : order.patient_id
+                                      ? order.patient_id.name
+                                      : ''
+                                  }}
+                                </td>
+                                <td>
+                                  {{
+                                    order.customer_id
+                                      ? order.customer_id.phone
+                                      : order.patient_id
+                                      ? order.patient_id.phone
+                                      : ''
+                                  }}
+                                </td>
+                                <td>{{ order?.driver_id?.name }}</td>
+                                <td>{{ order?.driver_id?.phone }}</td>
+                                <td>{{ order?.order_by }}</td>
+                                <td>{{ order?.cretaed_on.slice(0, 10) }}</td>
+                                <td>
+                                  <span
+                                    [class]="
+                                      order?.is_confirm == 1
+                                        ? 'badge badge-success'
+                                        : 'badge badge-danger'
+                                    "
+                                    >{{
+                                      order?.is_confirm == 1
+                                        ? 'Confirmed'
+                                        : 'Not Confirmed'
+                                    }}</span
+                                  >
+                                  <!-- (click)="onConfirmed($event, order?.id,  order?.is_confirm)" -->
+                                </td>
+                                <td>
+                                  <span
+                                    [class]="
+                                      order?.status == 1
+                                        ? 'badge badge-success'
+                                        : order?.status == 2
+                                        ? 'badge badge-secondary text-secondary'
+                                        : order?.status == 0 &&
+                                          order?.is_confirm === 1
+                                        ? 'badge badge-warning'
+                                        : 'badge badge-danger text'
+                                    "
+                                    >{{
+                                      order?.status == 1
+                                        ? 'Completed'
+                                        : order?.status == 0 &&
+                                          order?.is_confirm === 1
+                                        ? 'On Trip'
+                                        : order?.status == 0
+                                        ? 'New'
+                                        : order?.status == 2
+                                        ? 'Canceled'
+                                        : ''
+                                    }}
+                                  </span>
+                                </td>
+                                <!-- 
+                              <td>
+                                <button type="button" class="btn btn-success">
+                                  Print
+                                </button> -->
+                                <!-- <div class="d-flex"> -->
+
+                                <!--   <a
+                        [routerLink]="['edit-order/', order?.id]"
+                        routerLinkActive="router-link-active"
+                        class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                        ><i class="icon-pencil" aria-hidden="true"></i
+                      ></a>
+                    </div>
+                              </td> -->
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <ngb-pagination
+                        class="dataTables_paginate paging_simple_numbers"
+                        [(page)]="page"
+                        [pageSize]="pageSize"
+                        [maxSize]="15"
+                        [collectionSize]="ordersLength"
+                        (pageChange)="getOnGoingOrders()"
+                      >
+                      </ngb-pagination>
+                      <div
+                        class="dataTables_length float-right"
+                        id="example3_length"
+                      >
+                        <label
+                          >Show
+                          <select
+                            class="p-2"
+                            name="form-control"
+                            aria-controls="example3"
+                            [(ngModel)]="pageSize"
+                            (ngModelChange)="getOnGoingOrders()"
+                          >
+                            <option [ngValue]="5">5</option>
+                            <option [ngValue]="10">10</option>
+                            <option [ngValue]="15">15</option>
+                            <option [ngValue]="ordersLength">All</option>
+                          </select>
+                          entries</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  id="help"
+                  role="tabpanel"
+                  aria-labelledby="nav-help-tab "
+                >
+                  <div class="col-lg-12 col-md-12 mt-1">
+                    <div class="row clearfix">
+                      <div class="body row">
+                        <div id="wrapper">
+                          <section class="ftco-section">
+                            <div class="container">
+                              <div class="row justify-content-center">
+                                <div class="col-md-12 text-center">
+                                  <div class="row">
+                                    <h1 class="text-dark">Contact Us</h1>
+                                    <div class="col-xl-5"></div>
+                                    <div class="col-xl-4">
+                                      <hr class="hr-heading text-center" />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row justify-content-center">
+                                <div class="col-md-12">
+                                  <div class="wrapper">
+                                    <div class="row no-gutters">
+                                      <div class="w-100">
+                                        <h3>24x7 Help Desk</h3>
+                                        <hr class="hr-help" />
+                                        <p class="mb-4">
+                                          We're here to help you.
+                                        </p>
+                                        <div
+                                          class="dbox w-100 d-flex align-items-start"
+                                        >
+                                          <!-- <div
+                        class="icon d-flex align-items-center justify-content-center"
+                      >
+                        <span class="fa fa-map-marker"></span>
+                      </div> -->
+                                          <!-- <div class="text pl-3">
+                          <p>
+                            <span>Address:</span> 198 West 21th Street, Suite
+                            721 New York NY 10016
+                          </p>
+                        </div> -->
+                                        </div>
+                                        <div
+                                          class="dbox w-100 d-flex align-items-center py-2"
+                                        >
+                                          <div
+                                            class="icon d-flex align-items-center justify-content-center"
+                                          >
+                                            <i
+                                              class="fa fa-phone text_theme h5"
+                                            ></i>
+                                          </div>
+                                          <div class="text px-3">
+                                            <p>
+                                              <span>Phone:</span>
+                                              <a
+                                                class="px-3 text-danger"
+                                                href="tel://1234567920"
+                                                >18002572115</a
+                                              >
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="dbox w-100 d-flex align-items-center py-2"
+                                        >
+                                          <div
+                                            class="icon d-flex align-items-center justify-content-center"
+                                          >
+                                            <i
+                                              class="fa fa-paper-plane text_theme h5"
+                                            ></i>
+                                          </div>
+                                          <div class="text px-3">
+                                            <p>
+                                              <span>Email:</span>
+                                              <a
+                                                class="px-3 text-danger"
+                                                href="mailto:info@moambulance.in"
+                                                >info@moambulance.in</a
+                                              >
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="dbox w-100 d-flex align-items-center py-2"
+                                        >
+                                          <div
+                                            class="icon d-flex align-items-center justify-content-center"
+                                          >
+                                            <i
+                                              class="fa fa-globe text_theme h5"
+                                            ></i>
+                                          </div>
+                                          <div class="text px-3">
+                                            <p>
+                                              <span>Website:</span>
+                                              <a
+                                                class="px-3 text-danger"
+                                                href="https://moambulance.in/"
+                                                target="_blank"
+                                                >https://moambulance.in/</a
+                                              >
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="tab-pane fade m-0 p-0"
+                  id="manage"
+                  role="tabpanel"
+                  aria-labelledby="nav-manage-tab"
+                >
+                  <div
+                    class="col-lg-12 col-md-12 m-0 p-0 text-center text-danger"
+                    *ngIf="!manageOrderList"
+                  >
+                    <h1>No Ambulance Available</h1>
+                  </div>
+                  <div
+                    class="col-lg-12 col-md-12 m-0 p-0"
+                    *ngIf="manageOrderList"
+                  >
+                    <div class="row clearfix p-0 m-0">
+                      <div id="wrapper p-0 m-0">
+                        <section class="ftco-section p-0 m-0">
+                          <div class="container p-0 m-0">
+                            <div class="row justify-content-center">
+                              <div class="col-md-12 text-center">
+                                <div class="row">
+                                  <h1 class="text-dark p-0 m-0">
+                                    Manage Ambulance Queue
+                                  </h1>
+                                  <div class="col-xl-5 p-0 m-0"></div>
+                                  <div class="col-xl-4 p-0 m-0">
+                                    <hr class="hr-heading text-center" />
+                                  </div>
+                                  <div class="col-xl-12">
+                                    <div
+                                      id="example3_wrapper"
+                                      class="dataTables_wrapper no-footer table-scroll"
+                                    >
+                                      <table
+                                        class="table table-bordered table-hover table-striped text-center"
+                                        cellspacing="0"
+                                        id="addrowExample"
+                                        #excelTable
+                                      >
+                                        <thead>
+                                          <tr role="row">
+                                            <th
+                                              class=""
+                                              tabindex="0"
+                                              aria-controls="example3"
+                                              rowspan="1"
+                                              colspan="1"
+                                              aria-sort="ascending"
+                                              aria-label=": activate to sort column descending"
+                                            >
+                                              #
+                                            </th>
+
+                                            <th
+                                              class=""
+                                              tabindex="0"
+                                              aria-controls="example3"
+                                              rowspan="1"
+                                              colspan="1"
+                                              aria-label="Email: activate to sort column ascending"
+                                            >
+                                              Ambulance Type
+                                            </th>
+                                            <th
+                                              class=""
+                                              tabindex="0"
+                                              aria-controls="example3"
+                                              rowspan="1"
+                                              colspan="1"
+                                              aria-label="Department: activate to sort column ascending"
+                                            >
+                                              Ambulance Number
+                                            </th>
+                                            <th
+                                              class=""
+                                              tabindex="0"
+                                              aria-controls="example3"
+                                              rowspan="1"
+                                              colspan="1"
+                                              aria-label="Department: activate to sort column ascending"
+                                            >
+                                              Driver Name
+                                            </th>
+                                            <th
+                                              class=""
+                                              tabindex="0"
+                                              aria-controls="example3"
+                                              rowspan="1"
+                                              colspan="1"
+                                              aria-label="Department: activate to sort column ascending"
+                                            >
+                                              Driver Number
+                                            </th>
+                                            <th
+                                              class=""
+                                              tabindex="0"
+                                              aria-controls="example3"
+                                              rowspan="1"
+                                              colspan="1"
+                                              aria-label="Department: activate to sort column ascending"
+                                            >
+                                              Order No
+                                            </th>
+                                            <th
+                                              class=""
+                                              tabindex="0"
+                                              aria-controls="example3"
+                                              rowspan="1"
+                                              colspan="1"
+                                              aria-label="Department: activate to sort column ascending"
+                                            >
+                                              Status
+                                            </th>
+
+                                            <th
+                                              class=""
+                                              tabindex="0"
+                                              aria-controls="example3"
+                                              rowspan="1"
+                                              colspan="1"
+                                              aria-label="Action: activate to sort column ascending"
+                                            >
+                                              Action
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr
+                                            role="row"
+                                            class="odd"
+                                            *ngFor="
+                                              let item of manageOrderList
+                                                | searchFilter: searchText;
+                                              let i = index
+                                            "
+                                          >
+                                            <td>
+                                              <strong>{{ item?.sl_no }}</strong>
+                                            </td>
+                                            <td>
+                                              <strong>{{
+                                                item?.ambulance?.ambulance_type
+                                                  ?.name
+                                              }}</strong>
+                                            </td>
+                                            <td>
+                                              <strong>{{
+                                                item?.ambulance
+                                                  ?.registration_number
+                                              }}</strong>
+                                            </td>
+                                            <td>
+                                              <strong>{{
+                                                item?.drivers?.name
+                                              }}</strong>
+                                            </td>
+                                            <td>
+                                              <strong>{{
+                                                item?.drivers?.phone
+                                              }}</strong>
+                                            </td>
+                                            <td>
+                                              <strong>{{
+                                                item?.display_order
+                                              }}</strong>
+                                            </td>
+                                            <td>
+                                              <label
+                                                class="switch"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="right"
+                                                title="{{
+                                                  item?.is_active == 1
+                                                    ? 'Active'
+                                                    : 'Inactive'
+                                                }}"
+                                              >
+                                                <input
+                                                  type="checkbox"
+                                                  [checked]="
+                                                    item?.is_active == 1
+                                                  "
+                                                  (click)="onStatusChange(item)"
+                                                />
+                                                <span
+                                                  class="slider round"
+                                                ></span>
+                                              </label>
+                                            </td>
+                                            <td>
+                                              <button
+                                                type="button"
+                                                class="btn btn-success"
+                                                *ngIf="
+                                                  item?.order?.status == 1 &&
+                                                  item?.is_active == 1 &&
+                                                  item?.display_order == 0
+                                                "
+                                                (click)="
+                                                  endQueueByManager(item)
+                                                "
+                                              >
+                                                End Queue
+                                              </button>
+                                              <span
+                                                class="badge badge-success cursor-pointer"
+                                                *ngIf="
+                                                  item?.is_active == 1 &&
+                                                  item?.display_order !== 0
+                                                "
+                                              >
+                                                Avialable For Ride
+                                              </span>
+                                              <span
+                                                class="badge badge-warning cursor-pointer"
+                                                *ngIf="
+                                                  item?.order?.status == 0 &&
+                                                  item?.is_active == 1 &&
+                                                  item?.display_order == 0
+                                                "
+                                              >
+                                                On Ride
+                                              </span>
+                                              <span
+                                                class="badge badge-danger cursor-pointer"
+                                                *ngIf="item?.is_active == 0"
+                                              >
+                                                In Active
+                                              </span>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </section>
+                      </div>
+                      <!-- 
+      <div class="card text-center">
+        <div class="header">
+          <h1 class="fs-20">24x7 Help Desk</h1>
+        </div>
+        <div class="body">
+          <div class="col-sm-12">
+            <h3>18002572115</h3>
+            <h3>info@moambulance.in</h3>
+          </div>
+        </div>
+      </div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- LIVE AMBULANCE -->
+
+            <div class="col-md-4 p-0 m-0">
+              <app-live-kiosks></app-live-kiosks>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Payment save popup -->
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Payment</h5>
+        <button
+          type="button"
+          class="btn-close"
+          #closeModal
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-validation">
+          <form
+            id="basic-form"
+            [formGroup]="makePaymentForm"
+            (ngSubmit)="addPayment()"
+          >
+            <div class="mb-3 row">
+              <div class="col-xl-9">
+                <label class="fancy-radio">
+                  <input
+                    type="radio"
+                    (change)="onPymentMethodChange()"
+                    formControlName="payment_method"
+                    value="cash"
+                    required=""
+                    data-parsley-multiple="gender"
+                  />
+                  <span><i></i>Cash</span>
+                </label>
+                <label class="fancy-radio">
+                  <input
+                    type="radio"
+                    (change)="onPymentMethodChange()"
+                    formControlName="payment_method"
+                    value="card"
+                    required=""
+                    data-parsley-multiple="gender"
+                  />
+                  <span><i></i>Card</span>
+                </label>
+                <label class="fancy-radio">
+                  <input
+                    type="radio"
+                    (change)="onPymentMethodChange()"
+                    formControlName="payment_method"
+                    value="upi"
+                    required=""
+                    data-parsley-multiple="gender"
+                  />
+                  <span><i></i>UPI</span>
+                </label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="col-xl-9">
+                <div class="row">
+                  <fieldset [disabled]="true" class="col-xl-4">
+                    <label for="exampleInputPassword1" class="form-label"
+                      >Total Amount</label
+                    >
+                    <input
+                      [disabled]="true"
+                      type="text"
+                      formControlName="amount"
+                      placeholder="Enter Amount"
+                      class="form-control"
+                    />
+                  </fieldset>
+                  <div class="col-xl-4">
+                    <label for="exampleInputPassword1" class="form-label"
+                      >Discount</label
+                    >
+                    <input
+                      type="number"
+                      [min]="0"
+                      [max]="this.makePaymentForm.value['amount']"
+                      formControlName="discount"
+                      placeholder="Enter Amount"
+                      class="form-control"
+                      [value]="discount"
+                      (input)="onDiscountChange($event)"
+                    />
+                  </div>
+                  <div class="col-xl-4">
+                    <label for="exampleInputPassword1" class="form-label"
+                      >Other Charges</label
+                    >
+                    <input
+                      type="number"
+                      [min]="0"
+                      formControlName="other_charges"
+                      placeholder="Enter Amount"
+                      class="form-control"
+                      (input)="onOtherChargesChange($event)"
+                      [value]="otherCharges"
+                    />
+                  </div>
+                </div>
+              </div>
+              <fieldset [disabled]="true" class="col-xl-9" *ngIf="showCash">
+                <label for="exampleInputPassword1" class="form-label"
+                  >Net Payble</label
+                >
+                <input
+                  [disabled]="true"
+                  type="text"
+                  formControlName="cash"
+                  placeholder="Enter cash"
+                  class="form-control"
+                />
+              </fieldset>
+              <div class="col-xl-9" *ngIf="showCard">
+                <label for="exampleInputPassword1" class="form-label"
+                  >Receipt No.</label
+                >
+                <input
+                  type="text"
+                  formControlName="receipt_no"
+                  placeholder="Enter Receipt number"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-xl-9" *ngIf="showUpi">
+                <img src="assets/Image/payment.jpg" alt="" />
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <app-invoice class="d-none" [order]="orderDetails"></app-invoice> -->
